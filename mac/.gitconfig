@@ -1,0 +1,25 @@
+# This is Git's per-user configuration file.
+[user]
+# Please adapt and uncomment the following lines:
+	name = Arnon Moscona
+	email = arnonmoscona@arnonmoscona.local
+[gui]
+        recentrepo = C:/Users/arnon_000/projects/common/monastery/monastery-copycat
+        recentrepo = C:/Users/arnon_000/projects/opensource/copycat
+        recentrepo = C:/Users/arnon_000/projects/common/math
+        recentrepo = C:/Users/arnon_000/projects/common/util
+        recentrepo = C:/Users/arnon_000/projects/common/monastery/monastery-api
+        recentrepo = C:/Users/arnon_000/projects/common/monastery/monastery-bonehead
+[filter "lfs"]
+        clean = git-lfs clean %f
+        smudge = git-lfs smudge %f
+        required = true
+
+[alias]
+	co = checkout
+	ci = commit
+	st = status
+	br = branch
+	hist = log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short
+	type = cat-file -t
+	dump = cat-file -p
