@@ -1,0 +1,51 @@
+[user]
+	name = Arnon Moscona
+	email = arnon@moscona.com
+[gui]
+[alias]
+	co = checkout
+	st = status
+	ci = commit
+	br = branch
+	cp = cherry-pick
+[color "status"]
+	added = yellow
+	changed = green
+	untracked = red bold
+[color "branch"]
+	current = green bold
+	local = white
+	remote = white reverse
+[diff]
+	tool = winmerge
+[difftool "winmerge"]
+	cmd = git-difftool-winmerge-wrapper.sh \"$LOCAL\" \"$REMOTE\"
+[difftool]
+	prompt = false
+[merge]
+	tool = meld
+
+[mergetool "diffmerge"]
+	cmd = git-merge-diffmerge-wrapper.sh $PWD/$LOCAL $PWD/$BASE $PWD/$REMOTE $PWD/$MERGED
+	trustExitCode = false
+	keepBackup = false
+ 
+[mergetool "kdiff3"]
+	path = C:/Program Files (x86)/KDiff3/kdiff3.exe
+	keepBackup = false
+	trustExitCode = false
+
+[mergetool "p4merge"]
+	cmd = p4merge.exe \\\"$BASE\\\" \\\"$LOCAL\\\" \\\"$REMOTE\\\" \\\"$MERGED\\\"
+[mergetool "meld"]
+	cmd = meld.exe \\\"$BASE\\\" \\\"$LOCAL\\\" \\\"$REMOTE\\\" \\\"$MERGED\\\"
+[core]
+	autocrlf = true
+	askpass = git-gui--askpass
+[gui]
+	recentrepo = C:/Users/Arnon/projects/IB
+	recentrepo = C:/Users/Arnon/projects/common/trading
+	recentrepo = C:/Users/Arnon/projects/common/iqfeed
+	recentrepo = C:/Users/Arnon/projects/common/util
+[push]
+	default = matching
