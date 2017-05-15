@@ -45,4 +45,5 @@ alias int="${_TEST_INT} ${_TEST_SCOPE_DISCOUNT}"
 alias int_all="${_TEST_INT} udemy"
 alias int-all=int_all
 
+alias morning='. ~/.bash_aliases; w;; git rev-parse --abbrev-ref HEAD > ~/.git-last-branch;  git co master ;git pull; pip install -r requirements/dev.txt; git co `cat ~/.git-last-branch`; echo "REMEMBER to ssh dev, and you might need to build front end\n"'
 
