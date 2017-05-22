@@ -31,8 +31,10 @@ alias bfe="w;python manage.py buildfrontend --settings=udemy.settings.local"
 alias shell_plus="w;python manage.py shell_plus"
 alias sp=shell_plus
 alias rd="udemy-release-django"
+alias release="infra101 -t ‘screen -r release’"
+alias monitor="ssh agg101 -t ’screen -r monitor’"
 
-_TEST_BASE="python manage.py test --settings=udemy.settings."
+_TEST_BASE="w; python manage.py test --settings=udemy.settings."
 _TEST_UNIT="${_TEST_BASE}test_unit"
 _TEST_INT="${_TEST_BASE}test_integration"
 _TEST_SCOPE_DISCOUNT="udemy/discount udemy/discount udemy/rules"
@@ -45,5 +47,12 @@ alias int="${_TEST_INT} ${_TEST_SCOPE_DISCOUNT}"
 alias int_all="${_TEST_INT} udemy"
 alias int-all=int_all
 
-alias morning='. ~/.bash_aliases; w;; git rev-parse --abbrev-ref HEAD > ~/.git-last-branch;  git co master ;git pull; pip install -r requirements/dev.txt; git co `cat ~/.git-last-branch`; echo "REMEMBER to ssh dev, and you might need to build front end\n"'
+alias unit-js="w; cd static; ./node_modules/.bin/grunt test-with-sourcemaps"
+
+alias co-master='git stash; git rev-parse --abbrev-ref HEAD > ~/.git-last-branch;  git co master'
+alias co-last='git co `cat ~/.git-last-branch`; git stash pop'
+alias co-back=co-last
+alias morning='. ~/.bash_aliases; w; co-master ;git pull; pip install -r requirements/dev.txt; co-back; echo "REMEMBER to ssh dev, and you might need to build front end\n"'
+alias gpf='git push -f orgin HEAD'
+alias br='git branch'
 

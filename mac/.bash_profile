@@ -73,3 +73,8 @@ export PATH="$HOME/.yarn/bin:${PATH}"
 # SSH ---------------------------
 ssh-add -k ~/.ssh/id_rsa
 
+# The following must be at the end of the script for pyenv to work correctly
+if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
+
+
+test -e "${HOME}/.iterm2_shell_integration.bash" && source "${HOME}/.iterm2_shell_integration.bash"
