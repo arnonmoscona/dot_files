@@ -1,0 +1,7 @@
+#!/bin/bash
+GREP_ARG=$1
+GREP_ARG="${GREP_ARG:-.}"
+HEAD_ARG=$2
+HEAD_ARG="${HEAD_ARG:-30}"
+git rev-list --objects --all | awk '$2' | grep "$GREP_ARG" | head -$HEAD_ARG
+
