@@ -70,6 +70,9 @@ export DJANGO_SETTINGS_MODULE=udemy.settings.local
 # Add Yarn to path
 export PATH="$HOME/.yarn/bin:${PATH}"
 
+# Add mysql to the path
+export PATH=${PATH}:/usr/local/opt/mysql@5.6/bin/
+
 # SSH ---------------------------
 ssh-add -k ~/.ssh/id_rsa
 

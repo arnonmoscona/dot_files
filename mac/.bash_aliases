@@ -31,13 +31,13 @@ alias bfe="w;python manage.py buildfrontend --settings=udemy.settings.local"
 alias shell_plus="w;python manage.py shell_plus"
 alias sp=shell_plus
 alias rd="udemy-release-django"
-alias release="infra101 -t ‘screen -r release’"
-alias monitor="ssh agg101 -t ’screen -r monitor’"
+alias release="ssh infra101 -t ‘screen -D -R release’"
+alias monitor="ssh agg -t ’screen -D -R monitor’"
 
 _TEST_BASE="w; python manage.py test --settings=udemy.settings."
 _TEST_UNIT="${_TEST_BASE}test_unit"
-_TEST_INT="${_TEST_BASE}test_integration"
-_TEST_SCOPE_DISCOUNT="udemy/discount udemy/discount udemy/rules"
+_TEST_INT="${_TEST_BASE}test_integration --keepdb"
+_TEST_SCOPE_DISCOUNT="udemy/discount udemy/discount udemy/rules udemy/visit"
 
 alias unit="${_TEST_UNIT} ${_TEST_SCOPE_DISCOUNT}"
 alias unit_all="${_TEST_UNIT} udemy"
@@ -55,4 +55,5 @@ alias co-back=co-last
 alias morning='. ~/.bash_aliases; w; co-master ;git pull; pip install -r requirements/dev.txt; co-back; echo "REMEMBER to ssh dev, and you might need to build front end\n"'
 alias gpf='git push -f orgin HEAD'
 alias br='git branch'
+alias rebase='git stash; git rebase master; git stash pop'
 

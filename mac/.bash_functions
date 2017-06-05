@@ -59,3 +59,5 @@ mcd ()
     cd "$1";
 }
 
+# run a single test
+function t { `echo $*  | sed -e 's/-//' | awk '{print $2"."$1}' | sed -e 's/[\(\)]//g' | sed -e 's/\(.*\)\.\(.*\..*\)/.\/manage.py test --settings=udemy.settings.test_integration --keepdb \1:\2/'`; }
