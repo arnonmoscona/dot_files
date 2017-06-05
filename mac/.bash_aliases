@@ -31,8 +31,10 @@ alias bfe="w;python manage.py buildfrontend --settings=udemy.settings.local"
 alias shell_plus="w;python manage.py shell_plus"
 alias sp=shell_plus
 alias rd="udemy-release-django"
-alias release="ssh infra101 -t ‘screen -D -R release’"
-alias monitor="ssh agg -t ’screen -D -R monitor’"
+alias release="ssh infra101 -t 'screen -D -R release'"
+alias monitor="ssh agg -t 'screen -D -R monitor'"
+# a good ommand line there is:
+# udemy-logs-error-django   | grep -v 'SSL' | grep -v 'experiment' | grep -v 'read only' | grep -v 'merge' | grep -v 'spans' | grep -v 'Kafka'  | grep -v 'logo.jpg' | grep -v 'get_hls_root_playlist_url' | grep -v 'tier' | sed 's/\\n/\n/g'
 
 _TEST_BASE="w; python manage.py test --settings=udemy.settings."
 _TEST_UNIT="${_TEST_BASE}test_unit"

@@ -2,7 +2,7 @@
 [user]
 # Please adapt and uncomment the following lines:
 	name = Arnon Moscona
-	email = arnonmoscona@arnonmoscona.local
+	email = arnon.moscona@udemy.com
 [gui]
         recentrepo = C:/Users/arnon_000/projects/common/monastery/monastery-copycat
         recentrepo = C:/Users/arnon_000/projects/opensource/copycat
@@ -23,3 +23,26 @@
 	hist = log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short
 	type = cat-file -t
 	dump = cat-file -p
+[core]
+	excludesfile = /Users/arnonmoscona/.gitignore_global
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
+[mergetool "sourcetree"]
+	cmd = /Users/arnonmoscona/Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
+[diff]
+	  tool = meld
+[difftool]
+	  prompt = false
+[difftool "meld"]
+	  trustExitCode = true
+	    cmd = open -W -a Meld --args \"$LOCAL\" \"$PWD/$REMOTE\"
+[merge]
+	  tool = meld
+[mergetool]
+	  prompt = false
+[mergetool "meld"]
+	  trustExitCode = true
+	    cmd = open -W -a Meld --args --auto-merge \"$PWD/$LOCAL\" \"$PWD/$BASE\" \"$PWD/$REMOTE\" --output=\"$PWD/$MERGED\"
+
