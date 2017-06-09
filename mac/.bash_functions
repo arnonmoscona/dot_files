@@ -53,6 +53,44 @@ alias cd=cd_func
 
 #========================================================================
 
+if [ -f $(brew --prefix)/share/bash-completion/bash_completion ]; then
+  . $(brew --prefix)/share/bash-completion/bash_completion
+fi
+
+brewPkg() {
+  pkg=$1
+  shift
+  (
+    brew install ${pkg} $*  2>&1 |
+        tee $HOME/Library/Logs/Homebrew/$USER/${pkg}-$(date +"%F_%H%M").txt
+  )
+}
+
+brewSrcPkg() {
+  pkg=$1
+  shift
+  (
+    brew install --build-from-source  ${pkg} $*  2>&1 |
+        tee $HOME/Library/Logs/Homebrew/$USER/${pkg}-$(date +"%F_%H%M").txt
+  )
+}
+
+brewSrcPkgWgcc() {
+  pkg=$1
+  shift
+  (
+    export CC=gcc-6
+    export CXX=g++-6
+    export HOMEBREW_CC=gcc-6
+    export HOMEBREW_CXX=g++-6
+    brew install --build-from-source  ${pkg} $*  2>&1 |
+        tee $HOME/Library/Logs/Homebrew/$USER/${pkg}-$(date +"%F_%H%M").txt
+  )
+}
+
+
+#========================================================================
+
 mcd ()
 {
     mkdir -p -- "$1";

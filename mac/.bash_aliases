@@ -36,9 +36,12 @@ alias monitor="ssh agg -t 'screen -D -R monitor'"
 # a good ommand line there is:
 # udemy-logs-error-django   | grep -v 'SSL' | grep -v 'experiment' | grep -v 'read only' | grep -v 'merge' | grep -v 'spans' | grep -v 'Kafka'  | grep -v 'logo.jpg' | grep -v 'get_hls_root_playlist_url' | grep -v 'tier' | sed 's/\\n/\n/g'
 
+_KEEPDB_="--keepdb"
+# _KEEPDB_=""
 _TEST_BASE="w; python manage.py test --settings=udemy.settings."
 _TEST_UNIT="${_TEST_BASE}test_unit"
-_TEST_INT="${_TEST_BASE}test_integration --keepdb"
+_TEST_INT_NO_KEEPDB_="${_TEST_BASE}test_integration ${_KEEPDB_}"
+_TEST_INT="${_TEST_INT_NO_KEEPDB_} ${_KEEPDB_}"
 _TEST_SCOPE_DISCOUNT="udemy/discount udemy/discount udemy/rules udemy/visit"
 
 alias unit="${_TEST_UNIT} ${_TEST_SCOPE_DISCOUNT}"
@@ -48,6 +51,8 @@ alias unit-all=unit_all
 alias int="${_TEST_INT} ${_TEST_SCOPE_DISCOUNT}"
 alias int_all="${_TEST_INT} udemy"
 alias int-all=int_all
+alias int-only="${_TEST_INT}"
+alias int-only-no-keepdb="${_TEST_INT_NO_KEEPDB_}"
 
 alias unit-js="w; cd static; ./node_modules/.bin/grunt test-with-sourcemaps"
 
