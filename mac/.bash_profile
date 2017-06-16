@@ -73,6 +73,9 @@ export PATH="$HOME/.yarn/bin:${PATH}"
 # Add mysql to the path
 export PATH=${PATH}:/usr/local/opt/mysql@5.6/bin/
 
+# add local node executables
+export PATH=${PATH}:./node_modules/.bin/
+
 # SSH ---------------------------
 ssh-add -k ~/.ssh/id_rsa
 
