@@ -1,3 +1,4 @@
 #!/bin/bash
-git diff --name-only | grep '\.py$' | xargs -t flake8 "$@"
-
+#git diff --name-only | grep '\.py$' | xargs -t flake8 "$@"
+# Requires: pip install autoflake
+git diff --name-only | grep '\.py$' | xargs -L 1 -t autoflake --remove-all-unused-imports --remove-unused-variables -i "$@"
