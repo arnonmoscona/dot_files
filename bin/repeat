@@ -1,0 +1,49 @@
+#!/bin/bash
+# Repeat a commad and wait for something to change in the file system
+
+. ~/.bash_functions
+
+WEBSITE_DIR=~/projects/website-django
+
+function int-only {
+  cd $WEBSITE_DIR
+  python manage.py test --settings=udemy.settings.test_integration --keepdb --nocapture "$@"
+}
+
+function int-only-no-keepdb {
+  cd $WEBSITE_DIR
+  python manage.py test --settings=udemy.settings.test_integration "$@"
+}
+
+function unit-only {
+  cd $WEBSITE_DIR
+  python manage.py test --settings=udemy.settings.test_unit --processes=4 "$@"
+}
+
+function int_all {
+  cd $WEBSITE_DIR
+  python manage.py test --settings=udemy.settings.test_integration --keepdb udemy "$@"
+}
+
+function int-all {
+  int_all "$@"
+}
+
+function unit_all {
+  python manage.py test --settings=udemy.settings.test_unit --processes=4 udemy "$@"
+}
+
+function unit-all {
+  unit_all "$@"
+}
+
+_cmd=$1
+shift
+while true ; do
+    echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
+    $_cmd "$@"
+    echo '--------- DONE ---------'
+    fswatch -e '___$' -e '\/\.idea\/' -e '\/\.git\/' -e 'website-django/nosetests.xml' -1 . 
+    sleep 1 || break
+    #test $_exit_code -gt 128 && exit;
+done

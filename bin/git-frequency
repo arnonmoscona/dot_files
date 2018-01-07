@@ -1,0 +1,9 @@
+#!/bin/bash
+GREP_ARG=$1
+GREP_ARG="${GREP_ARG:-.}"
+HEAD_ARG=$2
+HEAD_ARG="${HEAD_ARG:-20}"
+LOOKBACK_ARG=$3
+LOOKBACK_ARG="${LOOKBACK_ARG:-20000}"
+git rev-list --objects --all | awk '$2' | head -$LOOKBACK_ARG | sort -k2 | uniq -cf1 | sort -rn | grep "${GREP_ARG}" | awk '{printf("%s\t%s\n", $1, $3);}' | head -$HEAD_ARG
+

@@ -1,4 +1,5 @@
-echo ".bash_profile"
+#!/usr/bin/bash
+#echo ".bash_profile"
 
 # Java --------------------------
 # export JDK_NAME="JDK1.8.0_111"
@@ -41,6 +42,12 @@ if [ -f "${HOME}/.bash_functions" ]; then
   source "${HOME}/.bash_functions"
 fi
 
+# Git completions
+if [ -f "{HOME}/git-completion.bash" ]; then
+  source "{HOME}/git-completion.bash"
+fi
+
+export PATH=~/bin:${PATH}
 # END shell options ..............
 
 # prompt stuff
@@ -57,7 +64,23 @@ export PS1="\[\e[33m\]\w\[\e]0;\w\a\] \[\e[32m\]\$(parse_git_branch)\[\e[0m\]\n\
 
 # Python ------------------------
 . ~/envs/python3/bin/activate
+export DJANGO_SETTINGS_MODULE=udemy.settings.local 
+#export PATH=${PATH}:~/envs/python3/bin
+
+# Add Yarn to path
+export PATH="$HOME/.yarn/bin:${PATH}"
+
+# Add mysql to the path
+export PATH=${PATH}:/usr/local/opt/mysql@5.6/bin/
+
+# add local node executables
+export PATH=${PATH}:./node_modules/.bin/
 
 # SSH ---------------------------
 ssh-add -k ~/.ssh/id_rsa
 
+# The following must be at the end of the script for pyenv to work correctly
+if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
+
+
+test -e "${HOME}/.iterm2_shell_integration.bash" && source "${HOME}/.iterm2_shell_integration.bash"
