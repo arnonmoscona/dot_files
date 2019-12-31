@@ -99,3 +99,10 @@ mcd ()
 
 # run a single test
 function t { `echo $*  | sed -e 's/-//' | awk '{print $2"."$1}' | sed -e 's/[\(\)]//g' | sed -e 's/\(.*\)\.\(.*\..*\)/.\/manage.py test --settings=udemy.settings.test_integration --keepdb \1:\2/'`; }
+
+function  parse_git_branch {
+  #ref=$(git-symbolic-ref HEAD 2> /dev/null) || return
+  ref=$(git branch --no-color 2> /dev/null |grep '^\*'|sed -e 's/^\* //')
+  echo "("${ref#refs/heads/}")"
+}
+

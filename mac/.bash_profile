@@ -18,10 +18,17 @@
 set -o ignoreeof
 #
 # Use case-insensitive filename globbing
-shopt -s nocaseglob
+if [ "$SHELL" = "/bin/bash" ]; then
+	shopt -s nocaseglob
+fi
 #
 # Make bash append rather than overwrite the history on disk
-shopt -s histappend
+if [ "$SHELL" = "/bin/zsh" ]; then
+	setopt SHARE_HISTORY
+	setopt APPEND_HISTORY
+else
+	shopt -s histappend
+fi
 # Uncomment to turn on programmable completion enhancements.
 # Any completions you add in ~/.bash_completion are sourced last.
 [[ -f /etc/bash_completion ]] && . /etc/bash_completion
@@ -31,6 +38,9 @@ export HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignoredups
 
 # Whenever displaying the prompt, write the previous line to disk
 export PROMPT_COMMAND="history -a"
+
+export PATH=~/bin:${PATH}
+export PATH=${PATH}:~/.local/bin:~/homebrew/bin
 
 # Some people use a different file for aliases
 if [ -f "${HOME}/.bash_aliases" ]; then
@@ -46,8 +56,6 @@ fi
 if [ -f "{HOME}/git-completion.bash" ]; then
   source "{HOME}/git-completion.bash"
 fi
-
-export PATH=~/bin:${PATH}
 # END shell options ..............
 
 # prompt stuff
@@ -60,11 +68,18 @@ function parse_git_branch {
 # original PS1: \[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[33m\]\w\[\e[0m\]\n\$
 # original Ubuntu PS1: \[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\u@\h:\w\$
 # original mac PS1: \h:\W \u\$
-export PS1="\[\e[33m\]\w\[\e]0;\w\a\] \[\e[32m\]\$(parse_git_branch)\[\e[0m\]\n\$"
+export NEWLINE=$'\n'
+if [ "$SHELL" = "/bin/zsh" ]; then
+	setopt PROMPT_SUBST
+	export PROMPT='%F{green}%~ %F{yellow}$(parse_git_branch)%F{reset_color}${NEWLINE}>'
+else
+	export PS1="\[\e[33m\]\w\[\e]0;\w\a\] \[\e[32m\]\$(parse_git_branch)\[\e[0m\]\n\$"
+fi
 
 # Python ------------------------
-. ~/envs/python3/bin/activate
-export DJANGO_SETTINGS_MODULE=udemy.settings.local 
+#. ~/envs/python3/bin/activate
+eval "$(pyenv init -)"
+#export DJANGO_SETTINGS_MODULE=udemy.settings.local 
 #export PATH=${PATH}:~/envs/python3/bin
 
 # Add Yarn to path

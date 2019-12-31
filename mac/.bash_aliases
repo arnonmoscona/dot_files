@@ -8,7 +8,11 @@ alias grep='grep --color=auto'
 alias egrep='egrep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias mkdir='mkdir -pv'
-alias h='history'
+if [ "$SHELL" = "/bin/zsh" ]; then
+	alias h='history 0'
+else
+	alias h='history'
+fi
 alias df="df -Tha --total"
 alias du="du -ach | sort -h"
 alias psg="ps aux | grep -v grep | grep -i -e VSZ -e"
