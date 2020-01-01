@@ -98,4 +98,8 @@ ssh-add -k ~/.ssh/id_rsa
 if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
 
 
-test -e "${HOME}/.iterm2_shell_integration.bash" && source "${HOME}/.iterm2_shell_integration.bash"
+if [ "$SHELL" = "/bin/zsh" ]; then
+	test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+else
+	test -e "${HOME}/.iterm2_shell_integration.bash" && source "${HOME}/.iterm2_shell_integration.bash"
+fi
