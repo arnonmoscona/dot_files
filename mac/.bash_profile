@@ -70,8 +70,10 @@ function parse_git_branch {
 # original mac PS1: \h:\W \u\$
 export NEWLINE=$'\n'
 if [ "$SHELL" = "/bin/zsh" ]; then
-	setopt PROMPT_SUBST
-	export PROMPT='%F{green}%~ %F{yellow}$(parse_git_branch)%F{reset_color}${NEWLINE}>'
+	# Use .zshrc_finalization instead
+	#setopt PROMPT_SUBST
+	#export PROMPT="╭─ %F{green}%~ %F{yellow}$(parse_git_branch)%F{reset_color}
+#╰─%B${user_symbol}%b "
 else
 	export PS1="\[\e[33m\]\w\[\e]0;\w\a\] \[\e[32m\]\$(parse_git_branch)\[\e[0m\]\n\$"
 fi
@@ -99,6 +101,7 @@ if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
 
 
 if [ "$SHELL" = "/bin/zsh" ]; then
+	source .zshrc_finalization
 	test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 else
 	test -e "${HOME}/.iterm2_shell_integration.bash" && source "${HOME}/.iterm2_shell_integration.bash"

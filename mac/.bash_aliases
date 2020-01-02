@@ -2,17 +2,10 @@ alias ll='ls -G -lF' # mac does not accept --color
 alias lh='ls -G -lFh'
 alias ls='ls -G'
 alias la='ls -G -a'
-alias ..='cd ..'
-alias ...='cd ../..'
 alias grep='grep --color=auto'
 alias egrep='egrep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias mkdir='mkdir -pv'
-if [ "$SHELL" = "/bin/zsh" ]; then
-	alias h='history 0'
-else
-	alias h='history'
-fi
 alias df="df -Tha --total"
 alias du="du -ach | sort -h"
 alias psg="ps aux | grep -v grep | grep -i -e VSZ -e"
@@ -67,4 +60,13 @@ alias morning='. ~/.bash_aliases; w; co-master ;git pull; pip install -r require
 alias gpf='git push -f orgin HEAD'
 alias br='git branch'
 alias rebase='git stash; git rebase master; git stash pop'
+
+# The following vary between bash and zsh
+if [ "$SHELL" = "/bin/zsh" ]; then
+	alias h='history 0'
+else
+	alias ..='cd ..'
+	alias ...='cd ../..'
+	alias h='history'
+fi
 
