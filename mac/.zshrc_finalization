@@ -106,4 +106,6 @@ source $ZSH/oh-my-zsh.sh
 #╰─ "
 PROMPT="╭─ %{$terminfo[bold]$fg[green]%}%~%{$reset_color%} ${rvm_ruby}${git_branch}${venv_prompt}
 ╰─%B${user_symbol}%b "
+RPROMPT='$(git_super_status)'
+
 
