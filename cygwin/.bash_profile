@@ -66,8 +66,8 @@ fi
 # }
 #
 
-. ~/envs/3.6.1/bin/activate
-. /cygdrive/c/Users/arnon_000/home/arnon_000/.bashrc
+. ~/envs/3.6.4/bin/activate
+. /cygdrive/c/Users/arnon/home/arnon/.bashrc
 
 #THIS MUST BE AT THE END OF THE FILE FOR GVM TO WORK!!!
-[[ -s "/home/arnon_000/.gvm/bin/gvm-init.sh" ]] && source "/home/arnon_000/.gvm/bin/gvm-init.sh"
+[[ -s "/home/arnon/.gvm/bin/gvm-init.sh" ]] && source "/home/arnon/.gvm/bin/gvm-init.sh"

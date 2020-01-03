@@ -62,7 +62,7 @@ alias br='git branch'
 alias rebase='git stash; git rebase master; git stash pop'
 
 # The following vary between bash and zsh
-if [ "$SHELL" = "/bin/zsh" ]; then
+if [ "$SHELL" = "/bin/zsh" ] || [ "$SHELL" = "/usr/bin/zsh" ]; then
 	alias h='history 0'
 else
 	alias ..='cd ..'

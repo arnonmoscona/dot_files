@@ -6,8 +6,8 @@ GRAILS_VER=1.3.7
 export GRAILS_HOME=c:/Users/Admin/grails-$GRAILS_VER
 export ANT_HOME_PATH=/cygdrive/c/Users/Arnon/Downloads/development/apache/ant/apache-ant-1.9.2-bin/apache-ant-1.9.2
 export ANT_HOME=C:/Users/Arnon/Downloads/development/apache/ant/apache-ant-1.9.2-bin/apache-ant-1.9.2
-export GRADLE_HOME=C:/Users/arnon_000/Downloads/Media/development/gradle/2.1/gradle-2.1-all/gradle-2.1
-export GRADLE_HOME_PATH=/cygdrive/c/Users/arnon_000/Downloads/Media/development/gradle/2.1/gradle-2.1-all/gradle-2.1
+export GRADLE_HOME=C:/Users/arnon/Downloads/Media/development/gradle/2.1/gradle-2.1-all/gradle-2.1
+export GRADLE_HOME_PATH=/cygdrive/c/Users/arnon/Downloads/Media/development/gradle/2.1/gradle-2.1-all/gradle-2.1
 
 export PATH=/cygdrive/c/Program\ Files/Java/jdk1.8.0/bin:~/cygwin_bin:${ANT_HOME_PATH}/bin:/cygdrive/c/Users/Admin/griffon-0.3/bin:/cygdrive/c/Users/Admin/grails-$GRAILS_VER/bin:~/cygwin_bin/maven3/bin:${PATH}:/cygdrive/c/Program\ Files\ \(x86\)/Groovy/Groovy-2.3.2/bin:${GRADLE_HOME_PATH}/bin
 
@@ -20,8 +20,15 @@ function parse_git_branch {
   echo "("${ref#refs/heads/}")"
 }
 
-# original PS1: \[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[33m\]\w\[\e[0m\]\n\$
-export PS1="\[\e[33m\]\w\[\e]0;\w\a\] \[\e[32m\]\$(parse_git_branch)\[\e[0m\]\n\$"
+
+# The following vary between bash and zsh
+if [ "$SHELL" = "/bin/zsh" ] || [ "$SHELL" = "/usr/bin/zsh" ]; then
+	# zsh specific stuff...
+else
+	# original PS1: \[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[33m\]\w\[\e[0m\]\n\$
+	export PS1="\[\e[33m\]\w\[\e]0;\w\a\] \[\e[32m\]\$(parse_git_branch)\[\e[0m\]\n\$"
+fi
+
 
 alias ll='ls --color -lF'
 alias lh='ls --color -lFh'
@@ -37,7 +44,7 @@ alias mkdirs='mkdir -p'
 # The following requires ncurses
 alias c clear
 
-. envs/3.6.1/bin/activate
+. envs/3.6.4/bin/activate
 
 #THIS MUST BE AT THE END OF THE FILE FOR GVM TO WORK!!!
-[[ -s "/home/arnon_000/.gvm/bin/gvm-init.sh" ]] && source "/home/arnon_000/.gvm/bin/gvm-init.sh"
+[[ -s "/home/arnon/.gvm/bin/gvm-init.sh" ]] && source "/home/arnon/.gvm/bin/gvm-init.sh"
