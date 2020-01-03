@@ -68,7 +68,7 @@ ZSH_THEME="bira"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git z python pip pipenv brew celery django helm osx pep8 postgres pylint rsync screen virtualenv vscode)
+plugins=(git z python pip brew celery django helm osx pep8 postgres pylint rsync screen vscode)
 
 source $ZSH/oh-my-zsh.sh
 
