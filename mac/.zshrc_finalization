@@ -104,6 +104,6 @@ source $ZSH/oh-my-zsh.sh
 #╰─ "
 #PROMPT="╭─ %{$terminfo[bold]$fg[blue]%}%~ %{$reset_color%}$(ruby_prompt_info)$(git_prompt_info)$(virtualenv_prompt_info)
 #╰─ "
-PROMPT="╭─ %{$terminfo[bold]$fg[green]%}%~ ${rvm_ruby}${git_branch}${venv_prompt}
+PROMPT="╭─ %{$terminfo[bold]$fg[green]%}%~%{$reset_color%} ${rvm_ruby}${git_branch}${venv_prompt}
 ╰─%B${user_symbol}%b "
 
