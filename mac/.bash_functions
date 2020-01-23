@@ -106,3 +106,24 @@ function  parse_git_branch {
   echo "("${ref#refs/heads/}")"
 }
 
+
+
+#========================================================================
+# Syapse
+#========================================================================
+
+ecr(){
+  eval "$(aws ecr get-login --region us-west-2 --registry-ids 304614349146 141380700111 --no-include-email)"
+}
+
+aws-env(){
+  if [ -z $1 ] ; then
+    account=dev
+  else
+    account=$1
+  fi
+  export AWS_ACCOUNT=$account
+  export AWS_PROFILE=$account
+  saml2aws login -a $account --skip-prompt
+}
+

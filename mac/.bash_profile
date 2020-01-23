@@ -96,12 +96,18 @@ export PATH=${PATH}:./node_modules/.bin/
 # SSH ---------------------------
 ssh-add -k ~/.ssh/id_rsa
 
+# Docker stuff (Syapse)
+export AWS_PROFILE=dev
+# add psql to path regardless of whether brew postresql is installed
+#export PATH="/Users/arnonmoscona/homebrew/opt/libpq/bin:$PATH"
+
 # The following must be at the end of the script for pyenv to work correctly
 if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
 
 
 if [ "$SHELL" = "/bin/zsh" ]; then
-	source .zshrc_finalization
+	# be sure to ln -s ~/.bash_profile ~/.zshrc
+	source ~/.zshrc_finalization
 	test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 else
 	test -e "${HOME}/.iterm2_shell_integration.bash" && source "${HOME}/.iterm2_shell_integration.bash"

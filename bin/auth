@@ -1,0 +1,4 @@
+#!~/bin/sh
+k8s-auth dev
+saml2aws login -a dev --username=xxxxxx --password=xxxxxx
+
