@@ -1,0 +1,19 @@
+#!/bin/bash
+# tars up the projec, copies everything to saws, and recovers .env from your saws home directory
+# For this script to work you need the following environment variables (preferably in .env):
+# SAWS_ID, SAWS_HOST, SAWS_PROJECT_DIR
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." >/dev/null 2>&1 && pwd )"
+cd "$DIR" || exit
+source .env
+PROJ_DIR="${PWD##*/}"
+
+echo "uploading project from $DIR to $SAWS_ID@$SAWS_HOST"
+echo "copying credentials"
+scp -r ~/.aws "$SAWS_ID"@"$SAWS_HOST":~/
+echo "packing up and shipping"
+rm /tmp/"$PROJ_DIR".tz
+tar cvfz /tmp/"$PROJ_DIR".tz .
+scp /tmp/"$PROJ_DIR".tz "$SAWS_ID"@"$SAWS_HOST":/tmp
+echo "unpacking on $SAWS_ID@$SAWS_HOST"
+ssh "$SAWS_ID"@"$SAWS_HOST" "cd $SAWS_PROJECT_DIR; rm -rf * .*; tar xfvz /tmp/$PROJ_DIR.tz; rm /tmp/$PROJ_DIR.tz; cp ~/.env ."
+

@@ -1,11 +1,9 @@
-#/bin/bash
-echo "copying credentials"
-scp -r ~/.aws arnonm@saws.syapse.com:~/
+#!/bin/bash
+# Copies just the files that changed over to your saws home directory (one by one)
+# For this script to work you need the following environment variables (preferably in .env):
+# SAWS_ID, SAWS_HOST, SAWS_PROJECT_DIR
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." >/dev/null 2>&1 && pwd )"
-echo "uploading project to $DIR"
-cd $DIR
-rm /tmp/ci-adw-rubosity-z-raw.tz
-tar cvfz /tmp/ci-adw-rubosity-z-raw.tz .
-scp /tmp/ci-adw-rubosity-z-raw.tz arnonm@saws.syapse.com:/tmp
-ssh arnonm@saws.syapse.com "cd ~/projects/ci-adw-rubosity-z-raw; rm -rf * .*; tar xfvz /tmp/ci-adw-rubosity-z-raw.tz; rm /tmp/ci-adw-rubosity-z-raw.tz; cp ~/.env ."
-
+echo "uploading git diff to $DIR"
+cd "$DIR" || exit
+source .env
+git diff --name-only | xargs -L 1 -t -I {} scp {} "$SAWS_ID"@"$SAWS_HOST":"$SAWS_PROJECT_DIR"/{}
