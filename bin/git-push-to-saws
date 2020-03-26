@@ -1,0 +1,11 @@
+#/bin/bash
+echo "copying credentials"
+scp -r ~/.aws arnonm@saws.syapse.com:~/
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." >/dev/null 2>&1 && pwd )"
+echo "uploading project to $DIR"
+cd $DIR
+rm /tmp/ci-adw-rubosity-z-raw.tz
+tar cvfz /tmp/ci-adw-rubosity-z-raw.tz .
+scp /tmp/ci-adw-rubosity-z-raw.tz arnonm@saws.syapse.com:/tmp
+ssh arnonm@saws.syapse.com "cd ~/projects/ci-adw-rubosity-z-raw; rm -rf * .*; tar xfvz /tmp/ci-adw-rubosity-z-raw.tz; rm /tmp/ci-adw-rubosity-z-raw.tz; cp ~/.env ."
+

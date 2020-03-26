@@ -2,7 +2,7 @@
 [user]
 # Please adapt and uncomment the following lines:
 	name = Arnon Moscona
-	email = arnon.moscona@udemy.com
+	email = arnon.moscona@syapse.com
 [gui]
         recentrepo = C:/Users/arnon_000/projects/common/monastery/monastery-copycat
         recentrepo = C:/Users/arnon_000/projects/opensource/copycat
@@ -29,7 +29,7 @@
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
 	path = 
 [mergetool "sourcetree"]
-	cmd = /Users/arnonmoscona/Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
 	trustExitCode = true
 [diff]
 	  tool = meld
@@ -46,3 +46,5 @@
 	  trustExitCode = true
 	    cmd = open -W -a Meld --args --auto-merge \"$PWD/$LOCAL\" \"$PWD/$BASE\" \"$PWD/$REMOTE\" --output=\"$PWD/$MERGED\"
 
+[commit]
+	template = /Users/arnonmoscona/.stCommitMsg

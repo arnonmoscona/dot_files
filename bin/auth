@@ -1,4 +1,6 @@
-#!~/bin/sh
-k8s-auth dev
-saml2aws login -a dev --username=xxxxxx --password=xxxxxx
+#!/bin/sh
+# the following file should contain: export SAML2AWS_PASSWORD=xxxxx
+source ~/.saml2aws.okta.password
+k8s-auth prod
+saml2aws login -a prod --username=arnon.moscona@syapse.com
 
