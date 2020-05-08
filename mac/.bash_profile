@@ -112,3 +112,5 @@ if [ "$SHELL" = "/bin/zsh" ]; then
 else
 	test -e "${HOME}/.iterm2_shell_integration.bash" && source "${HOME}/.iterm2_shell_integration.bash"
 fi
+
+export PATH="$HOME/.poetry/bin:$PATH"
