@@ -19,15 +19,21 @@ set -o ignoreeof
 #
 # Use case-insensitive filename globbing
 if [ "$SHELL" = "/bin/bash" ]; then
-	shopt -s nocaseglob
+	if [ -x "$(shopt 2>&1 > /dev/null)" ]; then
+	  shopt -s nocaseglob
+	fi
 fi
 #
 # Make bash append rather than overwrite the history on disk
-if [ "$SHELL" = "/bin/zsh" ]; then
+if [ "$SHELL" = "/bin/zsh" ] || [ "$SHELL" = "/usr/bin/zsh" ]; then
+  if [ -x "$(shopt 2>&1 > /dev/null)" ]; then
 	setopt SHARE_HISTORY
 	setopt APPEND_HISTORY
+  fi
 else
+  if [ -x "$(shopt 2>&1 > /dev/null)" ]; then
 	shopt -s histappend
+  fi
 fi
 # Uncomment to turn on programmable completion enhancements.
 # Any completions you add in ~/.bash_completion are sourced last.
@@ -69,7 +75,7 @@ function parse_git_branch {
 # original Ubuntu PS1: \[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\u@\h:\w\$
 # original mac PS1: \h:\W \u\$
 export NEWLINE=$'\n'
-if [ "$SHELL" = "/bin/zsh" ]; then
+if [ "$SHELL" = "/bin/zsh" ] || [ "$SHELL" = "/usr/bin/zsh" ]; then
 	# Use .zshrc_finalization instead
 	#setopt PROMPT_SUBST
 	#export PROMPT="╭─ %F{green}%~ %F{yellow}$(parse_git_branch)%F{reset_color}
@@ -79,8 +85,11 @@ else
 fi
 
 # Python ------------------------
-#. ~/envs/python3/bin/activate
+# pyenv
+export PATH="$HOME/.pyenv/bin:$PATH"
 eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+#. ~/envs/python3/bin/activate
 #export DJANGO_SETTINGS_MODULE=udemy.settings.local 
 #export PATH=${PATH}:~/envs/python3/bin
 
@@ -105,7 +114,7 @@ export AWS_PROFILE=dev
 if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
 
 
-if [ "$SHELL" = "/bin/zsh" ]; then
+if [ "$SHELL" = "/bin/zsh" ] || [ "$SHELL" = "/usr/bin/zsh" ]; then
 	# be sure to ln -s ~/.bash_profile ~/.zshrc
 	source ~/.zshrc_finalization
 	test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
@@ -114,3 +123,11 @@ else
 fi
 
 export PATH="$HOME/.poetry/bin:$PATH"
+
+unset  PIP_USER
+
+
+
+export PATH="$HOME/.yarn/bin:$PATH"
+
+
