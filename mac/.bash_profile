@@ -76,6 +76,7 @@ function parse_git_branch {
 # original mac PS1: \h:\W \u\$
 export NEWLINE=$'\n'
 if [ "$SHELL" = "/bin/zsh" ] || [ "$SHELL" = "/usr/bin/zsh" ]; then
+	:
 	# Use .zshrc_finalization instead
 	#setopt PROMPT_SUBST
 	#export PROMPT="╭─ %F{green}%~ %F{yellow}$(parse_git_branch)%F{reset_color}
@@ -107,6 +108,10 @@ ssh-add -k ~/.ssh/id_rsa
 
 # Docker stuff (Syapse)
 export AWS_PROFILE=dev
+# Some people use a different file for aliases
+if [ -f "${HOME}/.bash_aws" ]; then
+  source "${HOME}/.bash_aws"
+fi
 # add psql to path regardless of whether brew postresql is installed
 #export PATH="/Users/arnonmoscona/homebrew/opt/libpq/bin:$PATH"
 
@@ -130,4 +135,9 @@ unset  PIP_USER
 
 export PATH="$HOME/.yarn/bin:$PATH"
 
+# .env
+if [ -f "${HOME}/.env" ]; then
+  echo "Detected .env: running it..."
+  source "${HOME}/.env"
+fi
 
