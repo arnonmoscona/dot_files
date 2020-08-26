@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# Tunnel to ADW to local port 5432
+ssh -NLf 5432:adw-prod.cluster-czsq80p56jgd.us-west-2.rds.amazonaws.com:5432 localhost
+
