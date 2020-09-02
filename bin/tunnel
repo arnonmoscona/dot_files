@@ -1,5 +1,16 @@
 #!/bin/sh
 
+# make sure that we have the local public key in authorized_keys
+COUNT=$(wc -l ~/.ssh/authorized_keys | cut -d ' '  -f 1)
+if [ $COUNT == '2' ]; then
+        echo "Appending local public key to authorized_keys"
+        cp ~/.ssh/authorized_keys ~/.ssh/authorized_keys.new
+        echo '' >> ~/.ssh/authorized_keys.new
+        cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys.new
+        mv ~/.ssh/authorized_keys ~/.ssh/authorized_keys.orig
+        mv ~/.ssh/authorized_keys.new ~/.ssh/authorized_keys
+fi
+
 # Tunnel to ADW to local port 5432
-ssh -NLf 5432:adw-prod.cluster-czsq80p56jgd.us-west-2.rds.amazonaws.com:5432 localhost
+ssh -fNL 5432:adw-prod.cluster-czsq80p56jgd.us-west-2.rds.amazonaws.com:5432 localhost
 
