@@ -53,8 +53,10 @@ alias cd=cd_func
 
 #========================================================================
 
-if [ -f $(brew --prefix)/share/bash-completion/bash_completion ]; then
-  . $(brew --prefix)/share/bash-completion/bash_completion
+if [ -x "$(brew --prefix 2>&1 >/dev/null)" ]; then
+  if [ -f $(brew --prefix)/share/bash-completion/bash_completion ]; then
+    . $(brew --prefix)/share/bash-completion/bash_completion
+  fi
 fi
 
 brewPkg() {
