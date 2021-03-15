@@ -84,6 +84,9 @@ eval "$(pyenv init -)"
 #export DJANGO_SETTINGS_MODULE=udemy.settings.local 
 #export PATH=${PATH}:~/envs/python3/bin
 
+# the following depends on openssl (breq install openssl) and is required for psycopg2
+export LIBRARY_PATH=$LIBRARY_PATH:/usr/local/opt/openssl/lib/
+
 # Add Yarn to path
 export PATH="$HOME/.yarn/bin:${PATH}"
 
@@ -114,3 +117,6 @@ else
 fi
 
 export PATH="$HOME/.poetry/bin:$PATH"
+# Rust support
+source "$HOME/.cargo/env"
+

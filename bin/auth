@@ -1,6 +1,8 @@
 #!/bin/sh
 # the following file should contain: export SAML2AWS_PASSWORD=xxxxx
 source ~/.saml2aws.okta.password
+aws_env=${AWS_PROFILE:-prod}
+echo "aws_env=$aws_env  (AWS_PROFILE=$AWS_PROFILE)"
 k8s-auth prod
-saml2aws login $1  -a prod --username=arnon.moscona@syapse.com
+saml2aws login $1  -a "$aws_env" --username=arnon.moscona@syapse.com
 

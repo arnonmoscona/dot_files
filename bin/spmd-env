@@ -1,0 +1,18 @@
+#!/bin/bash
+export AWS_PROFILE=dev
+export PGHOST="spmd-dev.cluster-cheqtts362c0.us-west-2.rds.amazonaws.com"
+export PGPORT="5432"
+export PGUSER="normalization"
+export PGUSER="concept"
+HOST=${PGHOST}
+PORT=$PGPORT
+USER=$PGUSER
+PASS="$(aws rds generate-db-auth-token --profile dev --region us-west-2 --hostname $HOST --port $PORT --username $USER)"
+export PGPASSWORD="$PASS"
+export DATABASE_HOST=$HOST
+export DATABASE_USER=$USER
+export DATABASE_PORT=$PORT
+export DATABASE_PASSWORD=$PASS
+export DATABASE_NAME="spmd"
+export IAM_ENABLED="False"
+
