@@ -11,6 +11,7 @@ alias du="du -ach | sort -h"
 alias psg="ps aux | grep -v grep | grep -i -e VSZ -e"
 alias mkdirs="mkdir -p"
 alias c=clear
+alias md5sum='md5 -r'
 
 # Python stuff
 alias ip=ipython
@@ -69,4 +70,8 @@ else
 	alias ...='cd ../..'
 	alias h='history'
 fi
+
+# psql
+alias adw='ssh -fNL 5434:10.20.2.222:5432 arnonm@balboa.syapse.com; psql -d syadw -h localhost -U postgres -p 5434'
+alias syadw=adw
 

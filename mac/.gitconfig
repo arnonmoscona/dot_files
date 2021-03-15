@@ -10,9 +10,10 @@
         recentrepo = C:/Users/arnon_000/projects/common/monastery/monastery-api
         recentrepo = C:/Users/arnon_000/projects/common/monastery/monastery-bonehead
 [filter "lfs"]
-        clean = git-lfs clean %f
-        smudge = git-lfs smudge %f
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
         required = true
+	process = git-lfs filter-process
 
 [alias]
 	co = checkout
@@ -24,6 +25,7 @@
 	dump = cat-file -p
 [core]
 	excludesfile = /Users/arnonmoscona/.gitignore_global
+	autocrlf = input
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
 	path = 

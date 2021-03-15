@@ -1,0 +1,13 @@
+#!/bin/bash
+export AWS_PROFILE=dev
+HOST="spmd-dev.cluster-cheqtts362c0.us-west-2.rds.amazonaws.com"
+PORT="5432"
+USER="concept"
+DB="spmd"
+if [ -z "$HOST" ]; then print_usage_and_exit; fi
+if [ -z "$PORT" ]; then print_usage_and_exit; fi
+if [ -z "$USER" ]; then print_usage_and_exit; fi
+if [ -z "$DB" ]; then print_usage_and_exit; fi
+PASS="$(aws rds generate-db-auth-token --profile dev --region us-west-2 --hostname $HOST --port $PORT --username $USER)"
+PGPASSWORD="$PASS" psql -h $HOST -p $PORT -U $USER -d $DB
+

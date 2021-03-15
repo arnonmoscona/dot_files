@@ -1,5 +1,5 @@
 #!/bin/bash
-# tars up the projec, copies everything to saws, and recovers .env from your saws home directory
+# tars up the project, copies everything to saws, and recovers .env from your saws home directory
 # For this script to work you need the following environment variables (preferably in .env):
 # SAWS_ID, SAWS_HOST, SAWS_PROJECT_DIR
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." >/dev/null 2>&1 && pwd )"
