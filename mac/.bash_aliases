@@ -72,6 +72,6 @@ else
 fi
 
 # psql
-alias adw='ssh -fNL 5434:10.20.2.222:5432 arnonm@balboa.syapse.com; psql -d syadw -h localhost -U postgres -p 5434'
+alias adw='ssh -fNL 5434:10.20.137.111:5432 arnonm@balboa.syapse.com; psql -d syadw -h localhost -U postgres -p 5434'
 alias syadw=adw
 

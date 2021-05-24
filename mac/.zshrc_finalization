@@ -110,4 +110,5 @@ PROMPT="╭─ %{$terminfo[bold]$fg[green]%}%~%{$reset_color%} ${rvm_ruby}${git_
 RPROMPT='$(git_super_status)'
 
 unalias cd
+export PYTHONPATH=.
 
