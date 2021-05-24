@@ -5,4 +5,5 @@ aws_env=${AWS_PROFILE:-prod}
 echo "aws_env=$aws_env  (AWS_PROFILE=$AWS_PROFILE)"
 k8s-auth prod
 saml2aws login $1  -a "$aws_env" --username=arnon.moscona@syapse.com
+echo "Note: if not authorized edit ~/.saml2aws.okta.password to check whether it's up to date"
 

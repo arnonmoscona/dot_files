@@ -87,8 +87,17 @@ fi
 
 # Python ------------------------
 # pyenv
-export PATH="$HOME/.pyenv/bin:$PATH"
+# Add pyenv executable to PATH and
+# enable shims by adding the following
+# to ~/.profile:
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init --path)"
+…
+# Load pyenv into the shell by adding
+# the following to ~/.bashrc:
 eval "$(pyenv init -)"
+
 eval "$(pyenv virtualenv-init -)"
 #. ~/envs/python3/bin/activate
 #export DJANGO_SETTINGS_MODULE=udemy.settings.local 
