@@ -103,8 +103,11 @@ eval "$(pyenv virtualenv-init -)"
 #export DJANGO_SETTINGS_MODULE=udemy.settings.local 
 #export PATH=${PATH}:~/envs/python3/bin
 
-# the following depends on openssl (breq install openssl) and is required for psycopg2
+# the following depends on openssl (brew install openssl) and is required for psycopg2
 export LIBRARY_PATH=$LIBRARY_PATH:/usr/local/opt/openssl/lib/
+# The following two are here for pip install cryptography
+export CPPFLAGS=-I/usr/local/opt/openssl/include
+export LDFLAGS=-L/usr/local/opt/openssl/lib
 
 # Add Yarn to path
 export PATH="$HOME/.yarn/bin:${PATH}"
