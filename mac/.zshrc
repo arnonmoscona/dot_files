@@ -104,3 +104,10 @@ test -e "${HOME}/.bash_profile" && source "${HOME}/.bash_profile"
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 test -e "${HOME}/.zshrc_finalization" && source "${HOME}/.zshrc_finalization"
 
+
+export PATH="$HOME/.poetry/bin:$PATH"
+
+autoload -Uz compinit
+zstyle ':completion:*' menu select
+fpath+=~/.zfunc
+

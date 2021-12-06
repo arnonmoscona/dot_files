@@ -111,4 +111,5 @@ RPROMPT='$(git_super_status)'
 
 unalias cd
 export PYTHONPATH=.
+fpath+=~/.zfunc
 

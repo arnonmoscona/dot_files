@@ -1,0 +1,3 @@
+#!/bin/bash
+APPMAP=true python -m appmap.unittest $1
+
