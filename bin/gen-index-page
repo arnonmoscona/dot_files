@@ -1,0 +1,27 @@
+#!python
+from operator import not_
+import os
+from datetime import date
+from pathlib import Path
+from pprint import pprint
+
+
+def get_title(md_file):
+    with open(md_file) as data:
+        for line in data:
+            if line.startswith('# '):
+                return line[2:].strip()
+    return md_file.name
+
+
+md_files = []
+
+for root, dirs, files in os.walk('.'):
+    md_files += [Path(root, f) for f in files if f.endswith('.md')]
+
+content = [f'* [{get_title(f)}]({f})  ({f})' for f in md_files 
+           if not str(f).startswith('.')]
+#pprint(content)
+content = [f'# Directory of docs (generated file)\n\nGenerated on {date.today()} \n'] + content
+
+print('\n'.join(content))

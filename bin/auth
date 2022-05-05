@@ -3,7 +3,7 @@
 source ~/.saml2aws.okta.password
 aws_env=${AWS_PROFILE:-prod}
 echo "aws_env=$aws_env  (AWS_PROFILE=$AWS_PROFILE)"
-k8s-auth prod  # needed if using Kubernetic or othe local tools for K8S
+k8s-auth dev  # needed if using Kubernetic or other local tools for K8S
 saml2aws login $1  -a "$aws_env" --username=arnon.moscona@syapse.com
 echo "Note: if not authorized edit ~/.saml2aws.okta.password to check whether it's up to date"
 

@@ -1,0 +1,9 @@
+#!/bin/sh
+
+# Install old formula from https://github.com/Homebrew/homebrew-core given a commit and a formula name
+
+SHA1=$1
+FORMULA=$2
+echo "curl https://raw.githubusercontent.com/Homebrew/homebrew-core/$SHA1/Formula/$FORMULA.rb > $(find $(brew --repository) -name $FORMULA.rb) && brew reinstall $FORMULA"
+curl https://raw.githubusercontent.com/Homebrew/homebrew-core/$SHA1/Formula/$FORMULA.rb > $(find $(brew --repository) -name $FORMULA.rb) && brew reinstall $FORMULA
+
