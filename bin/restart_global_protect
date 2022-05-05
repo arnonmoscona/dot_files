@@ -1,0 +1,4 @@
+#!/bin/sh
+launchctl unload /Library/LaunchAgents/com.paloaltonetworks.gp.pangpa*
+launchctl load /Library/LaunchAgents/com.paloaltonetworks.gp.pangpa*
+
