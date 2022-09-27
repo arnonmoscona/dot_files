@@ -1,6 +1,7 @@
+#alias ls='ls -G'
+alias ls='exa -aFG --group-directories-first --color=auto --git' # could also do --icons but that doesn't do anything useful on a mac
 alias ll='ls -G -lF' # mac does not accept --color
 alias lh='ls -G -lFh'
-alias ls='ls -G'
 alias la='ls -G -a'
 alias grep='grep --color=auto'
 alias egrep='egrep --color=auto'
@@ -12,6 +13,7 @@ alias psg="ps aux | grep -v grep | grep -i -e VSZ -e"
 alias mkdirs="mkdir -p"
 alias c=clear
 alias md5sum='md5 -r'
+alias cat=bat
 
 # Python stuff
 alias ip=ipython
