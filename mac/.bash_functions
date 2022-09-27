@@ -129,3 +129,32 @@ aws-env(){
   saml2aws login -a $account --skip-prompt
 }
 
+# The following was written by Mike Smith.
+# Run it like emrlogs j-3QX6EDZ7C5Z8A qc for example
+
+emrlogs() { 
+    local id="${1?You must provide an id}";
+    local env;
+    local bucket;
+    local prefix;
+    local dest="$HOME/emrlogs/$id";
+    case "$AWS_PROFILE" in 
+        dev)
+            bucket=syapse-dev-system-logs;
+            prefix=emr/console/dev
+        ;;
+        prod)
+            bucket=syapse-system-logs;
+            env="${2?You must provide an environment in prod}";
+            prefix="emr/console/$env"
+        ;;
+        *)
+            echo "Unknown AWS_PROFILE '$AWS_PROFILE'" 1>&2;
+            return 1
+        ;;
+    esac;
+    aws s3 sync "s3://$bucket/$prefix/$id" "$dest";
+    find "$dest" -type f -name '*.gz' -exec gunzip --force {} \;;
+    find "$dest" -type f -exec less {} \+
+}
+

@@ -119,6 +119,9 @@ export PATH=${PATH}:/usr/local/opt/mysql@5.6/bin/
 # add local node executables
 export PATH=${PATH}:./node_modules/.bin/
 
+# CLI visual enhancements
+export LS_COLORS=`vivid generate molokai`
+
 # SSH ---------------------------
 ssh-add -k ~/.ssh/id_rsa
 
