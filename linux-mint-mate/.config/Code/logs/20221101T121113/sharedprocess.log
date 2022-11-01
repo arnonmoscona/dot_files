@@ -1,0 +1,7 @@
+[2022-11-01 12:11:24.414] [sharedprocess] [info] Starting worker process with pid 17065 (type: fileWatcher, window: 1).
+[2022-11-01 12:11:26.462] [sharedprocess] [warning] No ptyHost heartbeat after 6 seconds
+[2022-11-01 12:11:43.594] [sharedprocess] [info] Worker process with pid 17065 terminated normally (type: fileWatcher, window: 1).
+[2022-11-01 12:11:46.343] [sharedprocess] [info] Starting worker process with pid 17104 (type: fileWatcher, window: 1).
+[2022-11-01 13:26:53.941] [sharedprocess] [error] RequestService#request (browser) - error https://az764295.vo.msecnd.net/extensions/marketplace.json {}
+[2022-11-01 13:50:06.330] [sharedprocess] [info] Worker process with pid 17104 terminated normally (type: fileWatcher, window: 1).
+[2022-11-01 13:50:08.733] [sharedprocess] [info] Starting worker process with pid 51714 (type: fileWatcher, window: 1).

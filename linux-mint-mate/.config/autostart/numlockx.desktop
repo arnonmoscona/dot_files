@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Exec=numlockx
+Hidden=false
+Name[en_US]=numlockx
+Name=numlockx
+Comment[en_US]=Turn numlock on
+Comment=Turn numlock on
+X-MATE-Autostart-Delay=0

@@ -1,0 +1,41 @@
+[2022-11-01 12:11:23.092] [exthost] [info] Extension host with pid 17004 started
+[2022-11-01 12:11:23.920] [exthost] [info] ExtensionService#_doActivateExtension vscode.microsoft-authentication, startup: false, activationEvent: 'onAuthenticationRequest:microsoft'
+[2022-11-01 12:11:23.922] [exthost] [info] ExtensionService#_doActivateExtension vscode.debug-auto-launch, startup: true, activationEvent: '*'
+[2022-11-01 12:11:23.922] [exthost] [info] ExtensionService#_doActivateExtension vscode.git-base, startup: true, activationEvent: '*', root cause: vscode.git
+[2022-11-01 12:11:23.923] [exthost] [info] ExtensionService#_doActivateExtension vscode.ipynb, startup: true, activationEvent: '*'
+[2022-11-01 12:11:24.571] [exthost] [info] ExtensionService#_doActivateExtension vscode.git, startup: true, activationEvent: '*'
+[2022-11-01 12:11:24.571] [exthost] [info] ExtensionService#_doActivateExtension vscode.github, startup: true, activationEvent: '*'
+[2022-11-01 12:11:25.127] [exthost] [info] Eager extensions activated
+[2022-11-01 12:11:25.127] [exthost] [info] ExtensionService#_doActivateExtension vscode.github-authentication, startup: false, activationEvent: 'onAuthenticationRequest:github'
+[2022-11-01 12:11:25.282] [exthost] [info] ExtensionService#_doActivateExtension vscode.emmet, startup: false, activationEvent: 'onStartupFinished'
+[2022-11-01 12:11:25.282] [exthost] [info] ExtensionService#_doActivateExtension vscode.merge-conflict, startup: false, activationEvent: 'onStartupFinished'
+[2022-11-01 12:11:43.538] [exthost] [info] Extension host terminating: received terminate message from renderer
+[2022-11-01 12:11:43.618] [exthost] [info] Extension host with pid 17004 exiting with code 0
+[2022-11-01 12:11:48.694] [exthost] [info] Extension host with pid 17105 started
+[2022-11-01 12:11:48.694] [exthost] [info] Skipping acquiring lock for /home/arnon/.config/Code/User/workspaceStorage/a2c513c6004966b4a9c656b352def136.
+[2022-11-01 12:11:49.172] [exthost] [info] ExtensionService#_doActivateExtension vscode.microsoft-authentication, startup: false, activationEvent: 'onAuthenticationRequest:microsoft'
+[2022-11-01 12:11:49.173] [exthost] [info] ExtensionService#_doActivateExtension vscode.debug-auto-launch, startup: true, activationEvent: '*'
+[2022-11-01 12:11:49.175] [exthost] [info] ExtensionService#_doActivateExtension vscode.git-base, startup: true, activationEvent: '*'
+[2022-11-01 12:11:49.177] [exthost] [info] ExtensionService#_doActivateExtension vscode.ipynb, startup: true, activationEvent: '*'
+[2022-11-01 12:11:49.913] [exthost] [info] ExtensionService#_doActivateExtension vscode.github, startup: true, activationEvent: '*'
+[2022-11-01 12:11:50.165] [exthost] [info] Eager extensions activated
+[2022-11-01 12:11:50.206] [exthost] [info] ExtensionService#_doActivateExtension vscode.emmet, startup: false, activationEvent: 'onStartupFinished'
+[2022-11-01 12:11:50.207] [exthost] [info] ExtensionService#_doActivateExtension vscode.merge-conflict, startup: false, activationEvent: 'onStartupFinished'
+[2022-11-01 12:11:50.554] [exthost] [info] ExtensionService#_doActivateExtension vscode.github-authentication, startup: false, activationEvent: 'onAuthenticationRequest:github'
+[2022-11-01 12:11:55.173] [exthost] [info] ExtensionService#_doActivateExtension vscode.git, startup: false, activationEvent: 'api', root cause: vscode.github
+[2022-11-01 13:50:06.232] [exthost] [info] Extension host terminating: received terminate message from renderer
+[2022-11-01 13:50:06.325] [exthost] [info] Extension host with pid 17105 exiting with code 0
+[2022-11-01 13:50:11.458] [exthost] [info] Extension host with pid 51715 started
+[2022-11-01 13:50:11.458] [exthost] [info] Skipping acquiring lock for /home/arnon/.config/Code/User/workspaceStorage/0b0c6867a6f77c45a080a98ec6dbdce7.
+[2022-11-01 13:50:11.648] [exthost] [info] ExtensionService#_doActivateExtension vscode.microsoft-authentication, startup: false, activationEvent: 'onAuthenticationRequest:microsoft'
+[2022-11-01 13:50:11.650] [exthost] [info] ExtensionService#_doActivateExtension vscode.debug-auto-launch, startup: true, activationEvent: '*'
+[2022-11-01 13:50:11.651] [exthost] [info] ExtensionService#_doActivateExtension vscode.git-base, startup: true, activationEvent: '*', root cause: vscode.git
+[2022-11-01 13:50:11.651] [exthost] [info] ExtensionService#_doActivateExtension vscode.ipynb, startup: true, activationEvent: '*'
+[2022-11-01 13:50:11.809] [exthost] [info] ExtensionService#_doActivateExtension vscode.git, startup: true, activationEvent: '*'
+[2022-11-01 13:50:11.810] [exthost] [info] ExtensionService#_doActivateExtension vscode.github, startup: true, activationEvent: '*'
+[2022-11-01 13:50:12.047] [exthost] [info] Eager extensions activated
+[2022-11-01 13:50:12.194] [exthost] [info] ExtensionService#_doActivateExtension vscode.emmet, startup: false, activationEvent: 'onStartupFinished'
+[2022-11-01 13:50:12.196] [exthost] [info] ExtensionService#_doActivateExtension vscode.merge-conflict, startup: false, activationEvent: 'onStartupFinished'
+[2022-11-01 13:50:12.487] [exthost] [info] ExtensionService#_doActivateExtension vscode.github-authentication, startup: false, activationEvent: 'onAuthenticationRequest:github'
+[2022-11-01 13:51:14.219] [exthost] [warning] [Decorations] CAPPING events from decorations provider vscode.git 1076
+[2022-11-01 13:52:23.272] [exthost] [warning] [Decorations] CAPPING events from decorations provider vscode.git 1076
