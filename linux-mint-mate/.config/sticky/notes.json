@@ -1,0 +1,13 @@
+{
+    "Group 1": [
+        {
+            "x": 49,
+            "y": 15,
+            "height": 200,
+            "width": 250,
+            "color": "yellow",
+            "title": "",
+            "text": "Install brew\nbrew:\n * \n\nzsh\ndot files\npipenv\n\n\n"
+        }
+    ]
+}

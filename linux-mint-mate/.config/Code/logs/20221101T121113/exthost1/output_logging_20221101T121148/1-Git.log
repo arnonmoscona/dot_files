@@ -1,0 +1,61 @@
+[2022-11-01T16:11:55.228Z] Log level: Info
+[2022-11-01T16:11:55.232Z] [info] Validating found git in: git
+[2022-11-01T16:11:55.266Z] [info] Using git 2.34.1 from git
+[2022-11-01T16:11:55.294Z] > git rev-parse --show-toplevel [6ms]
+[2022-11-01T16:11:55.294Z] fatal: not a git repository (or any of the parent directories): .git
+[2022-11-01T16:11:55.353Z] > git rev-parse --show-toplevel [42ms]
+[2022-11-01T16:11:55.353Z] fatal: not a git repository (or any of the parent directories): .git
+[2022-11-01T16:11:55.374Z] > git rev-parse --show-toplevel [6ms]
+[2022-11-01T16:11:55.374Z] fatal: not a git repository (or any of the parent directories): .git
+[2022-11-01T16:11:55.393Z] > git rev-parse --show-toplevel [9ms]
+[2022-11-01T16:11:55.393Z] fatal: not a git repository (or any of the parent directories): .git
+[2022-11-01T16:11:55.423Z] > git rev-parse --show-toplevel [8ms]
+[2022-11-01T16:11:55.423Z] fatal: not a git repository (or any of the parent directories): .git
+[2022-11-01T16:11:55.438Z] > git rev-parse --show-toplevel [4ms]
+[2022-11-01T16:11:55.438Z] fatal: not a git repository (or any of the parent directories): .git
+[2022-11-01T16:11:55.452Z] > git rev-parse --show-toplevel [5ms]
+[2022-11-01T16:11:55.452Z] fatal: not a git repository (or any of the parent directories): .git
+[2022-11-01T16:11:55.477Z] > git rev-parse --show-toplevel [13ms]
+[2022-11-01T16:11:55.494Z] > git rev-parse --git-dir --git-common-dir [7ms]
+[2022-11-01T16:11:55.506Z] [info] Open repository: /home/arnon/dot-files-ubuntu/.oh-my-zsh
+[2022-11-01T16:11:55.544Z] > git rev-parse --show-toplevel [7ms]
+[2022-11-01T16:11:55.544Z] fatal: not a git repository (or any of the parent directories): .git
+[2022-11-01T16:11:55.555Z] > git rev-parse --show-toplevel [4ms]
+[2022-11-01T16:11:55.555Z] fatal: not a git repository (or any of the parent directories): .git
+[2022-11-01T16:11:55.567Z] > git rev-parse --show-toplevel [4ms]
+[2022-11-01T16:11:55.567Z] fatal: not a git repository (or any of the parent directories): .git
+[2022-11-01T16:11:55.578Z] > git rev-parse --show-toplevel [5ms]
+[2022-11-01T16:11:55.594Z] > git rev-parse --git-dir --git-common-dir [7ms]
+[2022-11-01T16:11:55.598Z] [info] Open repository: /home/arnon/dot-files-ubuntu/.pyenv
+[2022-11-01T16:11:55.631Z] > git rev-parse --show-toplevel [10ms]
+[2022-11-01T16:11:55.631Z] fatal: not a git repository (or any of the parent directories): .git
+[2022-11-01T16:11:55.653Z] > git rev-parse --show-toplevel [11ms]
+[2022-11-01T16:11:55.653Z] fatal: not a git repository (or any of the parent directories): .git
+[2022-11-01T16:11:55.679Z] > git rev-parse --show-toplevel [12ms]
+[2022-11-01T16:11:55.679Z] fatal: not a git repository (or any of the parent directories): .git
+[2022-11-01T16:11:56.199Z] > git status -z -uall [674ms]
+[2022-11-01T16:11:56.211Z] > git check-ignore -v -z --stdin [27ms]
+[2022-11-01T16:11:56.214Z] > git check-ignore -v -z --stdin [19ms]
+[2022-11-01T16:11:56.222Z] > git symbolic-ref --short HEAD [12ms]
+[2022-11-01T16:11:56.244Z] > git for-each-ref --format=%(refname)%00%(upstream:short)%00%(objectname)%00%(upstream:track)%00%(upstream:remotename)%00%(upstream:remoteref) refs/heads/master refs/remotes/master [9ms]
+[2022-11-01T16:11:56.274Z] > git for-each-ref --sort -committerdate --format %(refname) %(objectname) %(*objectname) [15ms]
+[2022-11-01T16:11:56.277Z] > git remote --verbose [8ms]
+[2022-11-01T16:11:56.305Z] > git config --get commit.template [6ms]
+[2022-11-01T16:11:56.360Z] > git status -z -uall [754ms]
+[2022-11-01T16:11:56.393Z] > git status -z -uall [75ms]
+[2022-11-01T16:11:56.403Z] > git symbolic-ref --short HEAD [26ms]
+[2022-11-01T16:11:56.409Z] > git symbolic-ref --short HEAD [7ms]
+[2022-11-01T16:11:56.416Z] > git for-each-ref --format=%(refname)%00%(upstream:short)%00%(objectname)%00%(upstream:track)%00%(upstream:remotename)%00%(upstream:remoteref) refs/heads/master refs/remotes/master [8ms]
+[2022-11-01T16:11:56.433Z] > git for-each-ref --format=%(refname)%00%(upstream:short)%00%(objectname)%00%(upstream:track)%00%(upstream:remotename)%00%(upstream:remoteref) refs/heads/master refs/remotes/master [18ms]
+[2022-11-01T16:11:56.451Z] > git for-each-ref --sort -committerdate --format %(refname) %(objectname) %(*objectname) [28ms]
+[2022-11-01T16:11:56.452Z] > git remote --verbose [21ms]
+[2022-11-01T16:11:56.476Z] > git remote --verbose [26ms]
+[2022-11-01T16:11:56.477Z] > git for-each-ref --sort -committerdate --format %(refname) %(objectname) %(*objectname) [35ms]
+[2022-11-01T16:11:56.507Z] > git config --get commit.template [34ms]
+[2022-11-01T16:11:56.548Z] > git config --get commit.template [42ms]
+[2022-11-01T16:11:56.624Z] > git status -z -uall [88ms]
+[2022-11-01T16:11:56.637Z] > git symbolic-ref --short HEAD [7ms]
+[2022-11-01T16:11:56.671Z] > git for-each-ref --format=%(refname)%00%(upstream:short)%00%(objectname)%00%(upstream:track)%00%(upstream:remotename)%00%(upstream:remoteref) refs/heads/master refs/remotes/master [11ms]
+[2022-11-01T16:11:56.690Z] > git for-each-ref --sort -committerdate --format %(refname) %(objectname) %(*objectname) [10ms]
+[2022-11-01T16:11:56.694Z] > git remote --verbose [6ms]
+[2022-11-01T16:11:56.727Z] > git config --get commit.template [16ms]

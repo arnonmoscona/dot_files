@@ -1,0 +1,18 @@
+[2022-11-01 12:11:14.456] [main] [info] update#setState idle
+[2022-11-01 12:11:18.353] [main] [info] Starting extension host with pid 17004 (fork() took 54 ms).
+[2022-11-01 12:11:43.684] [main] [info] Extension host with pid 17004 exited with code: 0, signal: null.
+[2022-11-01 12:11:44.360] [main] [info] update#setState checking for updates
+[2022-11-01 12:11:44.479] [main] [info] update#setState idle
+[2022-11-01 12:11:46.144] [main] [info] Starting extension host with pid 17105 (fork() took 44 ms).
+[2022-11-01 13:11:46.755] [main] [info] update#setState checking for updates
+[2022-11-01 13:11:47.270] [main] [info] update#setState idle
+[2022-11-01 13:50:06.415] [main] [info] Extension host with pid 17105 exited with code: 0, signal: null.
+[2022-11-01 13:50:08.637] [main] [info] Starting extension host with pid 51715 (fork() took 34 ms).
+[2022-11-01 14:11:49.061] [main] [info] update#setState checking for updates
+[2022-11-01 14:11:49.524] [main] [info] update#setState idle
+[2022-11-01 15:11:51.459] [main] [info] update#setState checking for updates
+[2022-11-01 15:11:51.947] [main] [info] update#setState idle
+[2022-11-01 16:11:53.950] [main] [info] update#setState checking for updates
+[2022-11-01 16:11:54.462] [main] [info] update#setState idle
+[2022-11-01 17:11:56.829] [main] [info] update#setState checking for updates
+[2022-11-01 17:11:57.291] [main] [info] update#setState idle

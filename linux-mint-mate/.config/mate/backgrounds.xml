@@ -1,0 +1,319 @@
+<?xml version="1.0"?>
+<!DOCTYPE wallpapers SYSTEM "mate-wp-list.dtd">
+<wallpapers>
+  <wallpaper deleted="false">
+    <name>Linux Mint</name>
+    <filename>/usr/share/backgrounds/linuxmint/sele_linuxmint_center.jpg</filename>
+    <options>zoom</options>
+    <shade_type>solid</shade_type>
+    <pcolor>rgb(0,0,0)</pcolor>
+    <scolor>rgb(0,0,0)</scolor>
+    <artist>Sele</artist>
+  </wallpaper>
+  <wallpaper deleted="false">
+    <name>Linux Mint</name>
+    <filename>/usr/share/backgrounds/linuxmint/edesigner_linuxmint.png</filename>
+    <options>zoom</options>
+    <shade_type>solid</shade_type>
+    <pcolor>rgb(0,0,0)</pcolor>
+    <scolor>rgb(0,0,0)</scolor>
+    <artist>eDesigner</artist>
+  </wallpaper>
+  <wallpaper deleted="false">
+    <name>Linux Mint</name>
+    <filename>/usr/share/backgrounds/linuxmint/bookwood_linuxmint.jpg</filename>
+    <options>zoom</options>
+    <shade_type>solid</shade_type>
+    <pcolor>rgb(0,0,0)</pcolor>
+    <scolor>rgb(0,0,0)</scolor>
+    <artist>Bookwood</artist>
+  </wallpaper>
+  <wallpaper deleted="false">
+    <name>Path</name>
+    <filename>/usr/share/backgrounds/linuxmint-vanessa/dhoefler_path.jpg</filename>
+    <options>zoom</options>
+    <shade_type>solid</shade_type>
+    <pcolor>rgb(0,0,0)</pcolor>
+    <scolor>rgb(0,0,0)</scolor>
+    <artist>Dave Hoefler</artist>
+  </wallpaper>
+  <wallpaper deleted="false">
+    <name>Linux Mint</name>
+    <filename>/usr/share/backgrounds/linuxmint/sele_ring_green.jpg</filename>
+    <options>zoom</options>
+    <shade_type>solid</shade_type>
+    <pcolor>rgb(0,0,0)</pcolor>
+    <scolor>rgb(0,0,0)</scolor>
+    <artist>Sele</artist>
+  </wallpaper>
+  <wallpaper deleted="false">
+    <name>Frozen</name>
+    <filename>/usr/share/backgrounds/linuxmint-vanessa/aburden_frozen.jpg</filename>
+    <options>zoom</options>
+    <shade_type>solid</shade_type>
+    <pcolor>rgb(0,0,0)</pcolor>
+    <scolor>rgb(0,0,0)</scolor>
+    <artist>Aaron Burden</artist>
+  </wallpaper>
+  <wallpaper deleted="false">
+    <name>Miksang</name>
+    <filename>/usr/share/backgrounds/linuxmint-vanessa/dbossarte_miksang.jpg</filename>
+    <options>zoom</options>
+    <shade_type>solid</shade_type>
+    <pcolor>rgb(0,0,0)</pcolor>
+    <scolor>rgb(0,0,0)</scolor>
+    <artist>Denise Bossarte</artist>
+  </wallpaper>
+  <wallpaper deleted="false">
+    <name>Digital Stream</name>
+    <filename>/usr/share/backgrounds/linuxmint-vanessa/mpiwnicki_digital_stream.jpg</filename>
+    <options>zoom</options>
+    <shade_type>solid</shade_type>
+    <pcolor>rgb(0,0,0)</pcolor>
+    <scolor>rgb(0,0,0)</scolor>
+    <artist>Marek Piwnicki</artist>
+  </wallpaper>
+  <wallpaper deleted="false">
+    <name>default_background.jpg</name>
+    <filename>/usr/share/backgrounds/linuxmint/default_background.jpg</filename>
+    <options>zoom</options>
+    <shade_type>solid</shade_type>
+    <pcolor>rgb(0,0,0)</pcolor>
+    <scolor>rgb(0,0,0)</scolor>
+    <artist>(none)</artist>
+  </wallpaper>
+  <wallpaper deleted="false">
+    <name>Orketal</name>
+    <filename>/usr/share/backgrounds/linuxmint-vanessa/echerkasski_orketal.jpg</filename>
+    <options>zoom</options>
+    <shade_type>solid</shade_type>
+    <pcolor>rgb(0,0,0)</pcolor>
+    <scolor>rgb(0,0,0)</scolor>
+    <artist>Evgeni Tcherkasski</artist>
+  </wallpaper>
+  <wallpaper deleted="false">
+    <name>Sphere</name>
+    <filename>/usr/share/backgrounds/linuxmint-vanessa/sjohnson_sphere.jpg</filename>
+    <options>zoom</options>
+    <shade_type>solid</shade_type>
+    <pcolor>rgb(0,0,0)</pcolor>
+    <scolor>rgb(0,0,0)</scolor>
+    <artist>Steve Johnson</artist>
+  </wallpaper>
+  <wallpaper deleted="false">
+    <name>Shingles</name>
+    <filename>/usr/share/backgrounds/linuxmint-vanessa/rbradshaw_shingles.jpg</filename>
+    <options>zoom</options>
+    <shade_type>solid</shade_type>
+    <pcolor>rgb(0,0,0)</pcolor>
+    <scolor>rgb(0,0,0)</scolor>
+    <artist>Roger Bradshaw</artist>
+  </wallpaper>
+  <wallpaper deleted="false">
+    <name>Linux Mint</name>
+    <filename>/usr/share/backgrounds/linuxmint/linuxmint.jpg</filename>
+    <options>zoom</options>
+    <shade_type>solid</shade_type>
+    <pcolor>rgb(0,0,0)</pcolor>
+    <scolor>rgb(0,0,0)</scolor>
+    <artist>eDesigner</artist>
+  </wallpaper>
+  <wallpaper deleted="false">
+    <name>Purple</name>
+    <filename>/usr/share/backgrounds/linuxmint-vanessa/fakurian_purple.jpg</filename>
+    <options>zoom</options>
+    <shade_type>solid</shade_type>
+    <pcolor>rgb(0,0,0)</pcolor>
+    <scolor>rgb(0,0,0)</scolor>
+    <artist>Fakurian Design</artist>
+  </wallpaper>
+  <wallpaper deleted="false">
+    <name>Blue Lines</name>
+    <filename>/usr/share/backgrounds/linuxmint-vanessa/constantin_blue_lines.jpg</filename>
+    <options>zoom</options>
+    <shade_type>solid</shade_type>
+    <pcolor>rgb(0,0,0)</pcolor>
+    <scolor>rgb(0,0,0)</scolor>
+    <artist>Constantin</artist>
+  </wallpaper>
+  <wallpaper deleted="false">
+    <name>Linux Mint</name>
+    <filename>/usr/share/backgrounds/linuxmint/sele_ring.jpg</filename>
+    <options>zoom</options>
+    <shade_type>solid</shade_type>
+    <pcolor>rgb(0,0,0)</pcolor>
+    <scolor>rgb(0,0,0)</scolor>
+    <artist>Sele</artist>
+  </wallpaper>
+  <wallpaper deleted="false">
+    <name>Tennis</name>
+    <filename>/usr/share/backgrounds/linuxmint-vanessa/ehesry_tennis.jpg</filename>
+    <options>zoom</options>
+    <shade_type>solid</shade_type>
+    <pcolor>rgb(0,0,0)</pcolor>
+    <scolor>rgb(0,0,0)</scolor>
+    <artist>Erwan Hesry</artist>
+  </wallpaper>
+  <wallpaper deleted="false">
+    <name>Greece</name>
+    <filename>/usr/share/backgrounds/linuxmint-vanessa/hlightbulb_greece.jpg</filename>
+    <options>zoom</options>
+    <shade_type>solid</shade_type>
+    <pcolor>rgb(0,0,0)</pcolor>
+    <scolor>rgb(0,0,0)</scolor>
+    <artist>Hello Lightbulb</artist>
+  </wallpaper>
+  <wallpaper deleted="false">
+    <name>Road</name>
+    <filename>/usr/share/backgrounds/linuxmint-vanessa/pcarmona_road.jpg</filename>
+    <options>zoom</options>
+    <shade_type>solid</shade_type>
+    <pcolor>rgb(0,0,0)</pcolor>
+    <scolor>rgb(0,0,0)</scolor>
+    <artist>Paul Carmona</artist>
+  </wallpaper>
+  <wallpaper deleted="false">
+    <name>Bubble</name>
+    <filename>/usr/share/backgrounds/linuxmint-vanessa/eskof_bubble.jpg</filename>
+    <options>zoom</options>
+    <shade_type>solid</shade_type>
+    <pcolor>rgb(0,0,0)</pcolor>
+    <scolor>rgb(0,0,0)</scolor>
+    <artist>Erik Skof</artist>
+  </wallpaper>
+  <wallpaper deleted="false">
+    <name>Linux Mint</name>
+    <filename>/usr/share/backgrounds/linuxmint/sele_linuxmint.png</filename>
+    <options>zoom</options>
+    <shade_type>solid</shade_type>
+    <pcolor>rgb(0,0,0)</pcolor>
+    <scolor>rgb(0,0,0)</scolor>
+    <artist>Sele</artist>
+  </wallpaper>
+  <wallpaper deleted="false">
+    <name>San Francisco</name>
+    <filename>/usr/share/backgrounds/linuxmint-vanessa/zetong_san_francisco.jpg</filename>
+    <options>zoom</options>
+    <shade_type>solid</shade_type>
+    <pcolor>rgb(0,0,0)</pcolor>
+    <scolor>rgb(0,0,0)</scolor>
+    <artist>Zetong Li</artist>
+  </wallpaper>
+  <wallpaper deleted="false">
+    <name>Linux Mint</name>
+    <filename>/usr/share/backgrounds/linuxmint/sele_ring_center.jpg</filename>
+    <options>zoom</options>
+    <shade_type>solid</shade_type>
+    <pcolor>rgb(0,0,0)</pcolor>
+    <scolor>rgb(0,0,0)</scolor>
+    <artist>Sele</artist>
+  </wallpaper>
+  <wallpaper deleted="false">
+    <name>Winding Road</name>
+    <filename>/usr/share/backgrounds/linuxmint-vanessa/calinstan_winding_road.jpg</filename>
+    <options>zoom</options>
+    <shade_type>solid</shade_type>
+    <pcolor>rgb(0,0,0)</pcolor>
+    <scolor>rgb(0,0,0)</scolor>
+    <artist>Calin Stan</artist>
+  </wallpaper>
+  <wallpaper deleted="false">
+    <name>Singapore</name>
+    <filename>/usr/share/backgrounds/linuxmint-vanessa/menerio_singapore.jpg</filename>
+    <options>zoom</options>
+    <shade_type>solid</shade_type>
+    <pcolor>rgb(0,0,0)</pcolor>
+    <scolor>rgb(0,0,0)</scolor>
+    <artist>Mike Enerio</artist>
+  </wallpaper>
+  <wallpaper deleted="false">
+    <name>Indonesia</name>
+    <filename>/usr/share/backgrounds/linuxmint-vanessa/aaronphs_indonesia.jpg</filename>
+    <options>zoom</options>
+    <shade_type>solid</shade_type>
+    <pcolor>rgb(0,0,0)</pcolor>
+    <scolor>rgb(0,0,0)</scolor>
+    <artist>Aaron Thomas</artist>
+  </wallpaper>
+  <wallpaper deleted="false">
+    <name>No Desktop Background</name>
+    <filename>(none)</filename>
+    <options>zoom</options>
+    <shade_type>solid</shade_type>
+    <pcolor>rgb(0,0,0)</pcolor>
+    <scolor>rgb(0,0,0)</scolor>
+    <artist>(none)</artist>
+  </wallpaper>
+  <wallpaper deleted="false">
+    <name>Santorini</name>
+    <filename>/usr/share/backgrounds/linuxmint-vanessa/rlopes_santorini.jpg</filename>
+    <options>zoom</options>
+    <shade_type>solid</shade_type>
+    <pcolor>rgb(0,0,0)</pcolor>
+    <scolor>rgb(0,0,0)</scolor>
+    <artist>Raphael Lopes</artist>
+  </wallpaper>
+  <wallpaper deleted="false">
+    <name>New Zealand</name>
+    <filename>/usr/share/backgrounds/linuxmint-vanessa/sferrara_new_zealand.jpg</filename>
+    <options>zoom</options>
+    <shade_type>solid</shade_type>
+    <pcolor>rgb(0,0,0)</pcolor>
+    <scolor>rgb(0,0,0)</scolor>
+    <artist>Samuel Ferrara</artist>
+  </wallpaper>
+  <wallpaper deleted="false">
+    <name>Linux Mint</name>
+    <filename>/usr/share/backgrounds/linuxmint/ktee_linuxmint.png</filename>
+    <options>zoom</options>
+    <shade_type>solid</shade_type>
+    <pcolor>rgb(0,0,0)</pcolor>
+    <scolor>rgb(0,0,0)</scolor>
+    <artist>Kevin Tee</artist>
+  </wallpaper>
+  <wallpaper deleted="false">
+    <name>India</name>
+    <filename>/usr/share/backgrounds/linuxmint-vanessa/navi_india.jpg</filename>
+    <options>zoom</options>
+    <shade_type>solid</shade_type>
+    <pcolor>rgb(0,0,0)</pcolor>
+    <scolor>rgb(0,0,0)</scolor>
+    <artist>Navi</artist>
+  </wallpaper>
+  <wallpaper deleted="false">
+    <name>Linux Mint</name>
+    <filename>/usr/share/backgrounds/linuxmint/sele_ring_center_green.jpg</filename>
+    <options>zoom</options>
+    <shade_type>solid</shade_type>
+    <pcolor>rgb(0,0,0)</pcolor>
+    <scolor>rgb(0,0,0)</scolor>
+    <artist>Sele</artist>
+  </wallpaper>
+  <wallpaper deleted="false">
+    <name>Linux Mint</name>
+    <filename>/usr/share/backgrounds/linuxmint/bookwood_ring.jpg</filename>
+    <options>zoom</options>
+    <shade_type>solid</shade_type>
+    <pcolor>rgb(0,0,0)</pcolor>
+    <scolor>rgb(0,0,0)</scolor>
+    <artist>Bookwood</artist>
+  </wallpaper>
+  <wallpaper deleted="false">
+    <name>Rose</name>
+    <filename>/usr/share/backgrounds/linuxmint-vanessa/pczerwinski_rose.jpg</filename>
+    <options>zoom</options>
+    <shade_type>solid</shade_type>
+    <pcolor>rgb(0,0,0)</pcolor>
+    <scolor>rgb(0,0,0)</scolor>
+    <artist>Pawel Czerwinski</artist>
+  </wallpaper>
+  <wallpaper deleted="false">
+    <name>Pink</name>
+    <filename>/usr/share/backgrounds/linuxmint-vanessa/w_pink.jpg</filename>
+    <options>zoom</options>
+    <shade_type>solid</shade_type>
+    <pcolor>rgb(0,0,0)</pcolor>
+    <scolor>rgb(0,0,0)</scolor>
+    <artist>W</artist>
+  </wallpaper>
+</wallpapers>
