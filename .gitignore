@@ -1,0 +1,8 @@
+.env
+.venv
+secrets.txt
+.python-version
+main.py
+pyproject.toml
+uv.lock
+
