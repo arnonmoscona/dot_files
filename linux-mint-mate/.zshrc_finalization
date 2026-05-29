@@ -108,9 +108,6 @@ source $ZSH/oh-my-zsh.sh
 #╰─ "
 #PROMPT="╭─ %{$terminfo[bold]$fg[blue]%}%~ %{$reset_color%}$(ruby_prompt_info)$(git_prompt_info)$(virtualenv_prompt_info)
 #╰─ "
-export PACKAGECLOUD_READ_TOKEN=REDACTED_PACKAGECLOUD_READ_TOKEN
-export PACKAGECLOUD_TOKEN=REDACTED_PACKAGECLOUD_TOKEN
-export PIP_EXTRA_INDEX_URL=https://$PACKAGECLOUD_TOKEN:@packagecloud.io/syapse/General/pypi/simple
 # removed ${git_branch} before ${rvm_ruby} to make it a bit faster on a mac mount
 PROMPT="╭─ %{$terminfo[bold]$fg[green]%}%~%{$reset_color%} ${rvm_ruby}${venv_prompt}
 ╰─%B${user_symbol}%b "

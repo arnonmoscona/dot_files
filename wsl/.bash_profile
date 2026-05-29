@@ -157,7 +157,8 @@ export PATH="$HOME/.poetry/bin:$PATH"
 
 # Rust support
 if [ -f "$HOME/.cargo/env" ]; then
-	fi
+	. "$HOME/.cargo/env"
+fi
 
 unset  PIP_USER
 

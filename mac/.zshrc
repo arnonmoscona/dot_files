@@ -146,12 +146,15 @@ export PATH="${PATH}:/Users/arnon/.nvm/versions/node/v24.8.0/bin/"
 
 # Added by Antigravity
 export PATH="/Users/arnon/.antigravity/antigravity/bin:$PATH"
-export GEMINI_API_KEY='REDACTED_GEMINI_API_KEY'
 
 
 # Added by Antigravity
 export PATH="/Users/arnon/.antigravity/antigravity/bin:$PATH"
 
 # Rentec Direct
-export RENTEC_API_KEY="REDACTED_RENTEC_API_KEY"
+
+if [ -f ~/.env ]; then
+  source ~/.env
+fi 
+
 

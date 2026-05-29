@@ -118,13 +118,6 @@ if ! shopt -oq posix; then
   fi
 fi
 
-# AWS
-export AWS_PROFILE=prod
-
-# postresql
-export PGHOST="adw-prod.cluster-czsq80p56jgd.us-west-2.rds.amazonaws.com"
-export PGDATABASE=syadw
-export PGUSER=postgres
 
 unset  PIP_USER
 
@@ -154,5 +147,9 @@ export NVM_DIR="$HOME/.nvm"
 
 
 export CLAUDE_SETTINGS_PATH=/home/arnon/projects/flowers/featherhill/.claude/settings.local.json
-export GEMINI_API_KEY='REDACTED_GEMINI_API_KEY'
+
+
+if [ -f ~/.env ]; then
+  source ~/.env
+fi
 

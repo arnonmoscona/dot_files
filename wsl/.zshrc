@@ -73,7 +73,9 @@ ZSH_THEME="robbyrussell"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git aws dotenv fabric httpie pep8 pip pipenv poetry rsync nvm)
 
+ZSH_DOTENV_PROMPT=false
 source ~/.oh-my-zsh/oh-my-zsh.sh
+ZSH_DOTENV_PROMPT=true 
 
 # User configuration
 
@@ -149,14 +151,12 @@ export NVM_DIR="$HOME/.nvm"
 
 # Added by Antigravity
 #export PATH="/home/arnon/.antigravity/antigravity/bin:$PATH"
-export GEMINI_API_KEY='REDACTED_GEMINI_API_KEY'
 
 
 # Added by Antigravity
 #export PATH="/Users/arnon/.antigravity/antigravity/bin:$PATH"
 
 # Rentec Direct
-export RENTEC_API_KEY="REDACTED_RENTEC_API_KEY"
 
 # [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
@@ -174,4 +174,8 @@ ssh-add ~/.ssh/id_rsa
 # enable shopt (it is a bash builtin, and not on by default in zsh, which uses setopt instead)
 # setopt AUTO_CD
 
+
+if [ -f ~/.env ]; then
+  source ~/.env
+fi
 

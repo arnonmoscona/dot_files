@@ -124,10 +124,6 @@ fi
 # AWS
 export AWS_PROFILE=prod
 
-# postresql
-export PGHOST="adw-prod.cluster-czsq80p56jgd.us-west-2.rds.amazonaws.com"
-export PGDATABASE=syadw
-export PGUSER=postgres
 
 unset  PIP_USER
 export PYENV_ROOT="$HOME/.pyenv"
