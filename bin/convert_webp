@@ -1,0 +1,5 @@
+#!/bin/sh
+# Resolve target to absolute path before cd-ing to the project
+target="$(cd "$(dirname "$1")" && pwd)/$(basename "$1")"
+cd ~/projects/instagram-downloader
+uv run python convert_existing.py "$target"

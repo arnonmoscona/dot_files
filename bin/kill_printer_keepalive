@@ -1,0 +1,4 @@
+#!/bin/sh
+echo `ps -ef|grep printer_keepalive|grep '/bin/sh'|grep -v kill|wc -l` processes match before attempt
+kill -9 `ps -ef|grep printer_keepalive|grep '/bin/sh'|grep -v kill|head -1| cut -w -f 3` || echo "nothing to kill?"
+echo `ps -ef|grep printer_keepalive|grep '/bin/sh'|grep -v kill|wc -l` processes match after attempt

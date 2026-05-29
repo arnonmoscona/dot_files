@@ -1,0 +1,48 @@
+# This is Git's per-user configuration file.
+[user]
+	name = Arnon Moscona
+	email = arnon@moscona.com
+[gui]
+
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+        required = true
+	process = git-lfs filter-process
+
+[alias]
+	co = checkout
+	ci = commit
+	st = status
+	br = branch
+	hist = log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short
+	type = cat-file -t
+	dump = cat-file -p
+[core]
+	excludesfile = /home/arnon/.gitignore_global
+	autocrlf = input
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
+#[mergetool "sourcetree"]
+#	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+#	trustExitCode = true
+[diff]
+	  tool = meld
+[difftool]
+	  prompt = false
+[difftool "meld"]
+	  trustExitCode = true
+	    cmd = open -W -a Meld --args \"$LOCAL\" \"$PWD/$REMOTE\"
+[merge]
+	  tool = meld
+[mergetool]
+	  prompt = false
+[mergetool "meld"]
+	  trustExitCode = true
+	    cmd = open -W -a Meld --args --auto-merge \"$PWD/$LOCAL\" \"$PWD/$BASE\" \"$PWD/$REMOTE\" --output=\"$PWD/$MERGED\"
+
+[commit]
+#	template = /home/arnon/.stCommitMsg
+[diff "sopsdiffer"]
+	textconv = sops -d

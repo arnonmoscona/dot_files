@@ -37,7 +37,9 @@ else
 fi
 # Uncomment to turn on programmable completion enhancements.
 # Any completions you add in ~/.bash_completion are sourced last.
-[[ -f /etc/bash_completion ]] && . /etc/bash_completion
+if [ -n "$BASH_VERSION" ]; then
+  [[ -f /etc/bash_completion ]] && . /etc/bash_completion
+fi
 
 # Don't put duplicate lines in the history.
 export HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignoredups
@@ -118,6 +120,9 @@ export PATH=${PATH}:/usr/local/opt/mysql@5.6/bin/
 
 # add local node executables
 export PATH=${PATH}:./node_modules/.bin/
+
+# brew to path
+export PATH=${PATH}:/home/linuxbrew/.linuxbrew/bin/
 
 # CLI visual enhancements
 export LS_COLORS=`vivid generate molokai`

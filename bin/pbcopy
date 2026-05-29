@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# bcopy - copy stdin to the Windows clipboard via clip.exe (WSL equivalent of macOS pbcopy)
+cat | clip.exe

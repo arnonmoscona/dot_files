@@ -1,0 +1,7 @@
+#!/bin/sh
+while true; do
+  #echo ''|lp  # send an empty print job to the default printer
+  /usr/bin/automator /Users/arnon/Documents/print\ blank\ once.workflow
+  sleep 2500  # sleep for 50 min
+done
+

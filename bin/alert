@@ -1,0 +1,16 @@
+#!/bin/bash
+# Alert script to display macOS notifications
+# Usage: ./tmp/alert "Title" "Message"
+# Or: ./tmp/alert "Message" (uses default title)
+
+if [ $# -eq 0 ]; then
+    echo "Usage: $0 [title] message"
+    exit 1
+elif [ $# -eq 1 ]; then
+    # Single argument - use default title
+    osascript -e "display notification \"$1\" with title \"Alert\" sound name \"Submarine\""
+else
+    # Two arguments - use provided title and message
+    osascript -e "display notification \"$2\" with title \"$1\" sound name \"Submarine\""
+fi
+

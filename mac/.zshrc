@@ -71,9 +71,9 @@ ZSH_THEME="robbyrussell"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+plugins=(git aws dotenv fabric httpie pep8 pip pipenv poetry rsync)
 
-source $ZSH/oh-my-zsh.sh
+source ~/.oh-my-zsh/oh-my-zsh.sh
 
 # User configuration
 
@@ -110,4 +110,48 @@ export PATH="$HOME/.poetry/bin:$PATH"
 autoload -Uz compinit
 zstyle ':completion:*' menu select
 fpath+=~/.zfunc
+
+# Intellij IDEA command line launcher
+if [ -d /Applications/IntelliJ\ IDEA.app/Contents/MacOS ]; then
+        export PATH=${PATH}:/Applications/IntelliJ\ IDEA.app/Contents/MacOS
+fi
+
+
+# bun
+export BUN_INSTALL="$HOME/Library/Application Support/reflex/bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+
+# bun
+export BUN_INSTALL="$HOME/Library/Application Support/reflex/bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+
+# bun
+export BUN_INSTALL="$HOME/Library/Application Support/reflex/bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+
+# bun
+export BUN_INSTALL="$HOME/Library/Application Support/reflex/bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+
+# NVM, node.js
+export NVM_DIR="$HOME/.nvm"
+  [ -s "/usr/local/opt/nvm/nvm.sh" ] && \. "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
+  [ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+# Claude code
+export PATH="${PATH}:$HOME/.nvm/versions/node/v24.8.0/bin"
+
+# Node and npm
+export PATH="${PATH}:/Users/arnon/.nvm/versions/node/v24.8.0/bin/"
+
+
+# Added by Antigravity
+export PATH="/Users/arnon/.antigravity/antigravity/bin:$PATH"
+export GEMINI_API_KEY='REDACTED_GEMINI_API_KEY'
+
+
+# Added by Antigravity
+export PATH="/Users/arnon/.antigravity/antigravity/bin:$PATH"
+
+# Rentec Direct
+export RENTEC_API_KEY="REDACTED_RENTEC_API_KEY"
 

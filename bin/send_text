@@ -1,0 +1,7 @@
+#!/bin/sh
+curl -X POST https://textbelt.com/text \
+     --data-urlencode phone='6509965748' \
+     --data-urlencode message="$*" \
+     -d key=REDACTED_TEXTBELT_API_KEY
+curl -X GET https://textbelt.com/quota/REDACTED_TEXTBELT_API_KEY
+

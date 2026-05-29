@@ -1,14 +1,17 @@
+#export ZSH_DISABLE_COMPFIX=true  # on Tom's machine I cannot change the permissions properly:w
+
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="$HOME/.oh-my-zsh"
+[ -d "/home/arnon/.oh-my-zsh" ] && export ZSH="/home/arnon/.oh-my-zsh"
+#[ -d "/home/arnonm/.oh-my-zsh" ] && export ZSH="/home/arnonm/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="bira"
+ZSH_THEME="robbyrussell"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -68,10 +71,9 @@ ZSH_THEME="bira"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git git-prompt z python brew celery helm macos pep8 rsync screen vscode docker docker-compose kubectl aws dotenv fabric httpie rsync alias-finder)
-# aws plugin kills session
+plugins=(git aws dotenv fabric httpie pep8 pip pipenv poetry rsync nvm)
 
-source $ZSH/oh-my-zsh.sh
+source ~/.oh-my-zsh/oh-my-zsh.sh
 
 # User configuration
 
@@ -98,45 +100,78 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+test -e "${HOME}/.bash_profile" && source "${HOME}/.bash_profile"
+#test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+test -e "${HOME}/.zshrc_finalization" && source "${HOME}/.zshrc_finalization"
 
 
-# My stuff
-#PROMPT="╭─ %{$terminfo[bold]$fg[green]%}%~ %{$reset_color%}$(ruby_prompt_info)$(git_prompt_info)$(virtualenv_prompt_info)
-#╰─ "
-#PROMPT="╭─ %{$terminfo[bold]$fg[blue]%}%~ %{$reset_color%}$(ruby_prompt_info)$(git_prompt_info)$(virtualenv_prompt_info)
-#╰─ "
-# export PACKAGECLOUD_READ_TOKEN=REDACTED_PACKAGECLOUD_READ_TOKEN
-# export PACKAGECLOUD_TOKEN=REDACTED_PACKAGECLOUD_TOKEN
-# export PIP_EXTRA_INDEX_URL=https://$PACKAGECLOUD_TOKEN:@packagecloud.io/syapse/General/pypi/simple
-PROMPT="%{$terminfo[bold]$fg[green]%}%~%{$reset_color%} ${rvm_ruby}${git_branch}${venv_prompt}
-╰─%B${user_symbol}%b "
-RPROMPT='$(parse_git_branch) $(git_super_status)'
-# export PS1='%B%F{green}%~ %F{yellow}$(parse_git_branch)%b$%F{white}'
+export PATH="$HOME/.poetry/bin:$PATH"
 
-if alias cd >/dev/null 2>&1; then
-	unalias cd
+# Homebrew for WSL — must come before the brew-dependent fpath/compinit block
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv zsh)"
+
+# fpath must be fully populated before compinit is called
+fpath+=(~/.zfunc)
+if type brew &>/dev/null; then
+  fpath=($(brew --prefix)/share/zsh-completions $fpath)
 fi
-# source ~/system-python/.venv/bin/activate
-export PYTHONPATH=.
-fpath+=~/.zfunc
-export PATH="${PATH}:$HOME/.nvm/versions/node/v24.8.0/bin/:$HOME/.nvm/versions/node/v24.8.0/bin"
-export COLORTERM=truecolor
+autoload -Uz compinit
+compinit
 
-# Rust for uv
-. "$HOME/.cargo/env"
-export PYO3_USE_ABI3_FORWARD_COMPATIBILITY=1  # needed when uv complains that error: the configured Python interpreter version (3.14) is newer than PyO3's maximum supported version (3.13)
+zstyle ':completion:*' menu select
 
-# Anthropic claude code
-export XX_ANTHROPIC_API_KEY='REDACTED_ANTHROPIC_API_KEY'
+# Intellij IDEA command line launcher
+#if [ -d /Applications/IntelliJ\ IDEA.app/Contents/MacOS ]; then
+#        export PATH=${PATH}:/Applications/IntelliJ\ IDEA.app/Contents/MacOS
+#fi
 
-# unset VIRTUAL_ENV
 
-if [[ "${UNSET_VIRTUAL_ENV}" == "1" ]]; then
-    # If the condition is true, unset the VIRTUAL_ENV variable.
-    unset VIRTUAL_ENV
-    echo "VIRTUAL_ENV has been unset."
-fi
+# bun
+#export BUN_INSTALL="$HOME/Library/Application Support/reflex/bun"
+#export PATH="$BUN_INSTALL/bin:$PATH"
 
-#unalias pip
-export CLAUDE_SETTINGS_PATH=/Users/arnon/projects/flowers/featherhill/.claude/settings.local.json
+# NVM, node.js
+#export NVM_DIR="$HOME/.nvm"
+#  [ -s "/usr/local/opt/nvm/nvm.sh" ] && \. "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
+#  [ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+# Claude code
+export PATH="${PATH}:$HOME/.nvm/versions/node/v24.8.0/bin"
+
+# Node and npm
+export PATH="${PATH}:$HOME/.nvm/versions/node/v24.8.0/bin/"
+
+# nvm (for node)
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+# The following only works in bash. Instead I added the nvm zsh plugin to the plugin list
+# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
+
+
+# Added by Antigravity
+#export PATH="/home/arnon/.antigravity/antigravity/bin:$PATH"
+export GEMINI_API_KEY='REDACTED_GEMINI_API_KEY'
+
+
+# Added by Antigravity
+#export PATH="/Users/arnon/.antigravity/antigravity/bin:$PATH"
+
+# Rentec Direct
+export RENTEC_API_KEY="REDACTED_RENTEC_API_KEY"
+
+# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# bun completions
+[ -s "/home/arnon/.bun/_bun" ] && source "/home/arnon/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+
+# run ssh agent
+eval `ssh-agent -s`
+ssh-add ~/.ssh/id_rsa
+
+# enable shopt (it is a bash builtin, and not on by default in zsh, which uses setopt instead)
+# setopt AUTO_CD
+
 

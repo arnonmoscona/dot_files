@@ -1,0 +1,4 @@
+#!/bin/sh
+cd ~/projects/instagram-downloader
+uv run python main.py
+
