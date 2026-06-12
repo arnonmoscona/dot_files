@@ -1,0 +1,57 @@
+[
+  {
+    "content": "Implement products_table.feature scenarios 1-7 (batch 1)",
+    "status": "completed",
+    "activeForm": "Implementing products_table.feature scenarios 1-7 (batch 1)"
+  },
+  {
+    "content": "Implement products_table.feature scenarios 8-14 (batch 2)",
+    "status": "completed",
+    "activeForm": "Implementing products_table.feature scenarios 8-14 (batch 2)"
+  },
+  {
+    "content": "Implement products_table.feature scenarios 15-21 (batch 3)",
+    "status": "completed",
+    "activeForm": "Implementing products_table.feature scenarios 15-21 (batch 3)"
+  },
+  {
+    "content": "Implement products_table.feature scenarios 22-27 (batch 4)",
+    "status": "completed",
+    "activeForm": "Implementing products_table.feature scenarios 22-27 (batch 4)"
+  },
+  {
+    "content": "Implement products_table.feature scenarios 28-32 (batch 5)",
+    "status": "completed",
+    "activeForm": "Implementing products_table.feature scenarios 28-32 (batch 5)"
+  },
+  {
+    "content": "Implement products_table_editing.feature scenarios 1-6 (batch 1)",
+    "status": "completed",
+    "activeForm": "Implementing products_table_editing.feature scenarios 1-6 (batch 1)"
+  },
+  {
+    "content": "Implement products_table_editing.feature scenarios 7-12 (batch 2)",
+    "status": "completed",
+    "activeForm": "Implementing products_table_editing.feature scenarios 7-12 (batch 2)"
+  },
+  {
+    "content": "Implement products_table_editing.feature scenarios 13-18 (batch 3)",
+    "status": "completed",
+    "activeForm": "Implementing products_table_editing.feature scenarios 13-18 (batch 3)"
+  },
+  {
+    "content": "Implement products_table_editing.feature scenarios 19-24 (batch 4)",
+    "status": "completed",
+    "activeForm": "Implementing products_table_editing.feature scenarios 19-24 (batch 4)"
+  },
+  {
+    "content": "Implement products_table_editing.feature scenarios 25-32 (batch 5)",
+    "status": "in_progress",
+    "activeForm": "Implementing products_table_editing.feature scenarios 25-32 (batch 5)"
+  },
+  {
+    "content": "Run full E2E suite and optimize performance",
+    "status": "pending",
+    "activeForm": "Running full E2E suite and optimizing performance"
+  }
+]

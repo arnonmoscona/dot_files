@@ -1,0 +1,17 @@
+[
+  {
+    "content": "Implement integration tests for orders_table.feature (29 scenarios)",
+    "status": "in_progress",
+    "activeForm": "Implementing integration tests for orders_table.feature"
+  },
+  {
+    "content": "Run tests and verify all pass",
+    "status": "pending",
+    "activeForm": "Running tests and verifying all pass"
+  },
+  {
+    "content": "Update feature file with integration test status",
+    "status": "pending",
+    "activeForm": "Updating feature file with integration test status"
+  }
+]

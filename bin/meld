@@ -1,3 +1,0 @@
-#!/bin/sh
-open -a Meld $* ; osascript -e 'tell application "Meld" to activate'
-

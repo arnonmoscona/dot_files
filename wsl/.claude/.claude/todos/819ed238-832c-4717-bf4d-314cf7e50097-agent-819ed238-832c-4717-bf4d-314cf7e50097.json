@@ -1,0 +1,27 @@
+[
+  {
+    "content": "Perform pre-checks (server status, checked_bash availability)",
+    "status": "in_progress",
+    "activeForm": "Performing pre-checks"
+  },
+  {
+    "content": "Recover previous test session info from Claude logs",
+    "status": "pending",
+    "activeForm": "Recovering previous test session info"
+  },
+  {
+    "content": "Run UI tests via manual-tester subagent (skip passed tests)",
+    "status": "pending",
+    "activeForm": "Running UI tests via manual-tester subagent"
+  },
+  {
+    "content": "Review test results and fix critical bugs if found",
+    "status": "pending",
+    "activeForm": "Reviewing test results and fixing critical bugs"
+  },
+  {
+    "content": "Run code review via code-reviewer subagent",
+    "status": "pending",
+    "activeForm": "Running code review via code-reviewer subagent"
+  }
+]

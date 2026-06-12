@@ -1,0 +1,52 @@
+[
+  {
+    "content": "Create separate editor templates for Available and Bunches columns",
+    "status": "completed",
+    "activeForm": "Creating separate editor templates for Available and Bunches columns"
+  },
+  {
+    "content": "Fix zero display issue in cell formatter",
+    "status": "completed",
+    "activeForm": "Fixing zero display issue in cell formatter"
+  },
+  {
+    "content": "Fix modal pre-population and product_pk handling",
+    "status": "completed",
+    "activeForm": "Fixing modal pre-population and product_pk handling"
+  },
+  {
+    "content": "Add client-side validation to modal inputs",
+    "status": "completed",
+    "activeForm": "Adding client-side validation to modal inputs"
+  },
+  {
+    "content": "Improve server-side error messages with specific details",
+    "status": "completed",
+    "activeForm": "Improving server-side error messages with specific details"
+  },
+  {
+    "content": "Add error dismissal tracking to state",
+    "status": "completed",
+    "activeForm": "Adding error dismissal tracking to state"
+  },
+  {
+    "content": "Implement message state management and clearing",
+    "status": "completed",
+    "activeForm": "Implementing message state management and clearing"
+  },
+  {
+    "content": "Add tooltips and hover effects to edit icons",
+    "status": "completed",
+    "activeForm": "Adding tooltips and hover effects to edit icons"
+  },
+  {
+    "content": "Run unit tests and manual testing with playwright",
+    "status": "in_progress",
+    "activeForm": "Running unit tests and manual testing with playwright"
+  },
+  {
+    "content": "Update implementation report and notify completion",
+    "status": "pending",
+    "activeForm": "Updating implementation report and notifying completion"
+  }
+]

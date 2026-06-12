@@ -1,0 +1,12 @@
+[
+  {
+    "content": "Fix critical bug in logout endpoint - add clear_session function",
+    "status": "completed",
+    "activeForm": "Fixing critical bug in logout endpoint"
+  },
+  {
+    "content": "Complete Stage 9 manual testing",
+    "status": "in_progress",
+    "activeForm": "Completing Stage 9 manual testing"
+  }
+]

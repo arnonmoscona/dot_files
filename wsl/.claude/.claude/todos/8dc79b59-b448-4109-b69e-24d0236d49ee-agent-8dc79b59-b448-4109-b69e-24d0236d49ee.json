@@ -1,0 +1,22 @@
+[
+  {
+    "content": "Review and edit suite configuration files (_suite.feature)",
+    "status": "in_progress",
+    "activeForm": "Reviewing and editing suite configuration files"
+  },
+  {
+    "content": "Create detailed test planning document with checklists",
+    "status": "pending",
+    "activeForm": "Creating detailed test planning document with checklists"
+  },
+  {
+    "content": "Generate individual feature files with scenarios",
+    "status": "pending",
+    "activeForm": "Generating individual feature files with scenarios"
+  },
+  {
+    "content": "Cross-check coverage against FLO-72 memories",
+    "status": "pending",
+    "activeForm": "Cross-checking coverage against FLO-72 memories"
+  }
+]

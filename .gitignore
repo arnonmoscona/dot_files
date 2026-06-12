@@ -5,4 +5,21 @@ secrets.txt
 main.py
 pyproject.toml
 uv.lock
+.credentials.json                                                                                                                                                                                              
+channels/                                                                                                                                                                                                      
+plugins/                                                                                                                                                                                                       
+history.jsonl                                                                                                                                                                                                  
+conversation-logs/                                                                                                                                                                                             
+sessions/                                                                                                                                                                                                      
+session-env/                                                                                                                                                                                                   
+cache/                                                                                                                                                                                                         
+paste-cache/                                                                                                                                                                                                   
+file-history/                                                                                                                                                                                                  
+backups/                                                                                                                                                                                                       
+projects/                                                                                                                                                                                                      
+plans/                                                                                                                                                                                                         
+shell-snapshots/                                                                                                                                                                                               
+.last-cleanup                                                                                                                                                                                                  
+.last-update-result.json                                                                                                                                                                                       
+mcp-needs-auth-cache.json
 

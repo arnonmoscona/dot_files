@@ -1,0 +1,24 @@
+{
+  "model": "opus",
+  "enabledPlugins": {
+    "telegram@claude-plugins-official": true
+  },
+  "theme": "auto",
+  "effortLevel": "high",
+  "hooks": {
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/log-conversation.sh"
+          }
+        ]
+      }
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "~/.claude/statusline/combined_statusline.js"
+  }
+}

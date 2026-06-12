@@ -1,0 +1,17 @@
+[
+  {
+    "content": "Export current test DB state to baseline",
+    "status": "completed",
+    "activeForm": "Exporting current test DB state to baseline"
+  },
+  {
+    "content": "Fix start_test_server to default to test DB",
+    "status": "completed",
+    "activeForm": "Fixing start_test_server to default to test DB"
+  },
+  {
+    "content": "Update auth.feature unimplemented scenarios to use predefined test users",
+    "status": "pending",
+    "activeForm": "Updating auth.feature scenarios to use predefined test users"
+  }
+]

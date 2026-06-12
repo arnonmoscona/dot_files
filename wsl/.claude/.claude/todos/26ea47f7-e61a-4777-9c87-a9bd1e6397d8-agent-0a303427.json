@@ -1,0 +1,47 @@
+[
+  {
+    "content": "Test the known bug: Navigate to old submitted order and verify 'Yes' on delivery modal renders page correctly",
+    "status": "in_progress",
+    "activeForm": "Testing known bug with delivery modal 'Yes' button"
+  },
+  {
+    "content": "Test Orders table page (filtering, sorting, double-click navigation)",
+    "status": "pending",
+    "activeForm": "Testing Orders table page functionality"
+  },
+  {
+    "content": "Test Draft orders (editable mode for all users)",
+    "status": "pending",
+    "activeForm": "Testing Draft orders functionality"
+  },
+  {
+    "content": "Test Submitted orders < 1 day old (admin read-only, Edit button)",
+    "status": "pending",
+    "activeForm": "Testing recent submitted orders"
+  },
+  {
+    "content": "Test Submitted orders ≥ 1 day old (admin with delivery modal)",
+    "status": "pending",
+    "activeForm": "Testing old submitted orders with delivery modal"
+  },
+  {
+    "content": "Test Delivered orders (admin read-only with Edit confirmation)",
+    "status": "pending",
+    "activeForm": "Testing delivered orders functionality"
+  },
+  {
+    "content": "Test non-admin user permissions (read-only for submitted/delivered)",
+    "status": "pending",
+    "activeForm": "Testing non-admin user permissions"
+  },
+  {
+    "content": "Validate HTML on all tested pages",
+    "status": "pending",
+    "activeForm": "Validating HTML conformance"
+  },
+  {
+    "content": "Write comprehensive test report to memory",
+    "status": "pending",
+    "activeForm": "Writing comprehensive test report"
+  }
+]

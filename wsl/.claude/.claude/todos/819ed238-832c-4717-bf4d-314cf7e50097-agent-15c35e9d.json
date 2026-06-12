@@ -1,0 +1,42 @@
+[
+  {
+    "content": "Test login functionality",
+    "status": "completed",
+    "activeForm": "Testing login functionality"
+  },
+  {
+    "content": "Test users table page",
+    "status": "in_progress",
+    "activeForm": "Testing users table page"
+  },
+  {
+    "content": "Test customers table page",
+    "status": "pending",
+    "activeForm": "Testing customers table page"
+  },
+  {
+    "content": "Test orders table page",
+    "status": "pending",
+    "activeForm": "Testing orders table page"
+  },
+  {
+    "content": "Test products table page",
+    "status": "pending",
+    "activeForm": "Testing products table page"
+  },
+  {
+    "content": "Test add/edit forms",
+    "status": "pending",
+    "activeForm": "Testing add/edit forms"
+  },
+  {
+    "content": "Validate HTML on all pages",
+    "status": "pending",
+    "activeForm": "Validating HTML on all pages"
+  },
+  {
+    "content": "Write comprehensive test report",
+    "status": "pending",
+    "activeForm": "Writing comprehensive test report"
+  }
+]

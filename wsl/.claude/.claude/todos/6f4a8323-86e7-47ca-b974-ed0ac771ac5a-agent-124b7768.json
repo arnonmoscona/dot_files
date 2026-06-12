@@ -1,0 +1,72 @@
+[
+  {
+    "content": "Test page loads correctly with all products",
+    "status": "completed",
+    "activeForm": "Testing page loads correctly with all products"
+  },
+  {
+    "content": "Test fuzzy name filtering (phonetic, 500ms debounce)",
+    "status": "completed",
+    "activeForm": "Testing fuzzy name filtering"
+  },
+  {
+    "content": "Test availability filtering (all/in stock/out of stock)",
+    "status": "in_progress",
+    "activeForm": "Testing availability filtering"
+  },
+  {
+    "content": "Test column sorting (all 5 columns)",
+    "status": "pending",
+    "activeForm": "Testing column sorting"
+  },
+  {
+    "content": "Test action buttons (New, Reload)",
+    "status": "pending",
+    "activeForm": "Testing action buttons"
+  },
+  {
+    "content": "Test Name cell editor (min length 3, required)",
+    "status": "pending",
+    "activeForm": "Testing Name cell editor"
+  },
+  {
+    "content": "Test Available cell editor (non-negative integer, zero displays as 0)",
+    "status": "pending",
+    "activeForm": "Testing Available cell editor"
+  },
+  {
+    "content": "Test Bunches cell editor (comma-delimited, unique, integers)",
+    "status": "pending",
+    "activeForm": "Testing Bunches cell editor"
+  },
+  {
+    "content": "Test Florist price cell editor (currency, 2 decimals)",
+    "status": "pending",
+    "activeForm": "Testing Florist price cell editor"
+  },
+  {
+    "content": "Test Wholesale price cell editor (same as florist)",
+    "status": "pending",
+    "activeForm": "Testing Wholesale price cell editor"
+  },
+  {
+    "content": "Test double-click navigation (product with spaces like apple pear)",
+    "status": "pending",
+    "activeForm": "Testing double-click navigation"
+  },
+  {
+    "content": "Test error message handling (format, dismissal, prefix on refresh)",
+    "status": "pending",
+    "activeForm": "Testing error message handling"
+  },
+  {
+    "content": "Run HTML validation with html-validate",
+    "status": "pending",
+    "activeForm": "Running HTML validation"
+  },
+  {
+    "content": "Verify minimal JS (~9 lines only)",
+    "status": "pending",
+    "activeForm": "Verifying minimal JS"
+  }
+]

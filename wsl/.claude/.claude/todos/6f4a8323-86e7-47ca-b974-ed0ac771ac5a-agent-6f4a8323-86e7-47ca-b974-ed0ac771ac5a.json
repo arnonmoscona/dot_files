@@ -1,0 +1,22 @@
+[
+  {
+    "content": "Fix endpoint naming mismatch between template and router",
+    "status": "completed",
+    "activeForm": "Fixing endpoint naming mismatch between template and router"
+  },
+  {
+    "content": "Replace hard-coded help text with validator-provided text in modal",
+    "status": "completed",
+    "activeForm": "Replacing hard-coded help text with validator-provided text in modal"
+  },
+  {
+    "content": "Run code quality validation (ruff, py_compile)",
+    "status": "completed",
+    "activeForm": "Running code quality validation"
+  },
+  {
+    "content": "Manual testing of fixed functionality",
+    "status": "pending",
+    "activeForm": "Performing manual testing of fixed functionality"
+  }
+]

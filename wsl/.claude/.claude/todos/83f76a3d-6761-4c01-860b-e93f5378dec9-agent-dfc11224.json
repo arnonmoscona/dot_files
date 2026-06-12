@@ -1,0 +1,47 @@
+[
+  {
+    "content": "Start test server and verify logs are accessible",
+    "status": "completed",
+    "activeForm": "Starting test server and verifying logs"
+  },
+  {
+    "content": "Initialize Playwright browser and login as user 'arnon'",
+    "status": "completed",
+    "activeForm": "Initializing Playwright browser and logging in"
+  },
+  {
+    "content": "Test Add Order Cancel Button functionality",
+    "status": "in_progress",
+    "activeForm": "Testing Add Order Cancel Button functionality"
+  },
+  {
+    "content": "Test Breadcrumb Navigation on add order page",
+    "status": "pending",
+    "activeForm": "Testing Breadcrumb Navigation"
+  },
+  {
+    "content": "Test Logout Functionality and session clearing",
+    "status": "pending",
+    "activeForm": "Testing Logout Functionality"
+  },
+  {
+    "content": "Test General Navigation across all pages",
+    "status": "pending",
+    "activeForm": "Testing General Navigation"
+  },
+  {
+    "content": "Run HTML validation on all tested pages",
+    "status": "pending",
+    "activeForm": "Running HTML validation"
+  },
+  {
+    "content": "Analyze server logs for exceptions",
+    "status": "pending",
+    "activeForm": "Analyzing server logs for exceptions"
+  },
+  {
+    "content": "Write comprehensive test report memory note",
+    "status": "pending",
+    "activeForm": "Writing comprehensive test report"
+  }
+]

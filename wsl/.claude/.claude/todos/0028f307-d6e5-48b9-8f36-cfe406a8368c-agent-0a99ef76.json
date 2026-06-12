@@ -1,0 +1,37 @@
+[
+  {
+    "content": "Set up test environment and verify server is running",
+    "status": "in_progress",
+    "activeForm": "Setting up test environment and verifying server is running"
+  },
+  {
+    "content": "Test invoice link visibility (submitted/delivered vs draft orders)",
+    "status": "pending",
+    "activeForm": "Testing invoice link visibility across different order statuses"
+  },
+  {
+    "content": "Test invoice rendering with all required elements",
+    "status": "pending",
+    "activeForm": "Testing invoice rendering with all required elements"
+  },
+  {
+    "content": "Test unauthenticated access to invoice page",
+    "status": "pending",
+    "activeForm": "Testing unauthenticated access to invoice page"
+  },
+  {
+    "content": "Monitor server logs for exceptions throughout testing",
+    "status": "pending",
+    "activeForm": "Monitoring server logs for exceptions throughout testing"
+  },
+  {
+    "content": "Perform HTML validation on rendered invoice",
+    "status": "pending",
+    "activeForm": "Performing HTML validation on rendered invoice"
+  },
+  {
+    "content": "Write comprehensive test report to testing/latest-manual-testing-report.md",
+    "status": "pending",
+    "activeForm": "Writing comprehensive test report to testing/latest-manual-testing-report.md"
+  }
+]

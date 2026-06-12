@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Temporary wrapper for recall_main_agent_conversation.
+# The script currently lives in the featherhill project; this wrapper makes it accessible
+# from ~/bin so that all projects can reference it via a stable path.
+#
+# TODO: Once a proper uv-managed Python setup exists in ~/bin, replace the body of this
+#       script with a self-contained implementation that does not depend on featherhill.
+#       Only this wrapper will need to change; all project instructions already point here.
+exec uv run python ~/projects/flowers/featherhill/bin/recall_main_agent_conversation.py "$@"

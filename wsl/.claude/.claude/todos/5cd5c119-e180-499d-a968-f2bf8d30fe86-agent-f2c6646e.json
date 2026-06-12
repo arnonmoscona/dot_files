@@ -1,0 +1,72 @@
+[
+  {
+    "content": "Start test server manually",
+    "status": "completed",
+    "activeForm": "Starting test server manually"
+  },
+  {
+    "content": "Setup browser and login",
+    "status": "in_progress",
+    "activeForm": "Setting up browser and logging in"
+  },
+  {
+    "content": "Test 1: Successful Save Flow",
+    "status": "pending",
+    "activeForm": "Testing successful save flow"
+  },
+  {
+    "content": "Test 2: Validation Error Flow",
+    "status": "pending",
+    "activeForm": "Testing validation error flow"
+  },
+  {
+    "content": "Test 3: Error Correction Flow",
+    "status": "pending",
+    "activeForm": "Testing error correction flow"
+  },
+  {
+    "content": "Test 4: Multiple Sequential Errors",
+    "status": "pending",
+    "activeForm": "Testing multiple sequential errors"
+  },
+  {
+    "content": "Test 5: Cancel Button",
+    "status": "pending",
+    "activeForm": "Testing cancel button"
+  },
+  {
+    "content": "Test 6: X Close Button",
+    "status": "pending",
+    "activeForm": "Testing X close button"
+  },
+  {
+    "content": "Test 7: All Columns Valid Saves",
+    "status": "pending",
+    "activeForm": "Testing all columns valid saves"
+  },
+  {
+    "content": "Test 8: All Columns Validation Errors",
+    "status": "pending",
+    "activeForm": "Testing all columns validation errors"
+  },
+  {
+    "content": "Test 9: Real-time Validation",
+    "status": "pending",
+    "activeForm": "Testing real-time validation"
+  },
+  {
+    "content": "Test 10: Rapid Fire Testing",
+    "status": "pending",
+    "activeForm": "Testing rapid fire interactions"
+  },
+  {
+    "content": "Write comprehensive test report to memory",
+    "status": "pending",
+    "activeForm": "Writing comprehensive test report"
+  },
+  {
+    "content": "Provide summary to parent agent",
+    "status": "pending",
+    "activeForm": "Providing summary to parent agent"
+  }
+]

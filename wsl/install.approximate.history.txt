@@ -1,0 +1,96 @@
+    9  sudo apt install -y build-essential procps curl file git
+   10  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+   34  brew --help
+   35  brew update
+   52  sudo apt install bun npm node
+   53  sudo apt install nvm
+   54  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+   59  nvm install --lts
+   61  export NVM_DIR="$HOME/.nvm"\n[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm\n[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion\n
+   62  nvm
+   65  nvm install --lts
+   67  sudo apt install nodejs npm
+   68  sudo npm install -g typescript
+   69  sudo npm install -g gcc
+   70  sudo  gcc
+   71  sudo apt install  gcc
+   72  sudo apt install curl build-essential -y
+   73  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+   80  curl -LsSf https://astral.sh/uv/install.sh | sh
+   86  curl -fsSL https://bun.sh/install | bash
+   97  sudo apt-get install -y libasound2t64 wget 
+  116  sudo apt install -y nodejs npm
+  117  curl -fsSL https://claude.ai/install.sh | bash
+  132  sudo mkdir /Users
+  133  sudo ln -s /home/arnon /Users
+  135  brew install btop
+  136  brew install helix
+  138  brew install htop
+  145  sudo apt-get mysqlclient
+  146  brew install mysqlclient
+  147  ^[[200~sudo apt-get update
+  148  sudo apt-get install python3-dev default-libmysqlclient-dev build-essential pkg-config
+  150  sudo apt-get install build-essential libssl-dev libffi-dev python3-dev cargo pkg-config
+  165  npm install -g html-validate
+  166  npm install canopy
+  179  brew install meld
+  180  sudo apt install meld
+  194  sudo mkdir -p /usr/local/share/fonts/custom
+  196  sudo cp /home/arnon/c_drive/mac-recovery/late-to-the-party/home-fonts/Users/arnon/Library/Fonts/*.ttf /usr/local/share/fonts/custom/
+  197  sudo fc-cache -fv
+  200  brew install vivid
+  201  brew install shopt
+  209  sudo cp /home/arnon/c_drive/Windows/Fonts/*.ttf /usr/local/share/fonts/custom/
+  210  sudo fc-cache -fv
+  222  sudo apt update
+  223  sudo apt install curl
+  224  curl -O https://repo.percona.com/apt/percona-release_latest.generic_all.deb
+  225  sudo apt update
+  226  sudo percona-release setup ps80
+  227  sudo apt install percona-release 
+  228  sudo apt install gnupg2 lsb-release ./percona-release_latest.generic_all.deb
+  229  sudo percona-release setup ps80
+  231  sudo apt install ./libperconaserverclient21*
+  232  sudo apt install ./libperconaserverclient21-dev_8.0.45-36-1.bullseye_arm64.deb
+  233  sudo apt install ./libperconaserverclient21_8.0.45-36-1.bullseye_arm64.deb
+  238  sudo apt install ./percona-server-server_8.0.45-36-1.bullseye_arm64.deb ./percona-server-common_8.0.45-36-1.bullseye_arm64.deb ./percona-server-client_8.0.45-36-1.bullseye_arm64.deb ./libperconaserverclient21_8.0.45-36-1.bullseye_arm64.deb ./percona-mysql-router_8.0.45-36-1.bullseye_arm64.deb
+  239  sudo apt install mysql-server
+  241  sudo service mysql start
+  242  sudo mysql_secure_installation
+  243  sudo mysql
+  244  sudo vi /etc/mysql/mysql.conf.d/mysql.cnf
+  245  sudo vi /etc/mysql/mysql.cnf
+  246  sudo vi /etc/mysql/mysql.conf.d/mysql.cnf
+  247  sudo vi /etc/mysql/mysql.conf.d/mysqld.cnf
+  248  sudo service mysql restart
+  249  sudo mysql
+  250  sudo vi /etc/mysql/mysql.conf.d/mysqld.cnf
+  251  sudo service mysql restart
+  252  sudo mysql
+  254  sudo mysql
+  263  sudo mysql
+  275  uv tool install basic-memory
+  302  brew install vivid
+  310  sudo vi /usr/share/bash-completion/bash_completion
+  314  brew install zsh-completions
+  407  cat ./dot_files/dot_files/mac/brew_list.txt
+  408  brew list > /tmp/brew_list.txt
+  410  meld ./dot_files/dot_files/mac/brew_list.txt /tmp/brew_list.txt
+  411  sudo touch /usr/local/bin/osascript\nsudo chmod +x /usr/local/bin/osascript\n
+  412  sudo apt update\nsudo apt install gnome-icon-theme adwaita-icon-theme-full\n
+  413  meld ./dot_files/dot_files/mac/brew_list.txt /tmp/brew_list.txt
+  415  meld ./dot_files/dot_files/mac/brew_list.txt /tmp/brew_list.txt
+  417  meld ./dot_files/dot_files/mac/brew_list.txt /tmp/brew_list.txt
+  421  meld ./dot_files/dot_files/mac/brew_list.txt /tmp/brew_list.txt
+  427  brew install graphviz
+  430  brew install httpie
+  431  brew install jq
+  432  brew install mcp-server-dump
+  434  brew install obsidian-cli
+  436  brew install sqlite
+  438  brew install tree
+  457  brew install rtk
+  494  sudo apt install chromium
+  502  sudo apt install firefox
+  675  sudo cp  ~/c_drive/Users/arnon/Downloads/fonts/Lora/static/*.ttf /usr/local/share/fonts/custom
+  676  sudo fc-cache -f -v

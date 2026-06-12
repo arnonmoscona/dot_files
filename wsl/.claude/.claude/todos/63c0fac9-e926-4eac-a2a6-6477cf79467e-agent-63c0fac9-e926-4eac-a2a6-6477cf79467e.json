@@ -1,0 +1,22 @@
+[
+  {
+    "content": "Batch 1: Refactor insert_new_product, insert_new_price, create_new_customer",
+    "status": "completed",
+    "activeForm": "Refactoring Batch 1 (product, price, customer inserts)"
+  },
+  {
+    "content": "Batch 2: Refactor create_order_line_items_by_sql, create_order_by_sql",
+    "status": "in_progress",
+    "activeForm": "Refactoring Batch 2 (order functions)"
+  },
+  {
+    "content": "Batch 3: Refactor insert_new_user, after_user_update",
+    "status": "pending",
+    "activeForm": "Refactoring Batch 3 (user functions)"
+  },
+  {
+    "content": "Batch 4: Refactor find_user_session_by_pk, save_user_session",
+    "status": "pending",
+    "activeForm": "Refactoring Batch 4 (session functions)"
+  }
+]

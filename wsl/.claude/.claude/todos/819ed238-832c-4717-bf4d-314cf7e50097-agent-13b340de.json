@@ -1,0 +1,52 @@
+[
+  {
+    "content": "Set up test environment and start test server with logging",
+    "status": "in_progress",
+    "activeForm": "Setting up test environment and starting test server with logging"
+  },
+  {
+    "content": "Prepare Playwright browser and open log monitoring",
+    "status": "pending",
+    "activeForm": "Preparing Playwright browser and opening log monitoring"
+  },
+  {
+    "content": "Phase 1: Black-box testing - Login and navigation",
+    "status": "pending",
+    "activeForm": "Performing black-box testing of login and navigation"
+  },
+  {
+    "content": "Phase 2: Black-box testing - Table pages (users, customers, orders, products)",
+    "status": "pending",
+    "activeForm": "Performing black-box testing of table pages"
+  },
+  {
+    "content": "Phase 3: Black-box testing - Add/edit forms and validation",
+    "status": "pending",
+    "activeForm": "Performing black-box testing of add/edit forms and validation"
+  },
+  {
+    "content": "Phase 4: White-box testing - Products table edit functionality",
+    "status": "pending",
+    "activeForm": "Performing white-box testing of products table edit functionality"
+  },
+  {
+    "content": "Phase 5: HTML validation of all tested pages",
+    "status": "pending",
+    "activeForm": "Performing HTML validation of all tested pages"
+  },
+  {
+    "content": "Phase 6: Review server logs and categorize exceptions",
+    "status": "pending",
+    "activeForm": "Reviewing server logs and categorizing exceptions"
+  },
+  {
+    "content": "Write comprehensive test report to memory",
+    "status": "pending",
+    "activeForm": "Writing comprehensive test report to memory"
+  },
+  {
+    "content": "Provide brief summary to Arnon",
+    "status": "pending",
+    "activeForm": "Providing brief summary to Arnon"
+  }
+]

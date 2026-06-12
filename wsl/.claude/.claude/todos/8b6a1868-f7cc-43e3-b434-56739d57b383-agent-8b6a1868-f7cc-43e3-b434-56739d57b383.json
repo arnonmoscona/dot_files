@@ -1,0 +1,12 @@
+[
+  {
+    "content": "Run manual testing for Stage 9 navigation fixes",
+    "status": "in_progress",
+    "activeForm": "Running manual testing for Stage 9 navigation fixes"
+  },
+  {
+    "content": "Remind Arnon to refactor add_order form to use generic form template pattern",
+    "status": "pending",
+    "activeForm": "Reminding about add_order form refactoring"
+  }
+]

@@ -1,0 +1,27 @@
+[
+  {
+    "content": "Test delivery modal fix (CRITICAL PRIORITY)",
+    "status": "in_progress",
+    "activeForm": "Testing delivery modal fix"
+  },
+  {
+    "content": "Test orders table filtering and sorting",
+    "status": "pending",
+    "activeForm": "Testing orders table filtering and sorting"
+  },
+  {
+    "content": "Test double-click navigation to order edit",
+    "status": "pending",
+    "activeForm": "Testing double-click navigation"
+  },
+  {
+    "content": "Write comprehensive test report",
+    "status": "pending",
+    "activeForm": "Writing comprehensive test report"
+  },
+  {
+    "content": "Stop test server",
+    "status": "pending",
+    "activeForm": "Stopping test server"
+  }
+]

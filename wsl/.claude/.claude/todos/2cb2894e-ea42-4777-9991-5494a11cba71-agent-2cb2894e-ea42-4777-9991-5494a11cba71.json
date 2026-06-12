@@ -1,0 +1,47 @@
+[
+  {
+    "content": "Generate proposed .env to /tmp/proposed.env",
+    "status": "completed",
+    "activeForm": "Generating proposed .env file"
+  },
+  {
+    "content": "Update settings.py with environment selection logic",
+    "status": "completed",
+    "activeForm": "Updating settings.py"
+  },
+  {
+    "content": "Update flowers/common.py with engine mismatch detection",
+    "status": "completed",
+    "activeForm": "Updating flowers/common.py"
+  },
+  {
+    "content": "Update CLI tools to accept --env parameter",
+    "status": "completed",
+    "activeForm": "Updating CLI tools"
+  },
+  {
+    "content": "Update bin/start_test_server.py to use EXEC_ENVIRONMENT",
+    "status": "completed",
+    "activeForm": "Updating start_test_server.py"
+  },
+  {
+    "content": "Update flowers/test/e2e/conftest.py to set test environment",
+    "status": "completed",
+    "activeForm": "Updating e2e conftest.py"
+  },
+  {
+    "content": "Update bin/local_tools_mcp.py database tools",
+    "status": "completed",
+    "activeForm": "Updating MCP tools"
+  },
+  {
+    "content": "Text user to update .env file",
+    "status": "completed",
+    "activeForm": "Texting user"
+  },
+  {
+    "content": "Test the full E2E flow",
+    "status": "pending",
+    "activeForm": "Testing E2E flow"
+  }
+]

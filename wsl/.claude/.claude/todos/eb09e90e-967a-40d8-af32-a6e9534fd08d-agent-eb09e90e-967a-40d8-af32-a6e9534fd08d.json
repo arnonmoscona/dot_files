@@ -1,0 +1,22 @@
+[
+  {
+    "content": "Phase 9a: Documentation fixes",
+    "status": "completed",
+    "activeForm": "Updating documentation"
+  },
+  {
+    "content": "Phase 9b: Extract inner commands from $(...) and backticks",
+    "status": "completed",
+    "activeForm": "Implementing command substitution extraction"
+  },
+  {
+    "content": "Phase 9c: Add subshell (...) support to grammar",
+    "status": "in_progress",
+    "activeForm": "Adding subshell support"
+  },
+  {
+    "content": "Phase 9d: Assess control structure support (optional)",
+    "status": "pending",
+    "activeForm": "Assessing control structure support"
+  }
+]

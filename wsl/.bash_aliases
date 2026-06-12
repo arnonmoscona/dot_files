@@ -77,3 +77,5 @@ fi
 #alias adw='ssh -fNL 5434:10.20.137.111:5432 arnonm@balboa.syapse.com; psql -d syadw -h localhost -U postgres -p 5434'
 #alias syadw=adw
 alias obsidian='nohup obsidian --force-device-scale-factor=1.05 &'
+alias cl='claude --channels plugin:telegram@claude-plugins-official'
+

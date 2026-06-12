@@ -1,0 +1,17 @@
+[
+  {
+    "content": "Generate additional authentication scenarios in auth.feature",
+    "status": "completed",
+    "activeForm": "Generating additional authentication scenarios"
+  },
+  {
+    "content": "Review scenarios with Arnon before generating tests",
+    "status": "pending",
+    "activeForm": "Reviewing scenarios with Arnon"
+  },
+  {
+    "content": "Send SMS notification when complete",
+    "status": "completed",
+    "activeForm": "Sending SMS notification when complete"
+  }
+]

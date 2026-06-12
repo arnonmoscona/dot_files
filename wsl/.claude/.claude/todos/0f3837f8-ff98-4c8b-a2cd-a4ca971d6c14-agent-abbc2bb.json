@@ -1,0 +1,72 @@
+[
+  {
+    "content": "Create integration test file structure and imports",
+    "status": "completed",
+    "activeForm": "Creating integration test file structure and imports"
+  },
+  {
+    "content": "Implement authorization scenarios (2 tests)",
+    "status": "completed",
+    "activeForm": "Implementing authorization scenarios"
+  },
+  {
+    "content": "Implement form load and initial state scenarios (1 test)",
+    "status": "completed",
+    "activeForm": "Implementing form load and initial state scenarios"
+  },
+  {
+    "content": "Implement login field validation scenarios (3 tests)",
+    "status": "completed",
+    "activeForm": "Implementing login field validation scenarios"
+  },
+  {
+    "content": "Implement name field validation scenarios (1 test)",
+    "status": "completed",
+    "activeForm": "Implementing name field validation scenarios"
+  },
+  {
+    "content": "Implement role field behavior scenarios (4 tests)",
+    "status": "completed",
+    "activeForm": "Implementing role field behavior scenarios"
+  },
+  {
+    "content": "Implement customer dropdown scenarios (1 test)",
+    "status": "completed",
+    "activeForm": "Implementing customer dropdown scenarios"
+  },
+  {
+    "content": "Implement save button state scenarios (3 tests)",
+    "status": "completed",
+    "activeForm": "Implementing save button state scenarios"
+  },
+  {
+    "content": "Implement successful user creation scenarios (2 tests)",
+    "status": "completed",
+    "activeForm": "Implementing successful user creation scenarios"
+  },
+  {
+    "content": "Implement clear button scenarios (1 test)",
+    "status": "completed",
+    "activeForm": "Implementing clear button scenarios"
+  },
+  {
+    "content": "Implement edit mode scenarios (4 tests)",
+    "status": "completed",
+    "activeForm": "Implementing edit mode scenarios"
+  },
+  {
+    "content": "Implement cancel button scenarios (1 test)",
+    "status": "completed",
+    "activeForm": "Implementing cancel button scenarios"
+  },
+  {
+    "content": "Run tests and verify they pass",
+    "status": "in_progress",
+    "activeForm": "Running tests and verifying they pass"
+  },
+  {
+    "content": "Perform self-review and validation",
+    "status": "pending",
+    "activeForm": "Performing self-review and validation"
+  }
+]

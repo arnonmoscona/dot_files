@@ -1,0 +1,52 @@
+[
+  {
+    "content": "Implement add_order E2E tests batch 1 (scenarios 1-6)",
+    "status": "completed",
+    "activeForm": "Implementing batch 1 scenarios"
+  },
+  {
+    "content": "Implement add_order E2E tests batch 2 (scenarios 7-13)",
+    "status": "completed",
+    "activeForm": "Implementing batch 2 scenarios"
+  },
+  {
+    "content": "Implement add_order E2E tests batch 3 (scenarios 14-20)",
+    "status": "completed",
+    "activeForm": "Implementing batch 3 scenarios"
+  },
+  {
+    "content": "Implement add_order E2E tests batch 4 (scenarios 21-27)",
+    "status": "in_progress",
+    "activeForm": "Implementing batch 4 scenarios"
+  },
+  {
+    "content": "Implement add_order E2E tests batch 5 (scenarios 28-34)",
+    "status": "pending",
+    "activeForm": "Implementing batch 5 scenarios"
+  },
+  {
+    "content": "Implement add_order E2E tests batch 6 (scenarios 35-41)",
+    "status": "pending",
+    "activeForm": "Implementing batch 6 scenarios"
+  },
+  {
+    "content": "Implement add_order E2E tests batch 7 (scenarios 42-48)",
+    "status": "pending",
+    "activeForm": "Implementing batch 7 scenarios"
+  },
+  {
+    "content": "Implement add_order E2E tests batch 8 (scenarios 49-54)",
+    "status": "pending",
+    "activeForm": "Implementing batch 8 scenarios"
+  },
+  {
+    "content": "Run full E2E test suite",
+    "status": "pending",
+    "activeForm": "Running full test suite"
+  },
+  {
+    "content": "Optimize test performance",
+    "status": "pending",
+    "activeForm": "Optimizing test performance"
+  }
+]

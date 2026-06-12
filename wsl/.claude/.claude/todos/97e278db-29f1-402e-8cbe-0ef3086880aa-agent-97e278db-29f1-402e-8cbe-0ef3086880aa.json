@@ -1,0 +1,47 @@
+[
+  {
+    "content": "Review current state of FastAPI migration per FLO-72",
+    "status": "pending",
+    "activeForm": "Reviewing current state of FastAPI migration per FLO-72"
+  },
+  {
+    "content": "Implement users list page with table and loading state",
+    "status": "pending",
+    "activeForm": "Implementing users list page with table and loading state"
+  },
+  {
+    "content": "Add tab-specific state support using sessionStorage",
+    "status": "pending",
+    "activeForm": "Adding tab-specific state support using sessionStorage"
+  },
+  {
+    "content": "Create customers list and edit pages",
+    "status": "pending",
+    "activeForm": "Creating customers list and edit pages"
+  },
+  {
+    "content": "Create products list and edit pages",
+    "status": "pending",
+    "activeForm": "Creating products list and edit pages"
+  },
+  {
+    "content": "Create orders list and edit pages",
+    "status": "pending",
+    "activeForm": "Creating orders list and edit pages"
+  },
+  {
+    "content": "Implement table double-click navigation to edit pages",
+    "status": "pending",
+    "activeForm": "Implementing table double-click navigation to edit pages"
+  },
+  {
+    "content": "Add printable invoice page",
+    "status": "pending",
+    "activeForm": "Adding printable invoice page"
+  },
+  {
+    "content": "Fix fatal error handling to use redirect pattern",
+    "status": "completed",
+    "activeForm": "Fixing fatal error handling to use redirect pattern"
+  }
+]

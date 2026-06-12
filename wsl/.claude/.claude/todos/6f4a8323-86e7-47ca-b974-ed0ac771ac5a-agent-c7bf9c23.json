@@ -1,0 +1,47 @@
+[
+  {
+    "content": "Test cell editing for Name column with validation",
+    "status": "in_progress",
+    "activeForm": "Testing cell editing for Name column with validation"
+  },
+  {
+    "content": "Test cell editing for Available column with validation",
+    "status": "pending",
+    "activeForm": "Testing cell editing for Available column with validation"
+  },
+  {
+    "content": "Test cell editing for Bunches column with validation",
+    "status": "pending",
+    "activeForm": "Testing cell editing for Bunches column with validation"
+  },
+  {
+    "content": "Test cell editing for Florist price column with validation",
+    "status": "pending",
+    "activeForm": "Testing cell editing for Florist price column with validation"
+  },
+  {
+    "content": "Test cell editing for Wholesale price column with validation",
+    "status": "pending",
+    "activeForm": "Testing cell editing for Wholesale price column with validation"
+  },
+  {
+    "content": "Test double-click navigation to edit page",
+    "status": "pending",
+    "activeForm": "Testing double-click navigation to edit page"
+  },
+  {
+    "content": "Test error message format and dismissal",
+    "status": "pending",
+    "activeForm": "Testing error message format and dismissal"
+  },
+  {
+    "content": "Perform HTML validation on all pages",
+    "status": "pending",
+    "activeForm": "Performing HTML validation on all pages"
+  },
+  {
+    "content": "Write comprehensive test report to memory",
+    "status": "pending",
+    "activeForm": "Writing comprehensive test report to memory"
+  }
+]

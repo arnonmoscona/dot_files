@@ -1,0 +1,32 @@
+[
+  {
+    "content": "Fix 1: Add hx-sync to product row form elements (bundle, quantity, Add button)",
+    "status": "completed",
+    "activeForm": "Adding hx-sync to product row elements"
+  },
+  {
+    "content": "Fix 2: Add hx-sync to action buttons (Save, Submit, Cancel, Clear, Delete, Edit)",
+    "status": "completed",
+    "activeForm": "Adding hx-sync to action buttons"
+  },
+  {
+    "content": "Fix 3: Add hx-sync to Update Inventory button",
+    "status": "completed",
+    "activeForm": "Adding hx-sync to Update Inventory"
+  },
+  {
+    "content": "Fix 4: Add hx-sync to Zero Inventory button",
+    "status": "completed",
+    "activeForm": "Adding hx-sync to Zero Inventory"
+  },
+  {
+    "content": "Fix 5: Add hx-sync to modal buttons",
+    "status": "completed",
+    "activeForm": "Adding hx-sync to modal buttons"
+  },
+  {
+    "content": "Manual testing to verify form still works",
+    "status": "in_progress",
+    "activeForm": "Manual testing the form"
+  }
+]

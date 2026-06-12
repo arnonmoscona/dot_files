@@ -1,0 +1,32 @@
+[
+  {
+    "content": "Start test server with logging to file",
+    "status": "completed",
+    "activeForm": "Starting test server with logging to file"
+  },
+  {
+    "content": "Test breadcrumb navigation on various pages",
+    "status": "in_progress",
+    "activeForm": "Testing breadcrumb navigation on various pages"
+  },
+  {
+    "content": "Test logout functionality and session clearing",
+    "status": "pending",
+    "activeForm": "Testing logout functionality and session clearing"
+  },
+  {
+    "content": "Test general navigation links and double-click navigation",
+    "status": "pending",
+    "activeForm": "Testing general navigation links and double-click navigation"
+  },
+  {
+    "content": "Test cancel buttons on Products, Customers, Users forms",
+    "status": "pending",
+    "activeForm": "Testing cancel buttons on Products, Customers, Users forms"
+  },
+  {
+    "content": "Write comprehensive test report to memory",
+    "status": "pending",
+    "activeForm": "Writing comprehensive test report to memory"
+  }
+]

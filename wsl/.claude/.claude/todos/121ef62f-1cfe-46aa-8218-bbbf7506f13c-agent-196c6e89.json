@@ -1,0 +1,37 @@
+[
+  {
+    "content": "Set up test environment (server, browser, logs)",
+    "status": "completed",
+    "activeForm": "Setting up test environment"
+  },
+  {
+    "content": "Test Orders Table Page functionality",
+    "status": "in_progress",
+    "activeForm": "Testing Orders Table Page"
+  },
+  {
+    "content": "Test Customers Table Page functionality",
+    "status": "pending",
+    "activeForm": "Testing Customers Table Page"
+  },
+  {
+    "content": "Test Users Table Page functionality",
+    "status": "pending",
+    "activeForm": "Testing Users Table Page"
+  },
+  {
+    "content": "Test cross-page navigation and state management",
+    "status": "pending",
+    "activeForm": "Testing cross-page navigation"
+  },
+  {
+    "content": "Test error handling and edge cases",
+    "status": "pending",
+    "activeForm": "Testing error handling"
+  },
+  {
+    "content": "Create comprehensive test report",
+    "status": "pending",
+    "activeForm": "Creating test report"
+  }
+]

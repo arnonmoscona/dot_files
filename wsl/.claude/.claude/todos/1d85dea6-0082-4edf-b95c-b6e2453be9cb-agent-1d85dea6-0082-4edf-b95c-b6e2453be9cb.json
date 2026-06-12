@@ -1,0 +1,27 @@
+[
+  {
+    "content": "Implement 5 FLO-81 coverage gap scenarios for add_order",
+    "status": "completed",
+    "activeForm": "Implementing coverage gap scenarios"
+  },
+  {
+    "content": "Fix 4 failing tests - different approach needed",
+    "status": "in_progress",
+    "activeForm": "Fixing failing tests"
+  },
+  {
+    "content": "Run full e2e test suite",
+    "status": "pending",
+    "activeForm": "Running full e2e test suite"
+  },
+  {
+    "content": "Optimize test performance",
+    "status": "pending",
+    "activeForm": "Optimizing test performance"
+  },
+  {
+    "content": "Final verification and report",
+    "status": "pending",
+    "activeForm": "Final verification"
+  }
+]

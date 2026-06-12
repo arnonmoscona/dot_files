@@ -1,0 +1,32 @@
+[
+  {
+    "content": "Set up test environment and server",
+    "status": "completed",
+    "activeForm": "Setting up test environment and server"
+  },
+  {
+    "content": "Create Playwright test script for Test 1: Basic Order Creation Flow",
+    "status": "completed",
+    "activeForm": "Creating Playwright test script for Test 1: Basic Order Creation Flow"
+  },
+  {
+    "content": "Execute all three test scenarios",
+    "status": "in_progress",
+    "activeForm": "Executing all three test scenarios"
+  },
+  {
+    "content": "Perform HTML validation on tested pages",
+    "status": "pending",
+    "activeForm": "Performing HTML validation on tested pages"
+  },
+  {
+    "content": "Monitor server logs for exceptions",
+    "status": "pending",
+    "activeForm": "Monitoring server logs for exceptions"
+  },
+  {
+    "content": "Write comprehensive final report",
+    "status": "pending",
+    "activeForm": "Writing comprehensive final report"
+  }
+]
