@@ -54,14 +54,16 @@ confirm the list before proceeding.
    - Security concerns (input validation, injection risks, credential handling)
    - Adherence to project patterns and conventions (informed by project CLAUDE.md and
      task context read in the bootstrap step)
-4. **Optional external analysis**: If asked for external code analysis, or if the scope
+   - Look for code duplication across the project, not only the change set
+   - Look for potentail cases of reimplementing the same thing multiple times across the project code but with a special focus on recent changes that either reimplemented within the change set or reimplemented something that exists in the project elsewhere. 
+4. **Optional recommended external analysis**: If asked for external code analysis, or if the scope
    covers a substantial portion of the codebase, run:
    ```
    uvx pyscn analyze --json --skip-deps .
    ```
    For a faster, directory-scoped analysis: `uvx pyscn analyze --json --skip-deps <dir>`.
    Results are stored in `.pyscn/reports/` -- read the latest timestamped JSON file there
-   and incorporate relevant findings.
+   and incorporate relevant findings. If the user did not ask for external analysis - then ask the user whether to run it.
 
 ## Report
 

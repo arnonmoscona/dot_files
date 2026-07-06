@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+#
+# tg_send -- send a Telegram message via the Bot API.
+#
+# A command-line fallback for when the Claude Code telegram plugin/MCP is
+# unavailable. The bot token is read from the channel .env at runtime and is
+# never printed.
+#
+# Usage:
+#   tg_send "message text"
+#   tg_send --chat <chat_id> "message text"
+#
+# Env overrides:
+#   TELEGRAM_ENV_FILE   path to the .env holding TELEGRAM_BOT_TOKEN
+#                       (default: ~/.claude/channels/telegram/.env)
+#   TELEGRAM_CHAT_ID    default chat id (default: 8205417538)
+#
+set -euo pipefail
+
+ENV_FILE="${TELEGRAM_ENV_FILE:-$HOME/.claude/channels/telegram/.env}"
+CHAT_ID="${TELEGRAM_CHAT_ID:-8205417538}"
+
+if [[ "${1:-}" == "--chat" ]]; then
+    [[ $# -ge 2 ]] || { echo "tg_send: --chat needs a value" >&2; exit 2; }
+    CHAT_ID="$2"
+    shift 2
+fi
+
+MSG="${1:-}"
+if [[ -z "$MSG" ]]; then
+    echo "usage: tg_send [--chat <id>] <message>" >&2
+    exit 2
+fi
+
+[[ -r "$ENV_FILE" ]] || { echo "tg_send: cannot read $ENV_FILE" >&2; exit 1; }
+# Load the token (and any other channel vars) without echoing them.
+set -a
+# shellcheck disable=SC1090
+. "$ENV_FILE"
+set +a
+: "${TELEGRAM_BOT_TOKEN:?tg_send: TELEGRAM_BOT_TOKEN not set in $ENV_FILE}"
+
+resp="$(curl -sS -m 15 \
+    "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+    --data-urlencode "chat_id=${CHAT_ID}" \
+    --data-urlencode "text=${MSG}")"
+
+if printf '%s' "$resp" | grep -q '"ok":true'; then
+    echo "tg_send: sent to ${CHAT_ID}"
+else
+    echo "tg_send: FAILED: $resp" >&2
+    exit 1
+fi

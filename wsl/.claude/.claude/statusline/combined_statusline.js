@@ -10,6 +10,7 @@ const sessionId = `\x1b[90m${String(input.session_id ?? "")}\x1b[0m`;
 const transcript = input.transcript_path;
 const model = input.model || {};
 const name = `\x1b[95m${String(model.display_name ?? "")}\x1b[0m`.trim();
+const rateLimits = input.rate_limits || {};
 const CONTEXT_WINDOW = 200_000;
 
 // --- helpers ---
@@ -135,23 +136,37 @@ function getCwd() {
   return `\x1b[33m${process.cwd()}\x1b[0m`;
 }
 
+// Get session token usage % from rate_limits
+function getSessionUsagePart() {
+  const limit = Number(rateLimits.tokens_limit ?? 0);
+  const remaining = Number(rateLimits.tokens_remaining ?? 0);
+  if (!limit) return null;
+  const used = limit - remaining;
+  const pct = Math.round((used * 1000) / limit) / 10;
+  return `${color(pct)}sess ${pct.toFixed(1)}%\x1b[0m \x1b[33m(${comma(used)}/${comma(limit)})\x1b[0m`;
+}
+
 // --- compute/print ---
 const usage = newestMainUsageByTimestamp();
 const leftPart = `${getCwd()} ${getGitInfo()}`;
 
+const sessionUsagePart = getSessionUsagePart();
+
 if (!usage) {
-  console.log(
-    `${leftPart} | \x1b[36mcontext starts after first question\x1b[0m | ${name}\nsession: ${sessionId}`
-  );
+  const parts = [`${leftPart}`, `\x1b[36mcontext starts after first question\x1b[0m`];
+  if (sessionUsagePart) parts.push(sessionUsagePart);
+  parts.push(name);
+  console.log(`${parts.join(" | ")}\nsession: ${sessionId}`);
   process.exit(0);
 }
 
 const used = usedTotal(usage);
 const pct = CONTEXT_WINDOW > 0 ? Math.round((used * 1000) / CONTEXT_WINDOW) / 10 : 0;
 
-const middlePart = `${color(pct)}ctx ${pct.toFixed(1)}%\x1b[0m \x1b[33m(${comma(used)}/${comma(CONTEXT_WINDOW)})\x1b[0m`;
-const rightPart = name;
+const ctxPart = `${color(pct)}ctx ${pct.toFixed(1)}%\x1b[0m \x1b[33m(${comma(used)}/${comma(CONTEXT_WINDOW)})\x1b[0m`;
 
-console.log(
-  `${leftPart} | ${middlePart} | ${rightPart}\nsession: ${sessionId}`
-);
+const parts = [leftPart, ctxPart];
+if (sessionUsagePart) parts.push(sessionUsagePart);
+parts.push(name);
+
+console.log(`${parts.join(" | ")}\nsession: ${sessionId}`);

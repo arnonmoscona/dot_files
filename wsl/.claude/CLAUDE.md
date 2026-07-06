@@ -147,22 +147,6 @@ compact them out. You should always follow them in each and every action.**
 When asked to put text on the system clipboard, use `pbcopy` which is installed on the
 system (native on Mac, custom user script on Linux/WSL2).
 
-### SMS notifications
-
-When I ask you to send me a notification by text (e.g. "text me when you're done",
-"notify me when the agent is finished"), use the script at `~/bin/send_text`. For example:
-
-```bash
-~/bin/send_text 'finished with the last prompt'
-```
-
-Only use SMS notifications when instructed to do so. Note that this tool is sometimes
-flaky and quota may evaporate without warning.
-
-Note that you may be started with `--channels plugin:telegram@claude-plugins-official`
-but this is not guaranteed. If you have access to the Telegram channel you can message
-through there instead of SMS.
-
 ### Opening notes in Obsidian
 
 To open a memory/note in Obsidian (by its `title` frontmatter property), use:
@@ -214,3 +198,5 @@ The ticket prefix is project-specific and will be specified in the project CLAUD
 
 2. **Note categorization**: When uncertain whether something is long-term memory (CLAUDE.md)
    or task-specific, ask for clarification.
+
+@RTK.md

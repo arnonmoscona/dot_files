@@ -179,3 +179,12 @@ if [ -f ~/.env ]; then
   source ~/.env
 fi
 
+# Update toolguard
+if [ -t 0 ]; then
+    # Interactive shell 
+    echo "auto-updating toolguard"
+    toolguard-update-check --upgrade
+    #uv tool upgrade toolguard
+    # toolguard_auto_update
+fi
+

@@ -1,0 +1,4 @@
+#!/bin/sh
+# Clear linux caches to reduce memory footprint of WSL2
+sudo echo 3 | sudo tee /proc/sys/vm/drop_caches
+
