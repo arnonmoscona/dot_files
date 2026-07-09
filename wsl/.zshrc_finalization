@@ -134,7 +134,7 @@ if [[ "${UNSET_VIRTUAL_ENV}" == "1" ]]; then
 fi
 
 #unalias pip
-export CLAUDE_SETTINGS_PATH=/home/arnon/projects/flowers/featherhill/.claude/settings.local.json
+#export CLAUDE_SETTINGS_PATH=/home/arnon/projects/flowers/featherhill/.claude/settings.local.json
 
 
 if [ -f ~/.env ]; then

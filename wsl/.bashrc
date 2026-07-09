@@ -146,7 +146,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
 
 
-export CLAUDE_SETTINGS_PATH=/home/arnon/projects/flowers/featherhill/.claude/settings.local.json
+#export CLAUDE_SETTINGS_PATH=/home/arnon/projects/flowers/featherhill/.claude/settings.local.json
 
 
 if [ -f ~/.env ]; then
