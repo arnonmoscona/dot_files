@@ -19,6 +19,17 @@ You are running in a forked subagent context with no conversation history. Befor
 reviewing, gather the context you need:
 
 1. Read the project CLAUDE.md to understand project conventions, patterns, and constraints.
+   If the project has a root-level `code-review.md`, read that too -- it's the place for
+   review priorities/objectives too large to pass as `$arguments` (CLAUDE.md itself serves
+   many purposes beyond code review; this file, when present, is dedicated to it).
+1a. Check whether `code-review-graph` is available for this project (its MCP tools are
+    named `mcp__code-review-graph__*`; a `.code-review-graph/` directory at the project root
+    is also a signal). If present, read `~/.claude/code-review-graph-review.md` before
+    starting the review -- it covers which of the tool's capabilities matter most for review
+    specifically and in what order. If the project's own CLAUDE.md documents
+    project-specific caveats for this tool (e.g. a known-unreliable query pattern in that
+    repo), those take precedence over the generic guidance. If absent, proceed with
+    Read/Grep as today -- no behavior change.
 2. Determine the basic-memory project name from the project CLAUDE.md.
 3. Read `Current Task Context.md` from basic-memory to identify what work is being
    reviewed. If a ticket ID appears in `$arguments`, use it to find and read the specific

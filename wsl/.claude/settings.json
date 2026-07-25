@@ -17,7 +17,53 @@
         "hooks": [
           {
             "type": "command",
-            "command": "rtk hook claude"
+            "command": "/home/arnon/.local/bin/toolguard"
+          }
+        ]
+      },
+      {
+        "matcher": "Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/arnon/.local/bin/toolguard"
+          }
+        ]
+      },
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/arnon/.local/bin/toolguard"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/arnon/.local/bin/toolguard"
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__jetbrains__execute_terminal_command",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/arnon/.local/bin/toolguard"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/arnon/.local/bin/toolguard-session-start"
           }
         ]
       }

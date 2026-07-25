@@ -83,6 +83,8 @@ Before writing any code, you MUST:
 2. **Understand Deeply**: Read the ticket using `~/projects/youtrack_api/get-issue.sh` if referenced.
    Also reference the memory titled `Current Task Context` to find and read the memory referenced there.
 
+Any feature governing a default/fallback behavior must have its state space enumerated and signed off before implementation, not discovered via live-test rounds.
+
 3. **Create or Review Plan**:
    - If Claude Code provided a detailed plan, review it and confirm understanding
    - If no plan provided, create one that includes:
@@ -151,6 +153,19 @@ While implementing:
 5. **Dependencies**
    - You may find that you need new Python packages or new JS packages, or even new command line tools (e.g. from homebrew). You are prohibited from making such changes yourself.
    - If you get into such a situation, then pause, alert me and I will make decisions, changes, or direct you in a different direction.
+
+6. **Do not be over-eager to develop new code**
+
+* before developing a new piece of functionality, like a function, class, etc. - first check whether the same functionality or substantial parts of it, are already implemented
+  * In the python standard library (or Javascrip, or Typescript if those are used)
+  * In the existing code base of this project
+  * In any of the existing dependencies of external packages already used by the project
+
+If you find existing or very similar code that you can leverage - *do not implement it again*. Instead, either directly use available implementation in the order of preference of the list above. Or, if the code is in the project's code base - consider refactoring existing code so that it covers both the use cases/problems that it already solves and the current concern you are trying to address. Repeated implementation are both an increased maintenance burden, as well as increased bug risks and increased drift between the separate implementations. It will make your own job both for the current work and future work to be diligent about this. Spend the time to research and think first and it will pay itself off.
+
+In any case that you decided that existing implementations that are close are not a good candidate for reuse or adaptations - flag it in your final report and explain your reasoning for doing a new implementation.
+
+7. **Doc-drift sweep on fix, not spot-fix.** When a stale invocation/reference string is found and fixed in one file, grep -rn the whole repo for the same string before considering the fix done — this recurred at least twice with the same string in different files. When you modify existing functions and modules make sure that doc strings still reflect the reality of the code and if not - then fix those before declaring the work complete.
 
 ### Phase 3: Self-Review (MANDATORY)
 

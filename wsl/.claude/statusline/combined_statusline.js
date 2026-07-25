@@ -6,10 +6,6 @@ const { execSync } = require("child_process");
 
 // --- input ---
 const input = readJSON(0); // stdin
-
-// temp debug code
-// fs.writeFileSync("/tmp/rl_debug.json", JSON.stringify(input.rate_limits ?? "MISSING", null, 2));
-
 const sessionId = `\x1b[90m${String(input.session_id ?? "")}\x1b[0m`;
 const transcript = input.transcript_path;
 const model = input.model || {};
@@ -145,7 +141,16 @@ function getSessionUsagePart() {
   const pct = rateLimits.five_hour?.used_percentage;
   if (pct == null) return null;
   const p = Number(pct);
-  return `${color(p)}sess ${p.toFixed(1)}%\x1b[0m`;
+  let out = `${color(p)}sess ${p.toFixed(1)}%\x1b[0m`;
+  if (p >= 80) {
+    const resetsAt = rateLimits.five_hour?.resets_at;
+    if (resetsAt != null) {
+      const t = new Date(Number(resetsAt) * 1000);
+      const hhmm = t.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+      out += ` \x1b[90m(resets ${hhmm})\x1b[0m`;
+    }
+  }
+  return out;
 }
 
 // --- compute/print ---

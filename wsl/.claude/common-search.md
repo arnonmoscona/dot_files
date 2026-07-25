@@ -114,6 +114,56 @@ Be aware of what text patterns can miss compared to semantic tools like
 * A second unrelated symbol of the same name elsewhere will produce false positives.
 * The import line itself is typically excluded by these recipes.
 
+# Structural graph search (code-review-graph, when installed)
+
+Some projects have `code-review-graph` installed -- a per-project MCP tool, not universal.
+Check for `mcp__code-review-graph__*` tools in your available tool list, or a
+`.code-review-graph/` directory at the project root, before assuming it's there.
+
+When present: read `~/.claude/code-review-graph-search.md` before relying on it -- it covers
+the staleness preconditions (**mandatory** -- several layers do not auto-update) and the
+edge-confidence caveat.
+
+When absent: the two lanes above are unaffected, proceed as today.
+
+## Reach for it by default on these questions
+
+The failure mode to avoid is habit: falling back on `ag` for multi-hop structural questions
+because it is familiar, burning several grep+read+reason rounds on something that is one
+call. When a question matches this table, use the graph **first**:
+
+| Question shape | Tool |
+|---|---|
+| "What breaks if I change this?" / blast radius before a refactor | `get_impact_radius_tool` |
+| "Who calls the callers of X", transitive dependency chains | `traverse_graph_tool`, or `query_graph_tool` with `pattern="callers_of"` |
+| "What execution paths touch this?" | `get_affected_flows_tool` |
+| "What tests cover this function?" | `query_graph_tool` `pattern="callers_of"` filtered to `is_test:true` |
+| Reviewing a change set -- risk-scored, token-efficient | `detect_changes_tool`, then `get_review_context_tool` |
+| "Is there already a helper that does X?" (BEFORE writing a new one) | `semantic_search_nodes_tool` |
+| Orienting in an unfamiliar area of the codebase | `get_architecture_overview_tool` |
+| Planning a rename, or hunting dead code | `refactor_tool` |
+
+The duplicate-helper row earns its place: a private predicate was once written that exactly
+duplicated an existing public function, and the "inventory existing helpers first"
+instruction only got added *after* the fact. A semantic search is what makes that
+instruction actionable rather than aspirational. Note it returns a ranked guess -- when the
+top hit is an adjacent sibling in the right file rather than the function itself, treat that
+as the lead it is and read.
+
+**Keep using `ag`/AST scripts when the answer must be exhaustive and verifiable** -- "all N
+call sites", "every import of this symbol", "does this file still reference `re.`". The
+graph returns ranked results, which is the wrong shape for a question where missing one
+entry IS the failure. On small-to-medium repos the fused relevance scores are also nearly
+flat, so ranking carries little signal.
+
+## Evaluate it each time, and say so
+
+`code-review-graph` is on trial. Whenever you use it for something non-trivial, add a
+one-line verdict to your reply: did it beat the alternative lane, was it right when you
+checked it, did stale data mislead you. Report misses as readily as wins -- a tool that only
+ever gets good reviews is not being evaluated -- and raise reservations about continued use
+as soon as they form rather than accumulating them silently.
+
 ## Caveats when using the MCP
 
 * The IDE must be running and the project indexed. Fresh checkouts or just-edited files

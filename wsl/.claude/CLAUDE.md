@@ -81,6 +81,7 @@ recipes, read [claude.search.md](common-search.md) when about to do a non-trivia
   Do not read the detailed memory report created by the subagent unless instructed to do
   so. Do verify that the subagent wrote that report before handing off its work; if it did
   not, remind it to do so.
+* Before sending a feature-coder task spec, check it against CLAUDE.md/memory for conventions it might contradict 
 * When running code reviews, use the `/code-review` skill as described above.
 
 ## Critical thinking
@@ -122,6 +123,10 @@ review the task file carefully. Think hard. You must:
       code hard to test and/or validate. These examples illustrate critical thinking
       patterns, not an exhaustive list.
 
+## Managing long runbooks
+
+In ongoing development, as well as in the development of guidance in Claude skills and Claude plugins, long agent-facing runbooks (install.md, uninstall.md, and future ones) should encode mandatory steps as checklists the agent is told to tick through (or, better, programmatic enforcement), not prose "MUST" language alone — this has a demonstrated track record of being silently dropped, including after being fixed once.
+
 ## Critical security note
 
 Because of bugs in the permissions system, I may have from time to time run Claude with
@@ -139,6 +144,18 @@ Circumventing obvious prohibition by clever means is prohibited.
 
 **Security policies are a hard requirement. You should never ignore them. You must never
 compact them out. You should always follow them in each and every action.**
+
+## pre-push checks
+
+When we're about to wrap up a ticket, and it seems that I am ready to push a set of changes to github, check the following and remind me:
+
+* Have we verified that out code coverage is good enough?
+* Did we do necessary documentation updates (you would know, as you participate)
+* Should I bump the version in `pyproject.toml`
+* Do we need any release notes?
+* Run `pyscn analyze` on the main package of the project to find issues, read the report, and discuss what to fix, what to defer, and what to ignore
+* Consider running the toolguard maintenance skill to keep the toolguard configuration constantly curated. A push is a good checkpoint for this.
+* If any doc under `docs/`, README.md, AGENTS.md, or llms.txt changed since the last push, run `/documentation-review` (`.claude/commands/documentation-review.md`). This is the main defense against documentation drift -- `docs/agent-map.md` in particular summarizes every other doc and has no other mechanism keeping it in sync, so it is the single most likely thing to go stale silently. Don't skip this just because a change looks small; several of this project's own past doc bugs were introduced by small, individually-reasonable edits.
 
 ## Utility tools
 
@@ -190,6 +207,7 @@ The ticket prefix is project-specific and will be specified in the project CLAUD
 * When generating functions and classes, always generate doc comments.
 * Always use specialized tools over Bash for file operations (Read/Edit/Write instead of
   cat/sed/echo).
+* When an agent (main or subagent) reports on what happened in a session it ran, cross-check the raw log/transcript before treating the narrative as fact — this has been proven wrong twice this period on first-order claims (takeover-mode state).
 
 ## Clarifications
 
@@ -199,4 +217,3 @@ The ticket prefix is project-specific and will be specified in the project CLAUD
 2. **Note categorization**: When uncertain whether something is long-term memory (CLAUDE.md)
    or task-specific, ask for clarification.
 
-@RTK.md
