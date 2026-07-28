@@ -16,7 +16,8 @@ cache/
 paste-cache/                                                                                                                                                                                                   
 file-history/                                                                                                                                                                                                  
 backups/                                                                                                                                                                                                       
-projects/                                                                                                                                                                                                      
+wsl/.claude/projects
+wsl/.claude/.claude/projects
 plans/                                                                                                                                                                                                         
 shell-snapshots/                                                                                                                                                                                               
 .last-cleanup                                                                                                                                                                                                  
