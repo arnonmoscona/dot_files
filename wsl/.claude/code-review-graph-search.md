@@ -90,8 +90,24 @@ judgement and tell Arnon in your reply -- briefly, not a formal report:
 - Did stale data mislead you?
 
 Say plainly when it added real value AND when it did not; a tool that only ever gets
-positive reports is not being evaluated. Flag reservations about continued use as soon as
-you have them rather than accumulating them silently.
+positive reports is not being evaluated.
+
+**Report observations, not verdicts.** A single use is a data point, not a statistic --
+do not generalize "it didn't help here" into "it isn't useful", and do not let one good
+result settle the question either. The purpose of the trial is to accumulate real evidence;
+concluding early defeats it. Note especially whether a miss was the tool's fault or the
+query's (a poorly-shaped question, or one asked after you already knew the answer, proves
+little).
+
+**Append every non-trivial use to `~/.claude/code-review-graph-evidence-log.md`** -- a
+GLOBAL, cross-project log, so evidence accumulates across every repo the tool is installed
+in rather than fragmenting into per-project memories. It carries the logging format and a
+running count.
+
+Arnon's bar for concluding anything: **~100 real-world uses across several of the tools.**
+Until then, log observations and keep going; raise a reservation about continued use only
+when a PATTERN emerges across many uses, never on a single disappointment. Check the running
+count before you are tempted to declare a verdict.
 
 ## One caveat to always apply: edge confidence
 

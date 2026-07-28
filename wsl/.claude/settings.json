@@ -69,6 +69,19 @@
       }
     ]
   },
+  "autoMode": {
+    "environment": [
+      "$defaults",
+      "Organization: solo developer, personal and client projects. Primary use: software development.",
+      "Permission configuration files: several projects are governed by 'toolguard', a PreToolUse permission hook, and by Claude Code's own permission system. The permission configuration files are: any toolguard_hook.toml or toolguard_hook.json at any level, ~/.toolguard/**, ~/.config/toolguard/**, and any Claude Code settings file at project, user, or system level (.claude/settings.json, .claude/settings.local.json, ~/.claude/settings.json, ~/.claude.json, managed/policy settings) in any repository on this machine. These files are the security controls that govern the agent itself, so they are a protected target rather than ordinary project files. Reading them is always fine."
+    ],
+    "soft_deny": [
+      "$defaults",
+      "Permission Config Change [named+specifics - **must name:** the permission configuration file and the specific change]: Changing, deleting, renaming, truncating, chmod-ing, or restoring an older version of any permission configuration file listed in Environment, and any change that defeats one without editing it: uninstalling or renaming the hook binary, launching with an alternate config (--settings, CLAUDE_* env overrides, claude config set, a symlink swap), or git checkout/stash/copy of a prepared file over it. Editing permission configuration to test a hypothesis, to unblock a command, or to reduce prompting is privilege escalation, because these files govern the agent. Clears when the user asked for this specific configuration change, either in their own message or by approving a proposal that named the file and the change. A general request to fix, unblock, or clean something up does not clear it. Reading these files is always allowed.",
+      "Permission Config Indirect Write [named+specifics - **must name:** the file and the mechanism]: Any write to a permission configuration file listed in Environment that does not arrive as a direct Edit or Write tool call on that file, regardless of mechanism - shell redirect, sed -i, tee, jq/yq, python -c, node -e, awk to a temp file then mv, cp/mv/install of a prepared file, patch or git apply, a heredoc into an interpreter, a scratch script, or a non-interactive editor. This holds even when the user authorized the change: an authorized edit must still be made directly so the diff is visible and reviewable. Clears only for toolguard's own purpose-built tooling (toolguard-maintain, toolguard-install, toolguard-migrate), which writes these files by design.",
+      "Toolguard Circumvention [named+specifics - **must name:** the command and the circumvention route]: Running a governed command in a way that prevents the toolguard PreToolUse hook from seeing the real command - wrapper scripts, shell aliases or functions, invoking an underlying binary directly to dodge a rule, or disabling, unregistering, or bypassing the hook. When a command is denied or asked, the correct response is to report it, not to find another route to the same effect."
+    ]
+  },
   "statusLine": {
     "type": "command",
     "command": "~/.claude/statusline/combined_statusline.js"
@@ -76,6 +89,6 @@
   "enabledPlugins": {
     "telegram@claude-plugins-official": true
   },
-  "effortLevel": "high",
+  "effortLevel": "medium",
   "theme": "auto"
 }

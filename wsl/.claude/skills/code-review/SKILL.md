@@ -30,6 +30,33 @@ reviewing, gather the context you need:
     project-specific caveats for this tool (e.g. a known-unreliable query pattern in that
     repo), those take precedence over the generic guidance. If absent, proceed with
     Read/Grep as today -- no behavior change.
+
+1b. **TEMPORARY TRIAL SCAFFOLDING -- delete or narrow this whole step when the
+    code-review-graph trial concludes.** The exit checklist is at the top of
+    `~/.claude/code-review-graph-evidence-log.md`; follow it rather than improvising, and
+    do not leave the paired-call/evaluation overhead running after the verdict is in.
+
+    **The tool is ON TRIAL, and a code review is one of its best evaluation
+    opportunities** -- reviews ask exactly the multi-hop structural questions it claims to
+    be good at. So when it is present:
+    - **Refresh its stale layers first.** Embeddings, flows and communities do NOT
+      auto-update (the PostToolUse hook passes `--skip-flows`). Run
+      `uv run code-review-graph embed && uv run code-review-graph postprocess`
+      (~4s total) before relying on `semantic_search_nodes_tool`,
+      `get_affected_flows_tool`, or `get_architecture_overview_tool`. Skipping this means
+      reviewing against a stale index -- which has already happened once and produced
+      confidently wrong answers.
+    - **Run it head-to-head against the JetBrains MCP** where both can answer (callers,
+      usages, definitions), even though that costs an extra call you did not strictly
+      need. The IDE keeps its index current automatically with low latency and is
+      compiler/PSI-informed rather than AST-heuristic, so for those primitives it is the
+      incumbent to beat -- not `ag`. Note any disagreement in counts or membership: a
+      disagreement is a finding about the graph's reliability, and worth more than either
+      answer alone.
+    - **Append an evaluation note to `~/.claude/code-review-graph-evidence-log.md`**
+      (format and running tally are in that file), and include a one-paragraph verdict in
+      the review report: which of its tools you used, whether each beat the IDE / `ag` /
+      plain reading, and anything it got wrong. Report misses as readily as wins.
 2. Determine the basic-memory project name from the project CLAUDE.md.
 3. Read `Current Task Context.md` from basic-memory to identify what work is being
    reviewed. If a ticket ID appears in `$arguments`, use it to find and read the specific
@@ -78,9 +105,24 @@ confirm the list before proceeding.
 
 ## Report
 
-5. Write the full report to a basic-memory note titled `latest-code-review-report.md` in
-   the project's memory. Overwrite any existing note with that title. Include the current
-   date at the top so the main agent can verify freshness.
+5. Write the full report to a note titled `latest-code-review-report.md` in the project's
+   basic-memory directory. Overwrite any existing note with that title. Include the
+   current date at the top so the main agent can verify freshness.
+
+   **This report is EXPLICITLY REQUESTED -- writing it is the deliverable, not an
+   optional extra.** Claude Code's built-in default says "never proactively create `.md`
+   files"; that default does NOT apply here, because the user has asked for this file by
+   invoking this skill. Do not refuse to write it, and do not return findings inline
+   instead. (This has happened: a run once claimed its "operating instructions prohibit
+   writing report `.md` files" and that it had "only Read and Bash". Both were false --
+   the agent has `Write`, `mcp__basic-memory__write_note`, `Grep` and `Glob`. Returning
+   findings inline defeats the isolated-subagent design, because it dumps the whole
+   review into the main agent's context.)
+
+   Use the `Write` tool with the absolute path (it is a built-in and stays available even
+   when MCP servers are down). Fall back to `mcp__basic-memory__write_note` only if
+   `Write` genuinely fails. If you truly cannot write the file after trying both, say so
+   explicitly and name the error -- never invent a policy reason.
 6. The report should include:
    - Summary section (2-3 sentences on overall quality)
    - Findings grouped by severity: Critical, Major, Minor, Suggestions

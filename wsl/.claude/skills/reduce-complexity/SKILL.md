@@ -30,6 +30,44 @@ You need at least one command line tool on the system to measure complexity. **I
 - **xenon**: CI/CD threshold enforcement
 - **wily**: Track trends across git history
 
+### Optional: code-review-graph MCP
+
+If the project has `code-review-graph` installed (its tools are named
+`mcp__code-review-graph__*`; a `.code-review-graph/` directory at the project root is also
+a signal), it complements the complexity measurers above: they tell you WHICH function is
+too complex, the graph tells you what will BREAK if you restructure it. Use it for:
+
+- `find_large_functions_tool` -- corroborate the complexity tool's hit list.
+- `get_impact_radius_tool` -- blast radius BEFORE extracting or splitting a function. This
+  is the single highest-value one here: a "safe" extraction is only safe if you know every
+  caller.
+- `query_graph_tool` with pattern `callers_of` -- enumerate callers, and find a function's
+  tests by filtering results to `is_test:true`. (In some repos the dedicated `tests_for`
+  heuristic misses class-based `unittest.TestCase` methods -- check the project's own
+  CLAUDE.md for caveats before trusting it.)
+- `get_affected_flows_tool` -- which execution paths run through the function you are about
+  to restructure, so you know what to re-test.
+- `get_hub_nodes_tool` / `get_bridge_nodes_tool` -- a complex function that is also a hub or
+  bridge is the riskiest to touch and deserves the most test coverage first.
+- `refactor_tool` -- plan renames and find dead code (dead code is complexity you can delete
+  outright, which always beats restructuring it).
+
+**Staleness precondition.** Embeddings, flows and communities do NOT auto-update in every
+setup (a common PostToolUse hook passes `--skip-flows`). Before relying on
+`semantic_search_nodes_tool`, `get_affected_flows_tool` or `get_architecture_overview_tool`,
+refresh:
+
+```bash
+uv run code-review-graph embed && uv run code-review-graph postprocess
+```
+
+The structural queries (callers, impact radius, large functions) read live structure and do
+not need this.
+
+**Verify before you cut.** Treat graph output as a lead, not proof -- confirm a caller list
+against the IDE or `ag` before deleting or resignaturing anything. A missed caller in a
+"behaviour-preserving" refactor is exactly the failure this skill must not produce.
+
 ## Discovery Phase
 
 ### Measure Complexity
