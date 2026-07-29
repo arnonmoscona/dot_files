@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__basic-memory__list_memory_projects",
+      "mcp__basic-memory__list_directory",
+      "WebFetch(domain:obsidian.md)",
+      "mcp__basic-memory__recent_activity",
+      "mcp__basic-memory__search_notes",
+      "mcp__basic-memory__read_note",
+      "mcp__basic-memory__write_note",
+      "WebSearch",
+      "WebFetch(domain:claudelog.com)",
+      "WebFetch(domain:claudefa.st)",
+      "WebFetch(domain:joseparreogarcia.substack.com)",
+      "mcp__basic-memory__edit_note",
+      "mcp__jetbrains__open_file_in_editor",
+      "mcp__jetbrains__replace_text_in_file",
+      "WebFetch(domain:github.com)",
+      "mcp__code-review-graph__list_graph_stats_tool",
+      "mcp__code-review-graph__semantic_search_nodes_tool",
+      "mcp__code-review-graph__query_graph_tool",
+      "mcp__code-review-graph__get_architecture_overview_tool",
+      "mcp__jetbrains__get_file_text_by_path",
+      "Skill(claude-api)"
+    ]
+  },
+  "enableAllProjectMcpServers": true
+}

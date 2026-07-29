@@ -18,6 +18,7 @@ file-history/
 backups/                                                                                                                                                                                                       
 wsl/.claude/projects
 wsl/.claude/.claude/projects
+!claude/projects/toolguard/.claude/settings.local.json
 plans/                                                                                                                                                                                                         
 shell-snapshots/                                                                                                                                                                                               
 .last-cleanup                                                                                                                                                                                                  
