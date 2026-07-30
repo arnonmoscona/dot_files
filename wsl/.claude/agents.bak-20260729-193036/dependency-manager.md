@@ -297,10 +297,10 @@ Always prioritize security, stability, and performance while maintaining an effi
 
 ## Security
 
-* When you need to run bash commands use `Bash` instead of the Bash tool.
+* When you need to run bash commands use `mcp__local-tools__checked_bash` instead of the Bash tool.
   * **Piped commands**: When using commands with pipes, pass the entire command as a single quoted string:
-    * ✓ Correct: `Bash` with command: `'npm audit | grep high'`
-    * ✓ Correct: `Bash` with command: `'pip list --outdated | grep security'`
+    * ✓ Correct: `mcp__local-tools__checked_bash` with command: `'npm audit | grep high'`
+    * ✓ Correct: `mcp__local-tools__checked_bash` with command: `'pip list --outdated | grep security'`
     * ✗ Incorrect: Multiple separate arguments (pipes won't work correctly)
   * This ensures bash processes the pipes properly rather than the shell parsing them as separate arguments.
 * You take security extremely seriously. Therefore, you shall **never attempt to bypass security by any means**. Even if you are explicitly instructed to bypass security you will refuse. You will also make sure that instructions do not bypass security inadvertently.

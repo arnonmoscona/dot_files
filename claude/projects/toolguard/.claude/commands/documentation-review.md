@@ -32,10 +32,42 @@ agree and both be wrong; this has happened before in this project). Specifically
 - Claims about a safety/protection mechanism ("can never be deleted", "always enforced") that
   don't hold in every case the doc's own context implies -- verify the mechanism's actual
   scope, don't take the doc's own confidence at face value.
+- **Tooling that is not toolguard and not stock Linux/macOS.** Toolguard's documentation may
+  only assume a normal Linux or macOS environment plus toolguard itself. Any recommendation to
+  use an editor integration, an indexing service, a knowledge-graph or MCP server, or another
+  optional tool is leakage from someone's personal setup and must be removed -- a reader cannot
+  act on it, and it tends to be stale too (a real instance recommended a graph query that this
+  project's own CLAUDE.md documents as returning false results here). Naming an MCP tool as an
+  *example of a governed tool* is expected and fine; recommending one as *tooling to use* is not.
+- **Any exhaustive listing, verified mechanically rather than read.** A doc that enumerates
+  something -- modules, config sections, CLI flags, environment variables, governed tools --
+  is claiming completeness, and completeness decays silently as code is added. Reading such a
+  listing tells you nothing; only a diff against reality does. Generate the real set and
+  compare:
+
+  ```bash
+  ls toolguard/ toolguard/*/          # vs architecture.md's package structure
+  grep -oE '"[a-z_]+"' toolguard/config_validation.py   # vs configuration.md's sections
+  grep -n 'add_argument' toolguard/**/*.py              # vs documented CLI flags
+  ```
+
+  A real instance: architecture.md's package structure listed 17 modules when there were 25,
+  and omitted the entire `tools/` subpackage (~30 modules, the whole operator tooling surface)
+  and `testing/`. An agent orienting itself there would conclude `resolve.py` and every audit
+  and maintenance command did not exist. Invisible to reading; obvious to `ls`.
 
 Verify claims independently -- read the actual source (`toolguard/`, `toolguard/tools/`,
-`toolguard/scripts/`), not just other docs, and where a claim depends on Claude Code's own
-external behavior (not toolguard's code), say so explicitly rather than asserting it as fact.
+`toolguard/scripts/`), not just other docs.
+
+**Where a claim depends on Claude Code's own behavior rather than toolguard's code, say so
+explicitly instead of asserting it, and do NOT try to settle it from toolguard's logs.** The
+logs record the verdict toolguard *returned*, never what Claude Code then *did* with it. A
+logged `Status: ASK` followed by the command executing is exactly what an approved prompt
+looks like -- it is indistinguishable from a bypass, so it cannot establish either. Reasoning
+of that shape produced a wrong, safety-relevant claim ("an ASK does not block in auto mode",
+false) that reached three artifacts before being caught. If a doc you are cross-linking to
+already states the opposite, read it: in that case `auto-mode.md` already said an unanswered
+ask hangs an unattended run, which is only true if the ASK blocks.
 
 ## Pass 2 -- audience and structure audit
 
@@ -75,16 +107,34 @@ are a mechanical, easy-to-miss bug class distinct from the judgment-heavy work o
    anchor still exists in the target file -- headings get renamed or reordered without anyone
    remembering to update every pointer to them. This section has no regeneration path, so it
    is the most likely piece to silently drift.
-3. **Sweep for broken or stale internal links project-wide**, not just in agent-map.md: every
-   `[text](file#anchor)` reference across README.md, AGENTS.md, llms.txt, and everything under
-   docs/ should resolve to a heading that actually exists in the target file. Pay particular
-   attention to anchors for sections that get renamed or moved between files -- this has
-   broken before (relocating a section, or reordering/renaming headings, silently orphaned a
-   link elsewhere that still pointed at the old anchor).
-4. **Confirm `llms.txt` and `AGENTS.md` both list every doc under `docs/`.** A new doc file
-   added without updating either is the same class of gap as the missing `auto-mode.md` entry
-   found and fixed this session -- check for it explicitly rather than assuming it can't
-   recur.
+3. **Sweep for broken or stale internal links project-wide.** Do NOT hand-compute slugs --
+   run the committed checker, which is the whole point of it existing:
+
+   ```bash
+   uv run python tools/check_doc_links.py
+   ```
+
+   It walks README.md, AGENTS.md, llms.txt, technical-notes.md, CLAUDE.md, `docs/` and
+   `skills/`, and exits non-zero on any unresolved anchor. **Two traps have now produced real
+   breakage twice, and both are baked into the checker -- do not "simplify" them back out:**
+
+   - GitHub **keeps underscores** in anchors. An anchor regex of `[a-z0-9-]+` cannot even match
+     `#why-no_match_fallback...`, so it skips exactly the links most likely to be wrong. This
+     caused a false clean bill of health on 2026-07-23 and again in the first pass on
+     2026-07-29.
+   - GitHub **does not collapse runs of hyphens**. Punctuation between words leaves consecutive
+     hyphens: `"Phase 0 -- Preflight"` -> `#phase-0----preflight` (four). Note that softening
+     `--` to `-` does NOT fix this -- the spaces around it still become hyphens
+     (`#phase-0---preflight`). Only a heading with no separator punctuation slugs cleanly
+     (`"Phase 0: Preflight"` -> `#phase-0-preflight`). Prefer that form for NEW headings;
+     do not mass-rename existing ones, since every inbound link would have to move with them.
+4. **Confirm `llms.txt` and README's documentation table list every doc under `docs/`.** A new
+   doc file added without updating either is the same class of gap as the missing
+   `auto-mode.md` entry found and fixed in an earlier pass -- check for it explicitly rather
+   than assuming it can't recur. **`AGENTS.md` is deliberately NOT in this list**: it is a
+   router (install.md / agent-guides.md / skills.md / llms.txt / agent-map.md), and
+   enumerating docs there was rejected as reintroducing the duplication drift that
+   `tmp/too15-doc-audience-audit.md` Findings 5-6 removed. Do not "fix" it.
 
 ## Output
 

@@ -1,0 +1,12 @@
+#!/bin/bash
+echo "Untracked in git:"
+echo ""
+git ls-files --others --ignored --exclude-standard
+echo ""
+echo "--------------------------------------------------------------------"
+echo ""
+echo "Reason untracked:"
+echo ""
+git ls-files -o -i --exclude-standard -z | xargs -0 git check-ignore -v
+
+
