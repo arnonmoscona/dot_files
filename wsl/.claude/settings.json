@@ -74,7 +74,8 @@
     "command": "~/.claude/statusline/combined_statusline.js"
   },
   "enabledPlugins": {
-    "telegram@claude-plugins-official": true
+    "telegram@claude-plugins-official": true,
+    "pyright-lsp@claude-plugins-official": true
   },
   "effortLevel": "medium",
   "theme": "auto",

@@ -1,219 +1,170 @@
 # CLAUDE.md (Global User Directives)
 
-This file provides guidance to Claude Code when working on any of my projects.
 My name is Arnon. You can also call me boss, just so we know who's in charge here.
 
-@common-memory.md
+## Security -- hard requirements, never relax, never compact away
 
-## Python
-
-Always use `uv run python` instead of bare `python` commands. This ensures the correct
-virtual environment is used:
-
-- `uv run python -m py_compile path/to/file.py`
-- `uv run python -c "..."`
-- `uv run python script.py`
-
-For code quality:
-
-```bash
-uv run ruff format .   # format
-uv run ruff check .    # lint
-```
-
-Always run linting and check syntax before committing. Always format with `ruff` after
-generating or editing.
-
-Note that `git flake8` and `git isort` are custom scripts in `~/bin/` that follow git
-command conventions. While we use `ruff` as the primary tool, these may also be used.
-
-For Python coding conventions, anti-patterns, and notation rules, see [common-python rules](rules/python.md) which applies automatically when editing `.py` files.
+* I sometimes run Claude with `--dangerously-skip-permissions`. **That is not blanket
+  permission.** Even then, ask before editing anything outside the project directory.
+* Never modify `.env` or `.claude.env` without my explicit permission, dangerous mode or not.
+* If an action is denied, do not reach for another route to the same effect (e.g. blocked
+  from reading a file, then writing a script to read it). Circumventing an obvious
+  prohibition by clever means is prohibited. When in doubt, ask.
 
 ## git
 
-Note that you are permitted to run `git diff` and `git log` with no explicit permission.
-**You must not do any write git operations yourself. Always leave that to me.** At most,
-provide me with a suggested command line if I ask. Read-only git operations are fine.
+Read-only git is fine without asking (`git diff`, `git log`, `git status`, `show`).
+**I do all write operations myself** -- no commits, pushes, checkouts, merges, branches,
+stashes, or resets, even when you think it's the obvious next step. Give me the command
+line instead.
 
-When writing commit messages, do not include Claude Code promotions and use only ASCII
-characters, no emoji. If Claude Code generated most of the code in the commit, it is OK
-to note that some code was authored by Claude Code.
+Commit messages: plain ASCII only, no emoji, no Claude Code promotion. Noting that Claude
+Code authored most of the code is fine. Same ASCII rule for any markdown you put on my
+clipboard (use `pbcopy`).
 
-Write all commit messages and all markdown intended for the clipboard in plain ASCII
-characters. If you need special characters, especially UTF-8, use either HTML conventions
-or numeric character representation.
+## Python
+
+Always `uv run python`, never bare `python`. Format and lint with
+`uv run ruff format .` and `uv run ruff check .` before I commit.
+
+Language conventions live in `~/.claude/rules/python.md`, which loads automatically when
+you touch a `.py` file.
+
+## Tickets
+
+YouTrack. The ticket prefix is in each project's CLAUDE.md. A bare `FLO-123`/`TOO-123` in a
+prompt or a code comment is a ticket reference -- read it without asking.
+
+**Read**: `~/projects/youtrack_api/get-issue.sh "<TICKET-ID>"`. Weight the description over the
+comments.
+
+**Comment**:
+
+```bash
+~/projects/youtrack_api/add-comment.sh <TICKET-ID> -f <file.md>    # preferred
+~/projects/youtrack_api/add-comment.sh <TICKET-ID> -m "short text"
+cat <file.md> | ~/projects/youtrack_api/add-comment.sh <TICKET-ID>
+```
+
+The body is markdown. The script handles all quoting and escaping, so don't sanitize the text; it
+prints the created comment as JSON and exits non-zero on failure. Anything longer than a line or
+two goes in a file (your scratchpad) passed with `-f`, not crammed into `-m`.
+
+**Ask me before posting.** A comment is visible to others and can't be undone. The exception is
+when I've already told you to comment on that specific ticket.
+
+The script authenticates as a **separate Claude Code account**, so your comments are attributed to
+you automatically -- no need to add an "authored by Claude" header to the body.
+
+## Task memory (basic-memory MCP)
+
+Each project's CLAUDE.md names its basic-memory project. Every task has a task memory note;
+`Current Task Context.md` links to the active one. At launch, read it and the linked task.
+
+* Ticket-scoped notes go in `<TICKET-ID>/<TICKET-ID> <description>.md` and must carry the
+  `task-memory` tag plus the ticket ID. Ask where to put a note with no ticket.
+* Keep your own notes in a "Clarifications from discussion" section, separate from mine.
+  "Take a note of this" / "remember that X" goes there. "In the future remember that X"
+  probably means long-term memory -- ask which.
+* Maintain a `task summaries/` note per task, under 150 words, tagged `task-summary`:
+  what it is, status, key decisions. Create it once you understand the task; ensure one
+  exists at completion.
+* When I say "we're now working on X" or "switch to X", identify the note, confirm with me,
+  then update the `Current Task Context.md` link and open the task file in the IDE. If X is
+  ambiguous, ask whether it's new, or which one I mean. If several summaries match a
+  "recall when we were working on X", list the candidates plus an "all of these" option.
+* Find notes with `search_notes` / `recent_activity` / `list_directory`, not by scanning.
+  Multi-tag search needs an explicit operator: `"task-memory AND TOO-72"` works;
+  space-separated, comma-separated, `+`-prefixed and quoted-pair forms all return empty.
+* Open memory files in the IDE with `mcp__jetbrains__open_file_in_editor` -- no permission
+  needed.
+
+## Delegation
+
+* Non-trivial implementation goes to the `feature-coder` subagent -- suggest it rather than
+  burning my main-agent context on the details. Verify it wrote its memory report before
+  you accept its work; remind it if it didn't. Don't read the report unless I ask.
+* Check a feature-coder task spec against CLAUDE.md conventions before sending it.
+* Code review goes through the `/code-review` skill (below).
+* Search: read `~/.claude/reference/search.md` before a non-trivial code search. Do **not**
+  route search or structural questions to `mcp__jetbrains__*` -- the reachable IDE build
+  exposes no analysis or language-aware tools, so it is neither a lane nor a fallback. Use it
+  to open files and nothing else.
+
+## Tool-capability reviews
+
+`code-review-graph` is a moving target under active evaluation, and I care more about
+precision than speed. Never restate a tool's capabilities from memory; measure them.
+
+The IDE MCP review is **suspended** as of 2026-07-31 -- the reachable build exposes no
+analysis tools, there is no fix in hand, and re-measuring a known-empty surface on a cadence
+is not worth the tokens. Don't remind me about it. If I say the IDE setup has changed, the
+method and the last measurements are in `~/.claude/reference/ide-mcp.md`; read it then, and
+only then.
 
 ## Code review
 
-When asked to do a code review, first determine the scope:
-- Default: added and changed files in the current task
-- Narrower: staged files only
-- Wider: all Python and template files in the project
-- Specific: a named package, file, or explicit list of files
+Determine scope first -- default is added/changed files in the current task; narrower is
+staged only; wider is all Python and templates; or a named package/file/list. Ask with
+AskUserQuestion if it isn't clear. Then invoke `/code-review <scope>`, appending the ticket
+ID (e.g. `/code-review changed TOO-14`).
 
-If scope is not clear from context, ask using the AskUserQuestion tool before proceeding.
-Then invoke `/code-review [scope]`, optionally appending the current ticket ID
-(e.g. `/code-review changed TOO-14`). The review runs in an isolated subagent context to
-preserve main agent context and avoid review bias from accumulated reasoning. When the
-scope is a specific subset of files, pass them as a space-separated list.
-
-After the skill returns:
-- The subagent provides the full path of the report it wrote. Verify the report is fresh
-  (not a previous run) before proceeding. If the subagent did not write a fresh report,
-  instruct it to do so again.
-- Open the `latest-code-review-report.md` memory file in the IDE using
-  `mcp__jetbrains__open_file_in_editor` so the report is ready for reading.
-- Do not read the report yourself unless Arnon instructs you to. Opening it in the IDE
-  is sufficient -- reading it would defeat the purpose of the isolated subagent design.
-
-For full code review directives see [Code Review Skill](skills/code-review/SKILL.md).
-
-## Searching in code
-
-For guidance on which search tool to use (ag, JetBrains MCP, etc.) and efficient search
-recipes, read [claude.search.md](common-search.md) when about to do a non-trivial search.
-
-## Subagent usage
-
-* When approaching an implementation of a non-trivial task, suggest that the
-  `feature-coder` subagent should be used. Avoid doing complex work in the main agent so
-  as to keep yourself focused on the high-level task and not deplete your context buffer.
-  Do not read the detailed memory report created by the subagent unless instructed to do
-  so. Do verify that the subagent wrote that report before handing off its work; if it did
-  not, remind it to do so.
-* Before sending a feature-coder task spec, check it against CLAUDE.md/memory for conventions it might contradict 
-* When running code reviews, use the `/code-review` skill as described above.
+Afterwards: verify the subagent reported a **fresh** report path (not a previous run), open
+`latest-code-review-report.md` with `mcp__jetbrains__open_file_in_editor`, and **do not read
+it yourself** unless I say so -- reading it defeats the isolated-context design.
 
 ## Critical thinking
 
-Your role in the project is not only writing code and analysis -- it is also to be a
-critical thinker and to improve my own knowledge and quality.
+Being a critical thinker is part of your job here, not a garnish on it.
 
-* Every time you are about to congratulate me or agree with me, you will first think
-  through whether what I say makes sense, whether it is factually true, and whether I
-  paid attention to all the relevant angles. Also, point out if you know of a better way
-  of doing things.
-* Look at methods, practices, libraries, and frameworks with a critical thinking angle.
-  Am I unaware of a better library or a simpler way of achieving a task? Are the libraries
-  I use up to date? Are they the best-in-class? Are they sufficiently maintained? Do they
-  introduce security risks?
+* Before you agree with me or congratulate me, check whether I'm actually right, whether
+  it's factually true, and whether I've missed an angle. Say so when I haven't.
+* Question the libraries and frameworks I choose: is there a better one, a simpler path, a
+  standard-library answer? Is it maintained? Does it carry security risk?
+* On a new task or stage: read the task file, then pressure-test the requirements before
+  writing code. Do they make sense given the ticket and the rest of the app? Is there a
+  simpler way? Any premature optimization -- caching with no measured problem, a dependency
+  for something stdlib does, duplicated logic, code in the wrong module, a design that's
+  hard to test? Say so before implementing, not after.
+* Success criteria must be verifiable and backed by unit, integration, or e2e tests.
+* Write the clarifications I give you back into the task memory so they survive.
 
-## Understanding requirements before implementation
+## Wrapping up a ticket
 
-When you get a new task file or when we start work on a new stage in the current task,
-review the task file carefully. Think hard. You must:
+When it looks like I'm ready to push, remind me about: coverage, documentation updates,
+a version bump in `pyproject.toml`, release notes, and `pyscn analyze` on the main package
+(read the report, then discuss fix/defer/ignore). Project CLAUDE.md files add their own
+items.
 
-* Ask any clarifying questions. When getting responses from me, keep asking clarifying
-  questions until you fully understand the requirements. Use the AskUserQuestion tool.
-* At the point where you fully understand the requirements, write the clarifications you
-  gathered back to the task memory file in a dedicated section. This way you do not forget
-  them.
-* Always remember that success criteria are needed for a task. Success criteria must be
-  verifiable. They should have unit, integration, or e2e tests written to ensure
-  repeatability and safety.
-* Before proceeding to implementation, review the requirements with critical thinking:
-    * Given the ticket context, the objectives of the task, and the patterns in the rest
-      of the application -- do the requirements actually make sense?
-    * Would there be a simpler or more intuitive way to achieve the same objectives?
-    * Do any requirements appear to imply a "premature optimization" anti-pattern? For
-      instance: introducing caching where there is no evidence yet for a performance
-      problem; introducing libraries that solve a problem easily addressed by the Python
-      standard library or by libraries already in the project; creating duplicate logic;
-      putting code in a module where another module would be a better home; making the
-      code hard to test and/or validate. These examples illustrate critical thinking
-      patterns, not an exhaustive list.
+## Utilities
 
-## Managing long runbooks
+* Obsidian: `open_note_by_title.sh "Note Title"` (uses the Advanced URI plugin).
+* Recall a conversation after a restart: `~/bin/recall_main_agent_conversation` (`--help`
+  for context options).
+* Clipboard: `pbcopy`.
+* `git flake8` and `git isort` are my own scripts in `~/bin/`; `ruff` is the primary tool.
 
-In ongoing development, as well as in the development of guidance in Claude skills and Claude plugins, long agent-facing runbooks (install.md, uninstall.md, and future ones) should encode mandatory steps as checklists the agent is told to tick through (or, better, programmatic enforcement), not prose "MUST" language alone — this has a demonstrated track record of being silently dropped, including after being fixed once.
+## Encoding rules as guidance vs. enforcing them
 
-## Critical security note
+CLAUDE.md is context, not enforcement -- a "MUST" in prose has a demonstrated track record
+of being silently dropped in this setup, including after being fixed once. So when a step
+genuinely must happen at a fixed point (before a commit, after an edit, at session start),
+say so and propose a **hook** instead of stronger wording. In long agent-facing runbooks,
+prefer explicit checklists the agent ticks through over prose imperatives.
 
-Because of bugs in the permissions system, I may have from time to time run Claude with
-`--dangerously-skip-permissions`. **This does not give you blanket permission to do
-anything you want!** When this option is turned on, you must still ask me before editing
-anything outside the project directory. No exceptions. Also, you may not modify `.env` or
-`.claude.env` under any circumstances without explicit permission from me. This is
-regardless of whether we are running in dangerous mode.
+<!--
+Maintainer notes (stripped before this file enters context, so they cost no tokens).
 
-I have observed you getting a deny based on permissions and then circumventing it by using
-another method -- for instance, being prevented from reading a file and then writing a
-Python script to read it. **This is not OK.** It should be clear to you whether the
-blocked action was intentional, at least in simple cases. **When in doubt, ask.**
-Circumventing obvious prohibition by clever means is prohibited.
-
-**Security policies are a hard requirement. You should never ignore them. You must never
-compact them out. You should always follow them in each and every action.**
-
-## pre-push checks
-
-When we're about to wrap up a ticket, and it seems that I am ready to push a set of changes to github, check the following and remind me:
-
-* Have we verified that out code coverage is good enough?
-* Did we do necessary documentation updates (you would know, as you participate)
-* Should I bump the version in `pyproject.toml`
-* Do we need any release notes?
-* Run `pyscn analyze` on the main package of the project to find issues, read the report, and discuss what to fix, what to defer, and what to ignore
-* Consider running the toolguard maintenance skill to keep the toolguard configuration constantly curated. A push is a good checkpoint for this.
-* If any doc under `docs/`, README.md, AGENTS.md, or llms.txt changed since the last push, run `/documentation-review` (`.claude/commands/documentation-review.md`). This is the main defense against documentation drift -- `docs/agent-map.md` in particular summarizes every other doc and has no other mechanism keeping it in sync, so it is the single most likely thing to go stale silently. Don't skip this just because a change looks small; several of this project's own past doc bugs were introduced by small, individually-reasonable edits.
-
-## Utility tools
-
-### System clipboard
-
-When asked to put text on the system clipboard, use `pbcopy` which is installed on the
-system (native on Mac, custom user script on Linux/WSL2).
-
-### Opening notes in Obsidian
-
-To open a memory/note in Obsidian (by its `title` frontmatter property), use:
-
-```bash
-open_note_by_title.sh "Note Title Here"
-```
-
-This script is in `~/bin` and uses the Obsidian Advanced URI plugin to search and open
-notes. Use this when asked to open a note in Obsidian.
-
-### Recalling past conversations
-
-If I ask you to recall our last conversation (e.g. after a restart mid-task), run:
-
-```bash
-~/bin/recall_main_agent_conversation
-```
-
-There may also be a tool in the local-tools MCP for this; you can run the script directly
-if the MCP tool is unavailable. Use `--help` to see options for controlling how much
-context to retrieve.
-
-## Ticket tracking
-
-We use YouTrack by JetBrains to track tickets. You do not have direct access to the
-ticketing system. You have partial read-only access via a script:
-
-```bash
-~/projects/youtrack_api/get-issue.sh "<TICKET-ID>"
-```
-
-This returns JSON with issue name, description, and comments. Almost all work is done in
-the context of a specific ticket, and activity about a ticket (elaboration, design,
-decision log, etc.) is kept in a dedicated folder in basic-memory.
-
-The ticket prefix is project-specific and will be specified in the project CLAUDE.md.
-
-## Additional directives
-
-* When generating functions and classes, always generate doc comments.
-* Always use specialized tools over Bash for file operations (Read/Edit/Write instead of
-  cat/sed/echo).
-* When an agent (main or subagent) reports on what happened in a session it ran, cross-check the raw log/transcript before treating the narrative as fact — this has been proven wrong twice this period on first-order claims (takeover-mode state).
-
-## Clarifications
-
-1. **Opening files in IDE**: Use `mcp__jetbrains__open_file_in_editor` to open memory MD
-   files in the IDE. No permission is needed for this operation.
-
-2. **Note categorization**: When uncertain whether something is long-term memory (CLAUDE.md)
-   or task-specific, ask for clarification.
-
+Rewritten for Opus 5 / Sonnet 5. Removed as redundant with current model+harness behavior:
+  - Python dot-notation -> file-path conversion rules (trivially known).
+  - "Always use specialized tools over Bash for file operations" (now in the harness
+    system prompt; also still in rules/python.md where it is an enforceable lint).
+  - "Always generate doc comments" as a standalone bullet -> folded into rules/python.md.
+  - The @common-memory.md indirection: per the docs, @imports load in full at launch and
+    save no context, so the surviving ~35 lines were folded in directly.
+Removed as actively harmful:
+  - "Keep asking clarifying questions until you fully understand" -- conflicted with the
+    harness's ambiguity guidance and with auto-memory feedback_avoid_overasking_small_phases.
+    Replaced by "pressure-test the requirements" under Critical thinking.
+219 lines + 127 imported -> 118 lines, none imported.
+-->
