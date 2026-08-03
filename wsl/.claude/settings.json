@@ -77,7 +77,7 @@
     "telegram@claude-plugins-official": true,
     "pyright-lsp@claude-plugins-official": true
   },
-  "effortLevel": "medium",
+  "effortLevel": "high",
   "theme": "auto",
   "autoMode": {
     "soft_deny": [

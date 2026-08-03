@@ -23,6 +23,22 @@ real failures (`test_takeover_mode.py`, 2026-07-23). Background: basic-memory no
 pre-push follow-up: suite-wide test isolation cleanup" and "TOO-30 Test Isolation Cleanup -
 Implementation Report".
 
+**A fourth, separate anchor: `toolguard.env_config`'s own log-directory resolution.**
+`toolguard/env_config.py` has its OWN `find_project_root()` -- a different function from
+`toolguard.config`'s, reading the real process `Path.cwd()` and the `TOOLGUARD_PROJECT_ROOT` /
+`TOOLGUARD_LOG_DIR` env vars, NOT patched by anything above. `toolguard.hook.main()` calls
+`get_env_config()` unconditionally, before `load_configuration()` even runs, to resolve
+`TOOLGUARD_LOG_DIR` (default `<project_root>/logs`) for the config-discovery diagnostic log. A
+test that drives `main()` without isolating this resolves the REAL repo's `logs/` directory --
+since the test process's cwd genuinely is the repo root -- and writes real entries into it. This
+bit `TestHardDenyThroughMain` in `test_hard_deny.py` for real (TOO-19, 2026-07-31) even though it
+DID use `ConfigIsolationMixin`, because the mixin's original scope covered only the first three
+anchors; it also bit `test_hook.py` and `test_hook_eval.py`, which mock `load_configuration()`
+directly and so never reach `toolguard.config`'s discovery at all, but still reach
+`get_env_config()`. `isolate_config_environment()` now ALSO isolates this anchor (see the
+checklist below) -- treat it as a fourth anchor alongside the original three, not a separate
+concern.
+
 ## Writing or editing a test here
 
 - [ ] **Does it reach `toolguard.config`'s discovery path** -- `load_configuration()`,
@@ -34,7 +50,8 @@ Implementation Report".
       `class TestFoo(ConfigIsolationMixin, unittest.TestCase):`
 - [ ] Call `home, project = self.isolate_config_environment(...)` first thing in the test, or
       once in `setUp` if the whole class needs the same shape. Pass `xdg_config_home=` /
-      `extra_env=` if the test controls those.
+      `extra_env=` if the test controls those. This also isolates `TOOLGUARD_LOG_DIR` (into
+      `self.isolated_log_dir`) as of TOO-19 -- no separate step needed.
 - [ ] **Never** hand-roll `tempfile.TemporaryDirectory()` +
       `patch("toolguard.config.find_project_root", ...)` + `patch.object(Path, "home", ...)`.
       That ad hoc, inconsistent pattern is exactly what the mixin replaced.
@@ -44,6 +61,13 @@ Implementation Report".
       case. If you truly must hand-roll, **add a one-line comment saying why** -- a silent
       exception is indistinguishable from a missed retrofit. See `test_hierarchical.py` for the
       one existing commented precedent.
+- [ ] **Does it drive `toolguard.hook.main()` end-to-end but mock `load_configuration()`
+      directly** (so it never reaches `toolguard.config`'s discovery, but DOES reach
+      `get_env_config()` -- the fourth anchor above)? If the whole module does this and doesn't
+      otherwise need `ConfigIsolationMixin`, use the lighter module-level
+      `isolate_log_dir_for_module()` from `test.unit._config_isolation` in `setUpModule()` /
+      `tearDownModule()` instead of retrofitting every test method -- see test_hook.py and
+      test_hook_eval.py for the pattern.
 
 ## Before pushing, if `toolguard/config.py` or any test here changed
 
@@ -80,6 +104,19 @@ Implementation Report".
       ```bash
       uv run python -m toolguard.testing.sandbox --config <file> --command "<command>"
       ```
+
+## Structural guard against a silent regression (TOO-19)
+
+A checklist here did not prevent the log-dir leak the first time -- three tests missed it
+independently, one of them despite already using `ConfigIsolationMixin`. On top of the checklist,
+`test/unit/_real_log_dir_guard.py` (installed from `test/unit/__init__.py`, before any test
+module is imported) wraps toolguard's log-writing entry points so that any call whose `log_dir`
+resolves to the REAL repo `logs/` directory is suppressed (never actually written) and recorded.
+`test_zz_real_log_dir_guard.py` asserts the record is empty; `test/unit/__init__.py` also
+registers an `atexit` hook that re-checks the same record after the whole process's test run and
+force-exits nonzero if anything leaked, so the guard does not depend on discovery/test order. If
+you add a new toolguard function that writes into the log directory, add it to the wrapped set in
+`_real_log_dir_guard.py`'s `install()`.
 
 <!--
 Maintainer notes (stripped before entering context).

@@ -89,22 +89,42 @@ The judgment stays yours, applied to the files it points you toward.
 
 ## The trial
 
-**The comparison is against `ag` and plain reading -- there is no other lane.** This was
-originally framed as a head-to-head against the JetBrains MCP, which was to be the incumbent:
-compiler/PSI-informed, auto-indexed, reliable on definitions and call hierarchies. That
-comparison is off. As of 2026-07-31 the reachable IDE build exposes no analysis or
-language-aware tools at all, so there is no semantic incumbent on this machine.
+**The incumbent is the `LSP` tool (pyright), and the bar moved up sharply on 2026-07-31.**
 
-That makes the bar lower and the trial more important, not less. Lower, because "better than
-grep" is easier than "better than a PSI index" -- so a positive verdict proves less than it
-would have. More important, because **if the graph is not carrying its weight there is nothing
-behind it**: every structural question falls back to text search and reading.
+The history matters, because this framing has now changed twice. It began as a head-to-head
+against the JetBrains MCP. That fell through: the reachable IDE build exposes no analysis tools
+at all, which briefly left `ag` and plain reading as the only competition -- a low bar, and one
+that made a positive verdict prove very little. Pyright is now configured for toolguard (and
+being set up for featherhill), which restores a real compiler-informed incumbent, and a better
+one than the IDE would have been.
 
-So be harder on it than the bar requires. The questions where it should be unambiguously ahead
-are transitive/multi-hop traversal, execution flows, communities, centrality, and
-all-reference-kinds questions -- things no text search answers at all. If it is only winning on
-questions `ag` could have answered, say so plainly; that is the finding, not a failure to find
-one.
+**What the incumbent takes back.** Measured on toolguard, `findReferences` returns every
+reference kind with import lines separated from call sites, and `incomingCalls` returns a call
+hierarchy naming each calling function -- including class-based `unittest.TestCase` methods,
+individually, by name. So pyright answers direct callers, callees, all-reference-kinds, and
+**which tests cover this function** from the type checker rather than a heuristic. Note what
+that last one means here: `tests_for` is documented as unreliable on this repo precisely because
+it misses class-based test methods. The graph's known weak spot is the incumbent's clean win.
+
+**What is left that is genuinely the graph's.** Multi-hop transitive traversal, execution flows,
+communities, centrality, bridge/hub analysis, cross-repo questions, and semantic "is there
+already a helper that does this?" search. That is a real set -- but it is much smaller than the
+set the graph was being reached for a week ago, and it excludes the everyday questions.
+
+So the standard is now: **would `LSP` have answered this, more accurately, in one call?** If yes,
+the graph did not earn the invocation, however good its answer looked. Say so plainly -- that is
+the finding, not a failure to find one. The honest risk to weigh is that the remaining
+graph-only questions are also the *rarer* ones, which is a legitimate reason to retire a tool
+even when it works.
+
+**Record the development phase with each observation, and do not generalize across phases.**
+What gets reached for depends heavily on what Arnon has asked for. Initial development, deep
+testing, and refactoring/optimization exercise different capabilities -- and the graph's
+exclusive ground (blast radius, dead code, transitive impact, centrality) clusters almost
+entirely in the refactoring and optimization phase. A quiet trial during a stretch of
+feature work is therefore weak evidence for retirement, and a strong showing during a
+refactor is weak evidence for general value. Tag each entry with the phase so the eventual
+verdict can be read per-phase rather than as one average that describes no real situation.
 
 Each non-trivial use: add a one-line verdict to your reply. Did it answer something the
 other lanes would have struggled with, or restate what a grep would have found faster? Was

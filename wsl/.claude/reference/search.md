@@ -6,19 +6,42 @@ Read this before a non-trivial code search. Not loaded at launch.
 
 | Question | Lane |
 |---|---|
-| Transitive callers, blast radius, affected flows, which tests cover a function | `code-review-graph` if installed (below) |
+| Where is `Foo` defined? What is its type? | `LSP` goToDefinition / hover |
+| Who calls `Foo`? What does it call? | `LSP` incomingCalls / outgoingCalls |
+| Every use of `Foo` -- calls, imports, attribute access | `LSP` findReferences |
+| Find a symbol by name across the project | `LSP` workspaceSymbol |
+| Transitive/multi-hop traversal, blast radius, execution flows | `code-review-graph` if installed (below) |
 | Conceptual -- "is there already a helper that does this?" | `semantic_search_nodes_tool`, else `ag` |
-| Where is `Foo` defined? Who calls it? | `ag` -- see the blind spots below |
 | String literal, comment, log message, template fragment, config value | `ag` |
 | Gitignored, generated, or just-created files | `ag` |
-| Must be exhaustive and verifiable ("all N call sites", "every import of X") | `ag` |
 
-There is currently **no working semantic/PSI lane** on this machine -- see the note at the
-bottom. So every symbol question that `code-review-graph` cannot answer falls to text search,
-and its blind spots are load-bearing rather than a footnote.
+**Prefer `LSP` for anything symbol-shaped.** It is compiler-informed, so it resolves what text
+search cannot: aliased imports, attribute-style access, and same-named symbols in different
+modules. One `findReferences` replaces a grep plus all the caveats you would otherwise have to
+attach to it.
 
 Say which lane you used when you report a caller set. They are not equivalent, and an `ag`
 count is not a call hierarchy.
+
+## `LSP` (pyright)
+
+Python only, and only where a language server is configured -- toolguard has one as of
+2026-07-31, featherhill is being set up. If none is available the tool returns an error; fall
+back to `ag` and say so, rather than presenting a text-search count as a reference set.
+
+Every operation takes `filePath`, `line`, `character` (both 1-based, as shown in an editor), so
+you usually need a position first: `workspaceSymbol` with the name, or an `ag` hit, then the LSP
+call at those coordinates.
+
+Verified on toolguard 2026-07-31 against `normalize_entry`: `findReferences` returned 50
+references across 8 files, separating import lines from call sites, and `incomingCalls` returned
+38 calls naming each calling function -- **including 30 class-based `unittest.TestCase` methods,
+resolved individually by name**. That last point matters: it is exactly the case
+`code-review-graph`'s `tests_for` is documented as missing on this repo, so **"which tests cover
+this function?" is now an LSP question**, not a graph one.
+
+`goToImplementation` covers abstract/protocol dispatch. `documentSymbol` outlines a file more
+cheaply than reading it.
 
 ## `ag` and `ack`
 
@@ -48,14 +71,21 @@ Per-project, not universal. Confirm `mcp__code-review-graph__*` tools exist or a
 `~/.claude/reference/code-review-graph.md` -- it has the mandatory staleness preconditions
 and the edge-confidence caveat, both of which change what you can trust.
 
-Reach for it first on multi-hop structural questions: impact radius before a refactor,
-transitive callers, affected execution paths, which tests cover a function, orienting in
-unfamiliar code, planning a rename or hunting dead code. The failure mode to avoid is habit
--- burning several grep+read+reason rounds on something that is one call.
+Reach for it on genuinely **multi-hop** structural questions: impact radius before a refactor,
+transitive callers several levels deep, affected execution paths, communities and centrality,
+orienting in unfamiliar code, planning a rename or hunting dead code. The failure mode to avoid
+is habit -- burning several grep+read+reason rounds on something that is one call.
 
-Keep using `ag` when the answer must be exhaustive: the graph returns *ranked* results, and
-on small-to-medium repos the fused scores are nearly flat, so ranking carries little signal.
-A question where missing one entry is the failure is the wrong shape for it.
+**Single-hop questions now belong to `LSP`, not the graph.** Direct callers, callees, every
+reference, which tests exercise a function: pyright answers those from the type checker rather
+than a heuristic, so it is both more accurate and cheaper. Since 2026-07-31 that has taken back
+a large part of what the graph was reached for -- see the trial note in
+`reference/code-review-graph.md`.
+
+Keep using `ag` when the answer must be exhaustive and no LSP server covers the file type: the
+graph returns *ranked* results, and on small-to-medium repos the fused scores are nearly flat,
+so ranking carries little signal. A question where missing one entry is the failure is the wrong
+shape for it.
 
 ## Why there is no IDE lane here
 

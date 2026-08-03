@@ -1,7 +1,8 @@
 # Auto-mode evidence-collection experiment (temporary, 2026-07-23): loosened from the
 # user-level default of "ask" so unmatched commands don't block auto-mode sessions.
 # Revert (remove this line) once evidence collection is done.
-no_match_fallback = "allow_with_warning"
+no_match_fallback = "allow_with_no_warnings"      # TEMPORARY until TOO-28 is done
+undecidable_fallback = "allow_with_no_warnings"   # TEMPORARY until TOO-28 is done
 
 [permissions]
 allow = [
@@ -28,6 +29,8 @@ allow = [
   "Bash(obsidian --version)",
   "Bash(obsidian version *)",
   "Bash(pbcopy)",
+  "Bash(pyright *)",
+  "Bash([regex]^timeout [0-9]* pyright .*)",
   "Bash(rtk grep *)",
   "Bash(rtk ls *)",
   "Bash(search)",
@@ -70,12 +73,11 @@ allow = [
   #
   # NOTE: heredoc-into-python and `python -c` are deliberately absent -- they
   # CANNOT be allowed from config at all. See the `ask` list below.
-  "Bash(uv run *)",
-  "Bash(uv run python -u -c *)",
-  "Bash(uv run python -c *)",
-  "Bash(python3 -c *)",
-  "Bash(uv sync *)",
-  "Bash(uv lock *)",
+#  "Bash(uv run *)",
+#  "Bash(uv run python -u -c *)",
+#  "Bash(uv run python -c *)",
+#  "Bash(uv sync *)",
+#  "Bash(uv lock *)",
   "Bash(canopy *)",
   "Bash(pyscn analyze *)",
   # ---------------------------------------------------------------------------
@@ -119,4 +121,9 @@ ask = [
   # php/Rscript/awk/... -- see FOREIGN_EXECUTORS). A heredoc into bash/sh is
   # NOT ask-floored -- verified allowed. So there is no __HEREDOC_TO_bash__
   # problem to solve.
+]
+
+deny = [
+  "Bash(python3 *)",  # You should always run python through uv in the current venv
+  "Bash(python *)"  # You should always run python through uv in the current venv
 ]

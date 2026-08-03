@@ -61,6 +61,58 @@ codebase, run `uvx pyscn analyze --json --skip-deps .` (or scoped to a directory
 latest timestamped JSON in `.pyscn/reports/` and fold in what's relevant. If Arnon didn't ask,
 ask him first.
 
+## Architectural drift -- a separate pass, looking past this change set
+
+**Run this when the change set touches 5 or more production files, or when a ticket ID was
+given.** Skip it for small or single-file reviews; it costs a few commands and says nothing
+useful about a two-line fix.
+
+This pass answers a different question from the rest of the review. Everything above asks *is
+this change good?* This asks *what does this change reveal about the architecture?* Those come
+apart, and the gap is the whole point: **a change can be entirely correct and still be evidence
+of decay.** Architectural drift accumulates precisely because every individual ticket looks
+reasonable in isolation, so a reviewer scoped to the change set structurally cannot see it.
+
+Report these as their own findings, distinct from defects, and say plainly when the code is
+fine but the trend is not.
+
+1. **Blast radius vs. conceptual size.** How many production files did one concept require?
+   State the ratio in the report. A small idea landing in many files, especially files that
+   each serve other purposes, is the signal -- not raw file count. One large file that embodies
+   one feature is healthy.
+
+2. **Logical coupling (co-change), which import graphs cannot show.** Structural metrics
+   describe how code is *written*; drift is about how it *changes*.
+
+   ```bash
+   git log --format=@@%H --name-only --no-merges -- <src-dir> | ...  # pair up files per commit
+   ```
+
+   Find files that co-change with many *distinct* others, and pairs where the rarer file has
+   never changed without the other. A 100%-coupled pair is two files behaving as one module.
+   Compare against the project's own history, not an absolute threshold. If the change under
+   review adds new partners to a file that is already a hub, say so.
+
+3. **New files must have a declared architectural home.** If the project defines layers or
+   modules boundaries (e.g. a `[architecture]` block in `.pyscn.toml`, an import-linter
+   contract, or a documented layering), check that every file added by this change is assigned
+   to one. **An unassigned file is drift by default**, and tooling usually will not tell you:
+   layer checkers commonly fall back to auto-detection or silently ignore what they cannot
+   classify, so coverage degrades quietly while the compliance score stays plausible.
+
+4. **Boundary crossings.** Does this change span parts of the tree that are meant to be
+   separate (source vs. tooling vs. scripts)? One crossing is a fact; a pattern of them means
+   the boundary is not real.
+
+5. **Test cost trend.** Compare this change's test-lines-to-production-lines against the
+   project's standing ratio. A change costing far more test code than the project's norm is
+   usually pinning representations rather than behaviour -- a duplication symptom, not thorough
+   testing.
+
+**Do not turn these into thresholds to enforce.** They are indicators for judgement. Every one
+of them can be satisfied by gaming (fewer, larger commits; splitting a file; deleting tests),
+so report what you observe and what you think it means, and leave the decision to Arnon.
+
 ## Report
 
 Write the full report to a note titled `latest-code-review-report.md` in the project's

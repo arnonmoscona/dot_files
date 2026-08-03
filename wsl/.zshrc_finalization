@@ -116,7 +116,7 @@ if alias cd >/dev/null 2>&1; then
 	unalias cd
 fi
 # source ~/system-python/.venv/bin/activate
-export PYTHONPATH=.
+#export PYTHONPATH=.
 fpath+=~/.zfunc
 export PATH="${PATH}:$HOME/.nvm/versions/node/v24.8.0/bin/:$HOME/.nvm/versions/node/v24.8.0/bin"
 export COLORTERM=truecolor
