@@ -15,23 +15,60 @@ governed_tools = [
 
 [permissions]
 allow = [
-  "Bash(export TG_ATTEST_READONLY=1 *)",
-  "Bash([regex]^export PATH=.?\\$HOME/\\.local/bin:\\$PATH.?$)",
-  'Bash([regex]^find\b(?!.*\s-(exec|execdir|ok|okdir|delete|fls|fprint|fprintf)\b))',
-  "Bash([regex]^rm (/home/arnon/\\.claude/toolguard_hook\\.local\\.toml|/home/arnon/\\.claude/toolguard_hook\\.toml))",
-  "Bash([regex]^rm \\-rf (/home/arnon/\\.claude/skills/toolguard\\-maintenance|/home/arnon/\\.claude/skills/toolguard\\-security\\-audit))",
-  "Bash(cd:*)",
-  "Bash(toolguard-audit:*)",
-  "Bash(uv tool uninstall toolguard:*)",
-  "Read(~/.toolguard/**)",
-  "Write(/home/arnon/.claude/settings.json)",
-  "Write(~/.toolguard/**)",
-  "Edit(/home/arnon/.claude/settings.json)",
-  "Edit(~/.toolguard/**)",
+    # <disclosure-and-attestation>
+    # --- Disclosure and attestation, deployed 2026-08-28 (TOO-73) ---
+    # Rationale and measurements: tmp/TOO-73-plan.md section 3.1b.
+    # The read-only attestation, anchored so the marker must lead the leaf it
+    # attests. The negative lookahead blocks a second assignment riding along
+    # (PATH=/evil, LD_PRELOAD=...) inside what is otherwise a blanket allow.
+    'Bash([regex]^TG_ATTEST_READONLY=1[ \t]+(?![A-Za-z_][A-Za-z0-9_]*=)\S)',
+    # The bare statement, which sets a variable and nothing else. Anchored to
+    # end-of-line so it can never carry a command. Attests nothing on its own.
+    'Bash([regex]^export TG_ATTEST_READONLY=1[ \t]*$)',
+    # Undisclosed authored logic: runs, but injects a nudge. Deliberately allow
+    # rather than ask -- an ask here stalls an unattended run. Becomes ask with an
+    # auto-mode override once TOO-28 sub-part 3 lands; the regex and the text
+    # carry over unchanged.
+    # The variable alternative is the important one and the least obvious. A loop
+    # is INVISIBLE to a rule -- toolguard matches extracted leaves, so
+    # `for f in a b; do cat $f; done` is judged as `cat $f`. But the body almost
+    # always references the loop variable, and referencing a variable you set is
+    # what "shell you composed" means.
+    #
+    # A 1-2 CHARACTER name, which needs no exclusion list. Measured: loop
+    # variables are essentially always single-character (f 107, t 9, c 7, d 6,
+    # s 5, q 4, i 3 -- only `spec` and `skill_name` are longer), while of the 77
+    # environment variables actually set here, only `_` has a name that short.
+    # So length separates "a variable I just set" from "the environment" without
+    # naming anything. An earlier attempt enumerated env vars to exclude; that
+    # list is a hardcoded enumeration that decays silently, which is the failure
+    # mode this whole scheme exists to avoid. Coverage: 1-2 char names appear in
+    # ~539 of the 596 variable-referencing commands, about 90%.
+    { match = 'Bash([regex]^(?!TG_(?:INTENT|ATTEST_READONLY)=1\s).*(\bsed\s+-[ei]\b|\bawk\s+.|\bfor\s+\w+\s+in\b|\bxargs\b|\$\{?[A-Za-z][A-Za-z0-9]?(?![A-Za-z0-9_])|(python|bash|sh|node)\s+\S*(tmp|scratchpad)/))', additionalContext = "This command carries logic you authored. CLAUDE.md requires an INTENT/TOUCHES block and a TG_INTENT=1 marker. It ran anyway -- disclose on the next one." },
+    # Read-only filters, so an attested pipeline is not blocked by its trailing
+    # leaf. 60% of attested commands are pipelines, and the marker can only lead
+    # one leaf. Temporary shape -- `cat` and `tr` want permit-testing before this
+    # is considered settled.
+    # Temporary allow before refinement for tr and cat
+    'Bash([regex]^(head|tail|wc|cut|sort|uniq|nl|column|tr|cat)\b(?!.*[>|].*\b(tee|dd)\b))',
+    # </disclosure-and-attestation>
+    "Bash([regex]^export PATH=.?\\$HOME/\\.local/bin:\\$PATH.?$)",
+    'Bash([regex]^find\b(?!.*\s-(exec|execdir|ok|okdir|delete|fls|fprint|fprintf)\b))',
+    "Bash([regex]^rm (/home/arnon/\\.claude/toolguard_hook\\.local\\.toml|/home/arnon/\\.claude/toolguard_hook\\.toml))",
+    "Bash([regex]^rm \\-rf (/home/arnon/\\.claude/skills/toolguard\\-maintenance|/home/arnon/\\.claude/skills/toolguard\\-security\\-audit))",
+    "Bash(cd:*)",
+    "Bash(toolguard-audit:*)",
+    "Bash(uv tool uninstall toolguard:*)",
+    "Read(~/.claude/CLAUDE.md)",
+    "Read(~/.toolguard/**)",
+    "Write(/home/arnon/.claude/settings.json)",
+    "Write(~/.toolguard/**)",
+    "Edit(/home/arnon/.claude/settings.json)",
+    "Edit(~/.toolguard/**)",
 ]
 
 ask = [
-  "Bash(toolguard-maintain:*)",
+    "Bash(toolguard-maintain:*)",
 ]
 
 [hard_deny]

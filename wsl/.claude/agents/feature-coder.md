@@ -116,7 +116,7 @@ While implementing:
    - Follow project style conventions from CLAUDE.md
    - Generate docstrings for all functions and classes -- short, and describing what the thing
      *is*, never how the current ticket changed it. A ticket reference in a docstring is almost
-     always wrong; see "Comments and doc comments" in the global CLAUDE.md.
+     always wrong. Read `~/.claude/rules/comments.md` before writing or reviewing comments.
 
 2. **Security First**:
    - Never bypass authentication/authorization

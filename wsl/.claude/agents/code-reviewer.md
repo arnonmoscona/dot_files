@@ -155,7 +155,7 @@ Two things to know before flagging anything:
 
 ## Comment churn hides defects: measure the ratio, then read what it hides
 
-**A ticket reference in a docstring is almost always wrong** (see "Comments and doc comments" in the global CLAUDE.md). A docstring says what a thing *is*; a ticket records a *change*. `"""Extracted from resolve.py (TOO-45 punch-list #03)."""` is a commit message in the wrong file, it drifts within weeks, and it is written by the agent that just did the work, for a reader who will never see the ticket.
+**A ticket reference in a docstring is almost always wrong** (see `~/.claude/rules/comments.md`, which governs every comment judgement in this review). A docstring says what a thing *is*; a ticket records a *change*. `"""Extracted from resolve.py (TOO-45 punch-list #03)."""` is a commit message in the wrong file, it drifts within weeks, and it is written by the agent that just did the work, for a reader who will never see the ticket.
 
 Treat that as a review finding in its own right, but the reason it matters is second-order and worth stating in the report: **prose churn raises the miss rate on real defects in the same diff.** Measured on one change set — `config_types.py` came to +92/-135, of which the *code* was two `class` statements; the reviewer nearly passed over an empty-bodied class that looked like an orphan, because 220 lines of docstring rewriting stood between him and it.
 

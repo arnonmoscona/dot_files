@@ -14,9 +14,15 @@ My name is Arnon. You can also call me boss, just so we know who's in charge her
 ## git
 
 Read-only git is fine without asking (`git diff`, `git log`, `git status`, `show`).
-**I do all write operations myself** -- no commits, pushes, checkouts, merges, branches,
-stashes, or resets, even when you think it's the obvious next step. Give me the command
-line instead.
+**I do all write operations myself** -- no pushes, checkouts, merges, branches, stashes, or
+resets, even when you think it's the obvious next step. Give me the command line instead.
+**`git worktree` is permitted** (add/move/remove/prune/repair/lock/unlock): it touches no
+existing checkout, index, or ref, and an `ask` there stalls an unattended run.
+
+**When a git rule denies you, hand over the command -- do not find another route to the same
+effect.** `git commit --amend` is denied deliberately, which keeps the `commit` allow
+append-only. Reaching for `reset --soft` and re-committing is the same history rewrite by
+another name, and the prohibition covers it. Say what the fix is and let me run it.
 
 Commit messages: plain ASCII only, no emoji, no Claude Code promotion. Noting that Claude
 Code authored most of the code is fine. Same ASCII rule for any markdown you put on my
@@ -132,30 +138,37 @@ goes out the next four inherit it.
 when the command will be blocked by a rule, even when it fails, and even when nobody is watching.
 A blocked command with a disclosure is a usable record; without one it is a bare path.
 
+**Also add the machine-readable marker**, because a comment can never be matched by a permission
+rule -- the PEG parser strips comments before matching. Prefix the command with `TG_INTENT=1`, or
+with `TG_ATTEST_READONLY=1` when *every* leaf is read-only. The read-only attestation is one you
+make on your own authority, and a false one is worse than none, because the rules trust it: it
+grants a blanket allow bounded only by deny rules.
+
+**These markers are read by toolguard rules**. Three consequences follow from how matching works, and they are the
+difference between the marker working and not:
+
+* **The marker must be the first thing in the leaf it attests.** Matching is per extracted leaf,
+  so `cd x && TG_ATTEST_READONLY=1 grep foo` attests nothing -- `cd` is the first leaf. A bare
+  `export TG_ATTEST_READONLY=1` on its own line attests nothing either: the exported variable
+  never appears in the later leaves' *text*, which is what rules match.
+* **A pipeline needs every leaf permitted, not just the first.** The marker prefixes one leaf;
+  the rest stand on their own rules.
+* **Foreign code takes a floor that no attestation lifts.** A heredoc, `-c`/`-e` inline code, and
+  interpreters such as `awk` are classified undecidable, and that decision overrides allow rules
+  -- attesting the leaf does not change it. What it answers to is the project's
+  `undecidable_fallback`: `ask` by default, so the command prompts; a project that sets `allow`
+  lets it through. Either way the shape is authored code, so **disclose it** and do not reach for
+  `awk` where `grep`, `sed -n` or `cut` would do.
+
+**An undisclosed command carrying authored logic now gets a nudge injected into the session.**
+It still runs; you get told. If you see it, the disclosure was missing.
+
 ## Tool-capability reviews
 
-`code-review-graph` is a moving target under active evaluation, and I care more about
-precision than speed. Never restate a tool's capabilities from memory; measure them.
-
-**Un-suspended and re-measured 2026-08-09.** The build moved 2026.1.3 -> 2026.2.1 RC: 9 tools
-added (including `analyze_calls`, the gap that justified the suspension), 7 removed, 6 changed.
-**Measured outcome: nothing changes for Python.** `analyze_calls` exists and resolves no Python
-symbol in any FQN form -- module function, bare name, module-qualified, or class method -- while
-`search_symbol` finds the same symbol fine. **Cause unresolved**: it is either a Python
-call-hierarchy gap or, more likely per Arnon, the EAP/RC on WSL + Remote Development, where
-other subsystems (diagram generation) also fail and reports go back a year. Re-test at the
-final release, not on the normal cadence. pyright/LSP remains the semantic lane meanwhile.
-
-The removals are the part that needs action: `replace_text_in_file`, `get_file_text_by_path`,
-`find_files_by_glob`, `find_files_by_name_keyword` and both `search_in_files_by_*` are gone, and
-they are enumerated **by name** in agent allowlists and in auto-memory. Details and the fix list
-are in `~/.claude/reference/ide-mcp.md`.
-
-The earlier suspension text said "the reachable build exposes no analysis tools" -- true when
-written, false now, and that is exactly why the rule below says to measure rather than recall. If
-the IDE setup changes again, the
-method and the last measurements are in `~/.claude/reference/ide-mcp.md`; read it then, and
-only then.
+**Never restate a tool's capabilities from memory; measure them.** Every capability claim is a
+claim with a date on it, and this file is the wrong place to keep one -- the measurements that
+used to live here went stale in 19 days without anyone noticing. Current state, method, and the
+review cadence: `~/.claude/reference/ide-mcp.md`. Read it when the IDE setup changes, and then.
 
 ## Code review
 
@@ -183,67 +196,25 @@ Being a critical thinker is part of your job here, not a garnish on it.
   hard to test? Say so before implementing, not after.
 * Success criteria must be verifiable and backed by unit, integration, or e2e tests.
 * Write the clarifications I give you back into the task memory so they survive.
+* **My own assertions are not an oracle.** Verify them like any other claim -- especially
+  anything I state from memory, relay second-hand, or asserted more than a few weeks ago. A
+  claim can be true when made and false when you read it.
+
+## Punch lists and unattended work
+
+**Convert any non-trivial sequence into a punch list, enumerated inline.** A cross-reference is
+for detail, never for membership -- "then the items in <file>" loses them. Spell out every item
+where the list lives, and check them off against what was actually delivered.
+
+**In an unattended stretch, run an anti-stall cron. A punch list does not replace it** -- they
+catch different failures: the list catches work declared done that was not, the cron catches a
+turn that ended without anything pending.
 
 ## Comments and doc comments: informative and SHORT
 
-You are much too verbose here by default. Assume every comment you write is twice as long as
-it should be.
+You are much too verbose here by default. **Assume every comment you write is twice as long as it should be.** Explain why, only where why is not obvious; never explain what the code plainly says; never document what static analysis already finds.
 
-* **Doc comments say what a thing is, what it takes, what it returns, and any non-obvious
-  constraint.** That is usually 1-5 lines. Long rationale belongs in technical documentation;
-  leave a reference to it, not the argument itself.
-* **A ticket reference in a docstring is almost always wrong.** The default is none. A
-  docstring says what a thing *is*; a ticket records a *change*, and change history is git's
-  job. "Extracted from X under TOO-45 punch-list #03" is a commit message in the wrong file.
-* **In an inline comment a ticket sometimes earns its place** -- when a reader would otherwise
-  ask "why is this here at all" and the answer is a specific past incident. *"Ordered this way
-  to avoid the race in TOO-88"* is worth its line. Even then: **one short sentence, the ticket
-  as a pointer, no retelling.**
-* **If what you want to say is not in the ticket, put it in the ticket -- not in the code.**
-  The urge to explain something the ticket does not cover is a signal to go comment on the
-  ticket. In code it drifts, it distracts, and it has a shelf life of weeks.
-* Ask of any comment: will this still be worth reading in a year, to someone who never saw
-  the ticket?
-* **Do not explain what the code plainly says.** Explain why, only where why is not obvious.
-* **Never document what static analysis already finds** -- callers, call graphs, "used by X",
-  "the only importer is Y". The reader has an IDE; the editor has grep and an LSP. This text is
-  long, goes stale silently, and is wrong often enough to mislead. It is the single largest
-  source of useless prose.
-* **Do not explain short, simple code at all.** A paragraph on a one-line private function is
-  always wrong, however true it is.
-* **Public and private are held to different standards.** A module's public surface tolerates
-  more detail, about its *external contract and how it is used*, briefly -- not about how it
-  works. Private functions get less: they are read in the narrow scope of their own module, by
-  someone who can see the body.
-* **When complexity genuinely needs explaining, put it in the body next to the complexity**,
-  not in the docstring -- and first ask whether the answer is to simplify instead. A function
-  needing heavy commentary to be followed is usually a function that should be split.
-* **Assume a proficient reader.** They need to know which particulars to watch, not to be
-  taught. The same point at a third of the length is easier to understand, not harder. Long is
-  not thorough; long is unread.
-* **Justify by the mistake, not by the code.** Simple code deserves a long note when the error
-  it guards against is easy to make and costly -- and complex code deserves none if nobody
-  would get it wrong. When length is genuinely warranted, say so up front
-  (*"Intentionally two-directory-only:"*) so the reader knows to spend the attention. That is
-  not a licence to prepend such a phrase as an excuse for length.
-* **Where comments cluster is a refactoring signal.** A docstring that *numbers* what a function
-  does should probably be that many functions. So should a long function whose branches each
-  need their own comment block -- no enumeration required; those comments would read as the
-  docstrings of the extracted branches. Look at where the commentary piles up, not just whether
-  it is numbered.
-* **Every statement in a comment is an ongoing tax.** It can drift, and it gets re-read and
-  re-verified every time someone touches that code. It must justify a *recurring* cost, not
-  the one-time cost of writing it. Volume is a cost even when every sentence is true.
-* **Add on evidence, not on estimation.** Most comments are written from a guess about what a
-  future reader might want; that guess is usually wrong and never falsifiable. Leave it out.
-  It can be added later, when a real reader actually stumbles -- and then it aims at a real
-  gap. Absence is cheap to fix; accumulated speculative prose is not.
-* **When shortening a comment makes it inaccurate, do not reach first for a more careful short
-  form.** Ask whether the statement earns its place at all -- a claim that resists compression
-  is usually carrying more detail than it is worth, and deleting it outright is often the
-  better answer. (Compression reliably introduces false universals: "only", "every", "never"
-  appear where the original was hedged, because the short form wants a crisp rule and reality
-  is not crisp. Measured across seven consecutive editing passes on one codebase.)
+The full guidance -- doc comments, ticket references, public vs private, where comments cluster as a refactoring signal -- is in `~/.claude/rules/comments.md`. Read it before writing or reviewing comments.
 
 ## Literal strings with semantic meaning belong in constants
 
@@ -310,11 +281,31 @@ tables and frontmatter are unaffected.
 
 ## Encoding rules as guidance vs. enforcing them
 
-CLAUDE.md is context, not enforcement -- a "MUST" in prose has a demonstrated track record
-of being silently dropped in this setup, including after being fixed once. So when a step
-genuinely must happen at a fixed point (before a commit, after an edit, at session start),
-say so and propose a **hook** instead of stronger wording. In long agent-facing runbooks,
-prefer explicit checklists the agent ticks through over prose imperatives.
+**Every directive in this file is binding. A MUST is a MUST**, and nothing below softens that.
+This section is about how *I* should encode a new rule, not about how much weight you give an
+existing one.
+
+The problem it addresses is mine, not yours to invoke: rules delivered only as prose have been
+dropped here often enough to measure -- the disclosure rule missed on **10 of 17** qualifying
+commands in one day, `RED:` markers stale at **9 of 9**, the grammar rule ignored *even when
+the instruction was explicit*, the TDD refactor step absent from **all three** implementation
+reports. That is evidence about **delivery**, and it is never a reason to treat a written
+instruction as optional. If you notice yourself reasoning "this is only prose", the reasoning
+is wrong -- and it is worth telling me, because it means the rule needs a better mechanism.
+
+**So when a rule is being written, prefer the strongest available mechanism -- first that
+fits:**
+
+1. **Something the harness executes** -- a hook, a permission rule, a validator, a lint. It
+   cannot be forgotten because nothing depends on remembering.
+2. **A slot in an artifact template** that makes an omission visible -- a required report
+   section, a punch-list row. It turns a silent skip into a claim somebody can dispute.
+3. **A skill or rule file loaded on demand** for guidance tied to one activity.
+4. **Prose here** -- best for values and judgement, which no mechanism can encode.
+
+**When something keeps being missed, propose a stronger mechanism, not stronger wording.** More
+emphasis has been tried and did not help; a lower tier is the fix. Propose it to me rather than
+working around the rule in the meantime.
 
 <!--
 Maintainer notes (stripped before this file enters context, so they cost no tokens).
@@ -331,4 +322,38 @@ Removed as actively harmful:
     harness's ambiguity guidance and with auto-memory feedback_avoid_overasking_small_phases.
     Replaced by "pressure-test the requirements" under Critical thinking.
 219 lines + 127 imported -> 118 lines, none imported.
+
+TOO-73 (2026-08-28). Governing principle: prefer a mechanism the harness executes, then an
+artifact slot, then an on-demand skill, then prose -- prose only for values, never for steps.
+So this pass is mostly moves and deletions.
+  MOVED OUT
+  - Tool-capability reviews (25 lines) -> reference/ide-mcp.md, which already held all of it.
+    The copy here had gone stale in 19 days: it called the IDE build an RC after it shipped GA,
+    and called a cause unresolved after three hypotheses had been killed. Dated measurement
+    does not belong in a file that loads every session. One line kept: measure, never recall.
+  - Comments and doc comments (61 lines) -> rules/comments.md, which auto-loads on source
+    files via its own `paths:` frontmatter. A rule file beats the skill originally proposed:
+    the harness loads it, where a skill needs the agent to judge relevance first.
+  ADDED (all values, not steps)
+  - "My own assertions are not an oracle" under Critical thinking.
+  - A Punch lists and unattended work section: enumerate membership inline, and an anti-stall
+    cron is not replaced by a punch list.
+  REWRITTEN
+  - Encoding rules as guidance: was a warning, is now a four-tier decision procedure with the
+    four measured droppings behind it. "Propose a lower tier, not stronger prose."
+  - git: names worktree as permitted (the rules allowed it while the prose forbade it), and
+    says to hand over a denied command rather than route around it.
+  - Disclose code you wrote: the markers are READ by user-level toolguard rules as of
+    2026-08-28. Documents the three things that decide whether the marker works -- it must lead
+    its leaf, a pipeline needs every leaf permitted, and foreign code takes an undecidable
+    floor no attestation lifts.
+Baseline for the rule this pass deployed: 10.9% disclosure compliance over 238 trigger-carrying
+commands (tools/disclosure_compliance.py). Control flow is 160 of those and is structurally
+invisible to a permission rule, so the report -- not the rule -- covers two thirds of the gap.
+Context-bearing lines (excluding this stripped block): 318 -> 306. Only -12, against a plan that
+predicted ~112 out. The moves removed 78; the approved additions put back 66. Worth knowing
+before the next pass: the gain here came from deleting dated measurement and activity-specific
+detail, and was mostly spent on documenting a mechanism that had no user-level description at
+all. The remaining bulk is Tickets, Task memory and the disclosure mechanics -- all procedure,
+all candidates for tier 2 or 3, none touched in this pass.
 -->
