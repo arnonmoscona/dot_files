@@ -1,0 +1,9 @@
+{
+  "id": "22",
+  "subject": "Ticket 44: invocation-scoped ambient state",
+  "description": "23 Path.home() calls across 10 files, 19 os.environ reads, 485 patch() sites, 0 autospec. Resolve ambient state once per invocation into a frozen facts object.",
+  "activeForm": "Refactoring ambient state",
+  "status": "completed",
+  "blocks": [],
+  "blockedBy": []
+}

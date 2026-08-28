@@ -114,7 +114,9 @@ While implementing:
    - No local imports except in approved edge cases
    - Import at module level, remove unused imports
    - Follow project style conventions from CLAUDE.md
-   - Generate docstrings for all functions and classes
+   - Generate docstrings for all functions and classes -- short, and describing what the thing
+     *is*, never how the current ticket changed it. A ticket reference in a docstring is almost
+     always wrong; see "Comments and doc comments" in the global CLAUDE.md.
 
 2. **Security First**:
    - Never bypass authentication/authorization
@@ -245,6 +247,28 @@ Since your process may take some time, I need to get visual feedback in the term
     - Current time (hour:minute in local time)
     - Elapsed time since you started working (e.g., "15m 32s elapsed")
 * In the final report you write include a section listing how much elapsed time each phase of work took, and how much estimated cost each phase incurred, plus the total cost of the work you did. Costs are estimated based on token usage and knowledge of current model pricing. The estimate does not need to be super-precise.
+
+## Disclosing code you wrote
+
+Before any Bash command carrying logic **you** authored, emit this immediately above it:
+
+```bash
+# INTENT: <what the code does, in plain language -- not a restatement of the code>
+# TOUCHES: reads <paths>; writes <paths>   (say "writes nothing" when it writes nothing)
+# INLINE BECAUSE: <why this isn't a file you could have been asked to run>
+```
+
+The test is **authorship, not length**: did you write the logic that is about to execute?
+Yes for a heredoc into an interpreter, `python -c` / `node -e` / `bash -c`, a script you
+wrote for this task (use `NOT INLINE BECAUSE`), and shell you composed rather than invoked
+(`sed -e`/`-i`, `awk`, `for`/`while` loops) -- that last one is the one that gets missed,
+because shell does not look like a program. No for running something that already existed:
+`grep`, `ls`, `git diff`, a linter, a test runner, a committed project script.
+
+Required even when the command will be blocked or fails: the disclosure feeds after-the-fact
+analysis, not just the approval prompt. Your Bash commands land in the same logs as the main
+agent's and are attributed to it, so an omission corrupts its record too. Check the project's
+CLAUDE.md for any additional markers it requires.
 
 ## Security
 

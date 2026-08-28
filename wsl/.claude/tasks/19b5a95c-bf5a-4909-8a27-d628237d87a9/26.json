@@ -1,0 +1,9 @@
+{
+  "id": "26",
+  "subject": "Ticket 77: leading env assignment evades a deny rule",
+  "description": "Design settled with Arnon: strip a leading VAR=value for deny/hard_deny/ask as an ADDITIONAL variant alongside the raw spelling (so marker-keyed rules still work); for allow, match raw only EXCEPT assignments named in a configured safe-list. Asymmetry exists because unconditional stripping for allow would let LD_PRELOAD=/tmp/evil.so ls match allow Bash(ls:*). Wrapper stripping (timeout/nice/nohup) and bare xargs are the same family but NOT in this ticket's scope.",
+  "activeForm": "Closing the env-assignment deny bypass",
+  "status": "completed",
+  "blocks": [],
+  "blockedBy": []
+}

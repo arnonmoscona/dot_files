@@ -15,7 +15,9 @@ governed_tools = [
 
 [permissions]
 allow = [
+  "Bash(export TG_ATTEST_READONLY=1 *)",
   "Bash([regex]^export PATH=.?\\$HOME/\\.local/bin:\\$PATH.?$)",
+  'Bash([regex]^find\b(?!.*\s-(exec|execdir|ok|okdir|delete|fls|fprint|fprintf)\b))',
   "Bash([regex]^rm (/home/arnon/\\.claude/toolguard_hook\\.local\\.toml|/home/arnon/\\.claude/toolguard_hook\\.toml))",
   "Bash([regex]^rm \\-rf (/home/arnon/\\.claude/skills/toolguard\\-maintenance|/home/arnon/\\.claude/skills/toolguard\\-security\\-audit))",
   "Bash(cd:*)",
@@ -34,8 +36,9 @@ ask = [
 
 [hard_deny]
 deny = [
-    "Bash([regex]^rm\\b.*\\.toolguard)",
-    "Bash([regex]^find\\b.*\\.toolguard.*-delete)",
+    "Bash([regex]rm\\b.*\\.toolguard)",
+    # REMOVED "Bash([regex]find\\b.*\\.toolguard.*-delete)",
+    'Bash([regex]^find\b.*\s-(delete|(exec|execdir)\s+(rm|shred|mv|dd|chmod|chown))\b)',
     "Read(**/.env)",
     "Read(**/.env.*)",
     "Read(**/.aws/**)",

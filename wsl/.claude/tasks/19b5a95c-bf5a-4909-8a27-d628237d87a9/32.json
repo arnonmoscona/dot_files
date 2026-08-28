@@ -1,0 +1,9 @@
+{
+  "id": "32",
+  "subject": "Ticket 81: runtime sentinel for relative resolve(), plus promote resolve to fatal",
+  "description": "Gap A: a resolve() in a module with no owner entry is reported but does not fail. DECISION TAKEN: promote 'resolve' to PATH_AMBIENT_FATAL_MEMBERS (zero findings today, verified by simulation) and keep the suite asserting fatal_findings == []. That closes Gap A with tool and suite AGREEING, which is strictly better than the ticket's 'suite stricter than tool' option and needs no explanatory failure message. Gap B: a new relative resolve() inside an already-owned module is invisible to AST, because receiver absoluteness is a runtime property. Needs a runtime sentinel wrapping Path.resolve/Path.absolute for the suite duration, recording any relative receiver - the project already has this exact shape in test/unit/_real_log_dir_guard.py. Requires editing test/unit/__init__.py.",
+  "activeForm": "Building the relative-resolve runtime sentinel",
+  "status": "completed",
+  "blocks": [],
+  "blockedBy": []
+}

@@ -1,0 +1,9 @@
+#!/bin/bash
+unset ANTHROPIC_API_KEY; 
+claude -p "/usage" --output-format json | jq -r '.result'
+echo ''
+echo ''
+echo "JSON:"
+echo ''
+claude -p "/usage" --output-format json | jq -r 
+

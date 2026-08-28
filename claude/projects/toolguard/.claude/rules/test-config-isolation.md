@@ -13,9 +13,24 @@ carries the suite-wide conventions (unittest, BDD docstrings, coverage).
 This repo dogfoods toolguard on itself, so real config genuinely exists on any dev machine:
 `~/.claude/toolguard_hook.toml`, `~/.config/toolguard/rules/`, and `~/.toolguard/rules/`.
 `toolguard/config.py`'s discovery reads real filesystem state from exactly three controllable
-anchors -- `Path.home()`, `toolguard.config.find_project_root()`, and the
+anchors -- the home directory, `toolguard.config.find_project_root()`, and the
 `XDG_CONFIG_HOME` / `CLAUDE_SETTINGS_PATH` environment variables. Both candidate rules
-directories derive from `Path.home()`, so patching it isolates both.
+directories derive from home, so patching it isolates both -- except that a set
+`XDG_CONFIG_HOME` relocates the first one.
+
+Since ticket 44 those reads go through `toolguard.ambient` -- `ambient.home()`, `ambient.cwd()`,
+`ambient.env_var()` -- rather than `pathlib`/`os` directly. Patching `pathlib.Path.home` still
+works, because an accessor with no facts bound falls through to the live call, and that is what
+`ConfigIsolationMixin` does. Patching `toolguard.ambient.home` is the alternative, and it is one
+target instead of one per reading module. `~` expansion answers from that same door
+(`path_utils.expanduser`), which matters because `pathlib`'s own `expanduser` reads `$HOME` and then
+the passwd entry: under the mixin, which clears `os.environ`, a `~` path used to expand to the
+developer's REAL home despite a patched `Path.home`.
+
+One caveat: `toolguard.hook.main()` binds home, cwd and the environment once for the invocation
+around its resolve/decide block (`--eval` returns above the binding and binds nothing), so a
+`pathlib.Path.home` or `os.environ` patch installed after `main()` has started is not consulted --
+install it before the call.
 
 A test that doesn't redirect all three anchors it touches can silently depend on, or be broken
 by, whatever config happens to exist on the machine running the suite. That has already caused
@@ -25,8 +40,9 @@ Implementation Report".
 
 **A fourth, separate anchor: `toolguard.env_config`'s own log-directory resolution.**
 `toolguard/env_config.py` has its OWN `find_project_root()` -- a different function from
-`toolguard.config`'s, reading the real process `Path.cwd()` and the `TOOLGUARD_PROJECT_ROOT` /
-`TOOLGUARD_LOG_DIR` env vars, NOT patched by anything above. `toolguard.hook.main()` calls
+`toolguard.config`'s, resolving from `ambient.cwd()`, which with nothing bound is the real
+process cwd that nothing above patches, and reading the `TOOLGUARD_PROJECT_ROOT` /
+`TOOLGUARD_LOG_DIR` env vars. `toolguard.hook.main()` calls
 `get_env_config()` unconditionally, before `load_configuration()` even runs, to resolve
 `TOOLGUARD_LOG_DIR` (default `<project_root>/logs`) for the config-discovery diagnostic log. A
 test that drives `main()` without isolating this resolves the REAL repo's `logs/` directory --
@@ -73,13 +89,26 @@ concern.
 
 - [ ] Diff `toolguard/config.py` and whatever it delegates discovery to against the last push.
       A new environment variable, a new fixed real-filesystem path, or a new function reading
-      `Path.home()` or walking the filesystem independently of `find_project_root` means
+      `ambient.home()` (config.py no longer calls `Path.home()` itself) or walking the
+      filesystem independently of `find_project_root` means
       `isolate_config_environment()` in `test/unit/_config_isolation.py` needs a new parameter
       or patched anchor.
 - [ ] Grep this directory for `Path.home()`, `patch.object(Path, "home"`,
-      `patch("toolguard.config.find_project_root"`, `patch("toolguard.config.Path.home"`, and
-      `XDG_CONFIG_HOME`, outside `_config_isolation.py` and the commented exceptions. Any new
-      uncommented hit is a missed retrofit or a new ad hoc pattern to fold into the mixin.
+      `patch("toolguard.config.find_project_root"`, `patch("toolguard.config.Path.home"`,
+      `patch("toolguard.ambient.` (covers `home`/`cwd`/`env`/`env_var` in one token), and
+      `XDG_CONFIG_HOME`, outside `_config_isolation.py`, `test_ambient.py` (ambient's own
+      tests, where patching those accessors is the subject) and the commented exceptions. For
+      the four `Path.home` / `find_project_root` tokens, a new uncommented hit is a missed
+      retrofit or a new ad hoc pattern to fold into the mixin. `patch("toolguard.ambient.`
+      needs the judgement below; a `XDG_CONFIG_HOME` hit is context for reading the others,
+      not a finding by itself.
+- [ ] Judge a `patch("toolguard.ambient.` hit differently. Redirecting or breaking one accessor
+      is the supported way to stage a machine the mixin cannot build -- a home that raises, a
+      crash log written somewhere else -- and the paragraph above endorses it. It is a missed
+      retrofit only where it stands in for `isolate_config_environment()`. A stated reason is
+      what separates the two, so require the same "why" as a hand-rolled exception -- beside
+      the patch, or in the enclosing `setUp`/`setUpModule` docstring where the whole module
+      shares one fixture -- and read it before concluding anything.
 - [ ] Run the suite against an empty `$HOME`:
 
       ```bash

@@ -1,0 +1,9 @@
+{
+  "id": "38",
+  "subject": "Ticket 19: compound splitter bypasses",
+  "description": "Runtime bypass. Three command shapes reach the shell without ever being rule-matched. Partially fixed 2026-08-19; remainder open. Runtime tier, so a defect here can silently permit.",
+  "activeForm": "Closing the compound splitter bypasses",
+  "status": "completed",
+  "blocks": [],
+  "blockedBy": []
+}

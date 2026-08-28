@@ -1,0 +1,9 @@
+{
+  "id": "54",
+  "subject": "Ticket 104: dicts are undeclared types",
+  "description": "DONE 61ecd7b + e32d3da. parse_hook_input returns PreToolUseEvent; contract KEY imports in hook.py 12 -> 6 -> 4, the 4 remaining all in raw-dict validation before the event exists. --undeclared-types added, reports 4 findings, none fixed (Arnon's call).",
+  "activeForm": "Handling dicts as undeclared types",
+  "status": "completed",
+  "blocks": [],
+  "blockedBy": []
+}

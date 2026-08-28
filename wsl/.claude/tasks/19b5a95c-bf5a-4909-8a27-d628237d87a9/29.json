@@ -1,0 +1,11 @@
+{
+  "id": "29",
+  "subject": "Ticket 18-remainder: mid-pattern over-match and any-colon split",
+  "description": "Partially fixed in 05f786d (token-boundary matcher + seeded rules rewritten exact). Still open: (a) mid-pattern ':*' treated as a wildcard, so 'git:* push' matches 'git checkout push' - MORE permissive than native, and toolguard cannot express the literal 'git:* push' that native accepts; (b) any colon triggers the cmd:args split, so 'curl http://ex.com/*' fails to match. Heavy blast radius: measured 20 indirect test failures in the consolidation/redundancy/golden-corpus tier, none in test_permissions or test_patterns. Two runs disagreed on which files - RE-MEASURE. Replay the verdict corpus before and after. Tickets 20 and 22 are downstream and should probably be scheduled with it.",
+  "activeForm": "Fixing the mid-pattern over-match",
+  "status": "completed",
+  "blocks": [],
+  "blockedBy": [
+    "28"
+  ]
+}

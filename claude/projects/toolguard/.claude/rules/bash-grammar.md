@@ -2,7 +2,7 @@
 paths:
   - "toolguard/parser/**"
   - "**/*.peg"
-  - "toolguard/command_extractor.py"
+  - "toolguard/parser/command_extractor.py"
 ---
 
 # Changing the bash grammar: two phases, in this order

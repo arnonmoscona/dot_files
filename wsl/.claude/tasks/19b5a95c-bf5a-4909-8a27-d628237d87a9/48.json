@@ -1,0 +1,9 @@
+{
+  "id": "48",
+  "subject": "Ticket 95: split judge_unit",
+  "description": "DONE b2c6f83. Complexity 20 to 8; four per-kind helpers; no test changes; mutation-verify found no coverage gap. Scored 100% production recall.",
+  "activeForm": "Splitting judge_unit",
+  "status": "completed",
+  "blocks": [],
+  "blockedBy": []
+}

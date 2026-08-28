@@ -1,0 +1,9 @@
+{
+  "id": "49",
+  "subject": "Ticket 99: contract module semantic seams",
+  "description": "DONE 4d62339, items 1+3. PreToolUseEvent/PreToolUseResponse in the contract; key imports hook 12 to 6, sandbox 4 to 1. Item 4 declined as predicted. Item 2 (parse_hook_input returns a class) deliberately held - needs Arnon's decision, own commit.",
+  "activeForm": "Planning the contract module seams",
+  "status": "completed",
+  "blocks": [],
+  "blockedBy": []
+}

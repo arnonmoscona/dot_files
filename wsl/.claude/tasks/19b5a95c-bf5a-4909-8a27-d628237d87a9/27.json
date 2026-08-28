@@ -1,0 +1,9 @@
+{
+  "id": "27",
+  "subject": "Ticket 78: absolute-spelled rule never matches a tilde-spelled command",
+  "description": "normalize_path collapses toward ~ but never expands it, so matching is asymmetric: a deny rule written with an absolute path does not fire on the ~ spelling. Bash-only; file-path tools are symmetric and safe. Needs a fourth tilde-expanded variant, accumulated not substituted. Caveats from the ticket: every added variant widens what BOTH allow and deny catch, and ~ expansion depends on home resolution which can fail — a variant that raises during matching is worse than the gap it closes.",
+  "activeForm": "Closing the tilde asymmetry",
+  "status": "completed",
+  "blocks": [],
+  "blockedBy": []
+}

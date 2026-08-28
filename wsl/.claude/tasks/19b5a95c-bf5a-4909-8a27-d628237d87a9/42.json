@@ -1,0 +1,9 @@
+{
+  "id": "42",
+  "subject": "Add architecture_fitness.py --stdlib mode (KISS)",
+  "description": "Arnon 2026-08-20: act on the finding that nothing enforces the stdlib-only runtime rule. KEEP IT SIMPLE - he said explicitly do not over-complicate.\n\nThe gap: an AST scan over all 77 runtime files confirms 0 foreign import roots today, but no test, no --guard mode and no fitness check would catch 'import numpy' in toolguard/, AND THE DEV VENV WOULD MASK IT (numpy and sentence_transformers ARE importable there, via code-review-graph). A hard architectural constraint with no enforcement is exactly the shape the \"encoding rules as guidance vs enforcing them\" note warns about.\n\nImplementation: ~20 lines as a --stdlib mode on tools/architecture_fitness.py. Walk the AST of every file under toolguard/, collect import roots, compare against sys.stdlib_module_names (stdlib since 3.10) plus 'toolguard' itself. Report any root outside that set. Do NOT build a package-resolution system, do not read pyproject, do not try to classify transitive deps - the check is \"is this import root in the stdlib or our own package\", nothing more.\n\nAdd it to the pre-push checklist in CLAUDE.md alongside --ambient. Per the conformance-vs-heuristic rule: the declaration this checks against is sys.stdlib_module_names, which is authoritative and versioned - so this is a strong check, not a heuristic.\n\nAnti-vacuity applies (it is a new INSTRUMENT, not a refactor): validate it against a deliberately planted 'import numpy' before believing a green result.\n\nDO THIS AFTER TICKET 18 COMMITS - do not add a second writer to the tree while 18 is in flight.",
+  "activeForm": "Adding the stdlib-only enforcement check",
+  "status": "completed",
+  "blocks": [],
+  "blockedBy": []
+}

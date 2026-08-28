@@ -1,0 +1,9 @@
+{
+  "id": "21",
+  "subject": "Ticket 45: static inert-mock check in architecture_fitness",
+  "description": "Detect patch(\"mod.name\") where the consumer binds by value. Head of queue per Arnon. Mechanism 1 only; mechanism 2 (assert every mock consulted) out of scope.",
+  "activeForm": "Building the inert-mock check",
+  "status": "completed",
+  "blocks": [],
+  "blockedBy": []
+}

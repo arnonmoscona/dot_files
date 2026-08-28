@@ -285,6 +285,28 @@ Integration with other agents:
 
 Always prioritize code readability, type safety, and Pythonic idioms while delivering performant and secure solutions.
 
+## Disclosing code you wrote
+
+Before any Bash command carrying logic **you** authored, emit this immediately above it:
+
+```bash
+# INTENT: <what the code does, in plain language -- not a restatement of the code>
+# TOUCHES: reads <paths>; writes <paths>   (say "writes nothing" when it writes nothing)
+# INLINE BECAUSE: <why this isn't a file you could have been asked to run>
+```
+
+The test is **authorship, not length**: did you write the logic that is about to execute?
+Yes for a heredoc into an interpreter, `python -c` / `node -e` / `bash -c`, a script you
+wrote for this task (use `NOT INLINE BECAUSE`), and shell you composed rather than invoked
+(`sed -e`/`-i`, `awk`, `for`/`while` loops) -- that last one is the one that gets missed,
+because shell does not look like a program. No for running something that already existed:
+`grep`, `ls`, `git diff`, a linter, a test runner, a committed project script.
+
+Required even when the command will be blocked or fails: the disclosure feeds after-the-fact
+analysis, not just the approval prompt. Your Bash commands land in the same logs as the main
+agent's and are attributed to it, so an omission corrupts its record too. Check the project's
+CLAUDE.md for any additional markers it requires.
+
 ## Security
 
 * When you need to run bash commands use `Bash` instead of the Bash tool.

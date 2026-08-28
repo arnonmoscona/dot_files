@@ -1,0 +1,9 @@
+{
+  "id": "33",
+  "subject": "Ticket 82 (rescoped): implement native's wrapper-stripping list",
+  "description": "PREMISE CORRECTED 2026-08-20 against code.claude.com/docs/en/permissions.md. sudo and env are NOT in native's stripped wrapper list, so toolguard not matching them is FAITHFUL, not a bypass - the sudo AND env halves are both closed as won't-fix, and the doc's own prescription for that class is to name the wrapper in the rule or use [regex].\n\nThe real defect is the opposite one, on compatibility grounds: native strips timeout, time, nice, nohup, stdbuf, command, builtin, noglob, and bare xargs (no flags) before matching. toolguard strips NONE of them - measured 9/9 divergent, 11/11 agreement on the not-stripped list (right by accident, since there is no list at all).\n\nDivergence runs both ways and is not primarily safety: deny Bash(rm:*) under-denies 'timeout 30 rm -rf x', and allow Bash(npm test *) under-allows 'timeout 30 npm test' - the native docs' own worked example.\n\nApply SYMMETRICALLY to allow and deny. Do NOT import 77's allow/deny asymmetry: that is documented for leading ASSIGNMENTS only, and native's wrapper example is itself an allow rule. Not stripped, and must stay unstripped: sudo, env, command -v, nocorrect, npx, docker exec, direnv exec, devbox run, mise exec, watch, setsid, ionice, flock, xargs with flags, find -exec/-delete. List is closed and non-configurable in native; keep it closed here.\n\nRecognition belongs in the .peg grammar - phase 1 grammar + canopy regen reviewed alone, then Python. 77 phase-1's assignment_prefix/command_word seam is the hook. The stripped spelling must reach every pattern type; _command_variants feeds DEFAULT alone.",
+  "activeForm": "Implementing native's wrapper-stripping list",
+  "status": "completed",
+  "blocks": [],
+  "blockedBy": []
+}

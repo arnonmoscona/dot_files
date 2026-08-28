@@ -1,0 +1,9 @@
+{
+  "id": "43",
+  "subject": "Tickets 38, 42, 47, 52: the low-severity runtime tier",
+  "description": "Restored to the punch list 2026-08-20 after being dropped in summarisation.\n\n38 - fallback_kind is re-derived by substring-matching the program's own prose. Arnon (A9): \"no prose-parsing should be present in the code base. Should be fixed.\" This is the campaign's founding defect - the incident where a decision was rendered to prose, the structured result thrown away, and the sub-command breakdown later re-derived by regex over that prose: 813 of 975 compound-allow decisions under-logged, 1,943 sub-commands with no record. Same family as ticket 32 item 1 (four LockUnavailable reasons collapse to one, then a false message is announced from what survives).\n\n42 - normalize_entry returns (None, error) and SEVEN call sites discard the error. Silent failure.\n\n47 - TakeoverConfig's 4th positional field is no_match_fallback, so the stock positional construction misassigns it.\n\n52 - a wrong-typed [[permissions]] section is discarded with no signal - no parse failure, no warning. TOML, so unaffected by the JSON retirement under TOO-67.",
+  "activeForm": "Fixing the low-severity runtime tier",
+  "status": "completed",
+  "blocks": [],
+  "blockedBy": []
+}

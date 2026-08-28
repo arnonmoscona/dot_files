@@ -1,0 +1,9 @@
+{
+  "id": "36",
+  "subject": "Ticket 74: empty registry silently disables the hook including hard-deny",
+  "description": "TIER 1 on severity, no log signature. Two findings. (1) hook._resolve_event and _handle_command_tool read the target from a hardcoded \"command\" key and call payload_key() only on the file-path branch, so a command tool registered with any other payload_key is read from the wrong field by the component that actually governs - while transcript_harvest and the verdict-corpus fixture loader both honour the registry. The contract exists, two consumers follow it, the hook does not. (2) With _REGISTRY = (), governed_tools() returns empty and _resolve_event ALLOWS EVERY TOOL including a hard-denied rm -rf. The safety net fails open. Not user-reachable (registry is code-level), but it is this campaign's most-repeated defect shape - a mechanism that fails open and says nothing - sitting in the last line of defence. RED test already in tree: test_the_hook_reads_a_command_tools_target_from_the_registered_key.",
+  "activeForm": "Fixing the registry fail-open",
+  "status": "completed",
+  "blocks": [],
+  "blockedBy": []
+}

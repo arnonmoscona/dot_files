@@ -1,0 +1,9 @@
+{
+  "id": "51",
+  "subject": "Ticket 100: two orphaned module-private functions",
+  "description": "DONE b63257c + e32d3da. Both orphans deleted, ~30 tests repointed, --orphans added (reports zero). Found real drift the two shapes hid: single-unit path now carries real fallback_kind/fallback_warning where the wrapper left defaults, and no test asserted on either.",
+  "activeForm": "Handling the orphaned private functions",
+  "status": "completed",
+  "blocks": [],
+  "blockedBy": []
+}

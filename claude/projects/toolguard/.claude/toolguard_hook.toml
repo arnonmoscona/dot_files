@@ -55,30 +55,11 @@ allow = [
   "Write(./**)",
   "Edit(./**)",
 
-  # ---------------------------------------------------------------------------
-  # TEMPORARY -- TOO-19 Phase 0 unattended implementation run (2026-07-25).
-  # Arnon is away during the implementation and explicitly accepted the risk.
-  # DELETE THIS WHOLE BLOCK when TOO-19 Phase 0 is done.
-  #
-  # Why these exist even though `no_match_fallback = "allow_with_warning"`
-  # (line 4) would already let them through: that fallback is itself a
-  # temporary experiment flagged for reversion. If it is reverted mid-run the
-  # fallback returns to the user-level "ask" and an unattended session
-  # deadlocks on the first command. These explicit allows make the run
-  # independent of that flag rather than relying on it.
-  #
-  # NOT included on purpose: a blanket "Bash(*)". It would add nothing over the
-  # fallback except suppressing warnings, and it would blunt the warning signal
-  # that is the whole point of the auto-mode evidence experiment.
-  #
-  # NOTE: heredoc-into-python and `python -c` are deliberately absent -- they
-  # CANNOT be allowed from config at all. See the `ask` list below.
-#  "Bash(uv run *)",
-#  "Bash(uv run python -u -c *)",
-#  "Bash(uv run python -c *)",
-#  "Bash(uv sync *)",
-#  "Bash(uv lock *)",
+
   "Bash(canopy *)",
+  "Bash(npx canopy *)",
+  "Bash(npx canopy@latest *)",
+  "Bash(git worktree *)",
   "Bash(pyscn analyze *)",
   # ---------------------------------------------------------------------------
 ]
@@ -125,5 +106,55 @@ ask = [
 
 deny = [
   "Bash(python3 *)",  # You should always run python through uv in the current venv
-  "Bash(python *)"  # You should always run python through uv in the current venv
+  "Bash(python *)",  # You should always run python through uv in the current venv
+
+  # <TEMPORARY>
+  # TOO-45 refactoring-loop guards -- invariant 6, written as rules rather than as
+  # prose in a prompt, because prose "MUST" language has a demonstrated track record
+  # of being dropped in this setup.
+  #
+  # These are DENIES rather than omissions on purpose: with
+  # no_match_fallback = "allow_with_no_warnings" above, a path that simply is not
+  # allowed falls through to the fallback and is silently permitted. Only an
+  # explicit deny stops anything while that fallback stands.
+  #
+  # Scope note: this closes the FILE-TOOL half only. Bash-side writes to the same
+  # paths (`>`, `tee`, `rm`, `mv`) cannot be enumerated exhaustively by patterns;
+  # those are covered after the fact by architecture_fitness.py --guard, which
+  # inspects what was actually touched rather than predicting every spelling.
+  #
+  # Self-locking by design: once toolguard_hook.toml itself is denied, an agent
+  # cannot remove this fence either, and a deny is only overridable at a MORE
+  # specific level. Removal at ticket close is Arnon's action, via the IDE.
+  #
+  # Revert = delete this whole fence.
+
+  # The decision log is evidence. The loop reads it; it never writes it.
+  "Write(./logs/**)",
+  "Edit(./logs/**)",
+
+  # Secrets. Standing rule, independent of this ticket.
+  "Write(./.env)",
+  "Edit(./.env)",
+  "Write(./.claude.env)",
+  "Edit(./.claude.env)",
+
+  # Permission configuration -- project level. Self-locking, see above.
+  "Write(./.claude/toolguard_hook.toml)",
+  "Edit(./.claude/toolguard_hook.toml)",
+  "Write(./.claude/settings.json)",
+  "Edit(./.claude/settings.json)",
+  "Write(./.claude/settings.local.json)",
+  "Edit(./.claude/settings.local.json)",
+
+  # Permission configuration -- user level and the rules directory.
+  "Write(//home/arnon/.toolguard/rules/**)",
+  "Edit(//home/arnon/.toolguard/rules/**)",
+  "Write(//home/arnon/.claude/toolguard_hook.toml)",
+  "Edit(//home/arnon/.claude/toolguard_hook.toml)",
+  "Write(//home/arnon/.claude/settings.json)",
+  "Edit(//home/arnon/.claude/settings.json)",
+  "Write(//home/arnon/.claude/settings.local.json)",
+  "Edit(//home/arnon/.claude/settings.local.json)",
+  # </TEMPORARY>
 ]

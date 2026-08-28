@@ -1,0 +1,9 @@
+{
+  "id": "25",
+  "subject": "Ticket 80: Path.resolve() is a fifth route to cwd (MUST FIX)",
+  "description": "Arnon 2026-08-19: must fix. Path(\"rel\").resolve() reads os.getcwd() and is invisible to a Path.cwd patch; 17 sites. Same shape as ticket 44's expanduser hole, which was reaching the real home under a patched Path.home. MEASURE FIRST which sites run relative paths where cwd is not already pinned — the ticket says that measurement comes before any blanket migration. ambient.resolve(), matching ambient.expanduser(), is the obvious shape if migration is warranted.",
+  "activeForm": "Closing the cwd route gap",
+  "status": "completed",
+  "blocks": [],
+  "blockedBy": []
+}

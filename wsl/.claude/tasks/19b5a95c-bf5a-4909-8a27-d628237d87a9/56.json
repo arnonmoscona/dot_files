@@ -1,0 +1,9 @@
+{
+  "id": "56",
+  "subject": "Awaiting Arnon: five decisions, no work blocked",
+  "description": "(1) #102 no-evidence deferral to YouTrack. (2) #106 audit-visibility proposal for compound.py. (3) #107 proc_subst identified by characters not a label. (4) Four --undeclared-types findings, reported and unfixed by instruction. (5) Two dot_files commits from 2026-08-21 (audit skill + maintenance pass 2). Plus: pyscn disposition written, recommends only match_command/match_pattern on merit, and flags that bash_parser.py is absent from pyscn results for reasons unknown.",
+  "activeForm": "Waiting on decisions",
+  "status": "pending",
+  "blocks": [],
+  "blockedBy": []
+}

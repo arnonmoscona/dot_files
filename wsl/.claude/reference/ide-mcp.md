@@ -10,28 +10,194 @@ and plugin releases, and **the published docs run ahead of what a given build sh
 capability inventory has to be treated as a measured fact with a date on it, not as
 documentation. Everything below is measured.
 
-## Current state (measured 2026-07-29)
+## Current state (measured 2026-08-25)
 
 | | |
 |---|---|
-| Server | `IntelliJ IDEA MCP Server` **2026.1.3** |
+| Server | `IntelliJ IDEA MCP Server` **2026.2.1 GA** (was 2026.2.1 RC, was 2026.1.3) |
 | Registration | user scope, key `jetbrains`, SSE `http://127.0.0.1:64342/sse` |
-| Backend | JetBrains Remote Development (`remote-dev-serv`) |
-| Tools advertised | **56** |
+| Backend | **Windows-native IDE over `\\wsl.localhost`** — no longer Remote Development |
+| Tools advertised | **60** (was 58) |
 | MCP protocol | `2024-11-05` |
+
+**The backend changed and it is the single most disruptive fact here.** `pgrep -f remote-dev-serv`
+finds nothing in WSL; the IDE runs on Windows and reaches the project over the 9p share. Every
+tool call must now carry a `projectPath` in Windows UNC form -- see the next section, which is the
+first thing to read.
+
+### `projectPath` is mandatory, and the POSIX path does not work (measured 2026-08-25)
+
+Nine variants tried against one fixed `search_file` query:
+
+| value | result |
+|---|---|
+| *omitted* | **rejected** -- no auto-resolve, even with exactly one project open |
+| `/home/arnon/projects/toolguard` | **rejected** |
+| `\\wsl$\Ubuntu-26.04\home\arnon\projects\toolguard` | **rejected** |
+| `//wsl$/Ubuntu-26.04/home/arnon/projects/toolguard` | **rejected** |
+| `//wsl.localhost/Ubuntu/...` (distro alias) | **rejected** |
+| `//wsl.localhost/Ubuntu-26.04/home/arnon/projects/toolguard` | works |
+| same with backslashes, mixed slashes, `//WSL.Localhost/ubuntu-26.04/...`, trailing `/` | works |
+| any **subdirectory** of the project | works -- resolves to the containing project |
+
+So it normalizes slash direction and case, tolerates a trailing slash, and does containment
+resolution from a subdirectory (an agent may pass its cwd). It does **not** resolve `wsl$` -- a
+genuine Windows alias for the identical share -- nor the distro alias, nor the POSIX path.
+**That pins the mechanism: a normalized string comparison against the registered project path, not
+a filesystem resolution.** Same directory, wrong spelling, no match.
+
+Do not hardcode the literal. It is derivable in-process, which generalizes to any project here:
+
+```bash
+//wsl.localhost/$WSL_DISTRO_NAME$PWD      # WSL_DISTRO_NAME=Ubuntu-26.04
+```
+
+Failure is loud and distinguishable: a bad `projectPath` says *"doesn't correspond to any open
+project"* and lists the open ones. **That error is not a capability result** -- do not record a
+tool as broken on the strength of it.
+
+### Drift 2026-08-09 -> 2026-08-25, measured by the script
+
+Version `2026.2.1 RC` -> `2026.2.1`. **NEW (2):** `get_python_environment`,
+`configure_python_interpreter` -- both Python-specific, and the first is how you diagnose a missing
+interpreter (see the `analyze_calls` section). No removals. The tool surface is stable; **the
+backend change, which the script cannot see, was the disruptive part.**
+
+### Drift 2026-07-29 -> 2026-08-09, measured by the script
+
+**NEW (9):** `analyze_calls`, `lint_files`, `git_status`, `skill_search`, `execute_tool`, `create_database_connection`, `edit_database_connection`, `fetch_query_result`, `introspect_schema`.
+
+**REMOVED (7):** `find_files_by_glob`, `find_files_by_name_keyword`, `get_file_text_by_path`, `replace_text_in_file`, `search_in_files_by_text`, `search_in_files_by_regex`, `runNotebookCell`.
+
+**CHANGED:** `reformat_file` (`path` → `files`, now required), `xdebug_set_breakpoint` and `xdebug_list_breakpoints` (new `sessionId`), `list_database_schemas` (`selectedOnly` dropped), plus description changes on `execute_run_configuration` and `get_project_dependencies`.
+
+**The removals matter more than the additions here.** `replace_text_in_file`, `get_file_text_by_path`, `find_files_by_glob`, `find_files_by_name_keyword` and both `search_in_files_by_*` tools are enumerated by name in `~/.claude/agents/*.md` allowlists and referenced by auto-memory. Those references are now dangling — see *Fallout* below.
+
+### `analyze_calls`: RE-TESTED AT GA, still NOT usable on Python (measured 2026-08-25)
+
+**The GA re-test the checklist demanded is done. The answer is unchanged.** Four `symbolFqn` forms
+x both `INCOMING_CALLS` and `OUTGOING_CALLS` = 8 calls, every one `No callable symbol found`, same
+provider message. The control matters: `search_symbol` succeeded on the *same* `projectPath` in the
+same batch, so this is symbol resolution failing, not project resolution.
+
+**Three competing explanations have now been tried and all three are dead:**
+
+| explanation | status |
+|---|---|
+| EAP/RC on WSL + Remote Development | **dead** -- this is GA, and `pgrep` finds no `remote-dev-serv`; the IDE is Windows-native over `\\wsl.localhost` |
+| Plugin version skew (tool not advertised) | **dead** -- advertised and reachable; it returns a provider error, not an absence |
+| **No Python interpreter** (IDE auto-detects uv, cannot see `/home/arnon/.local/bin/uv` from Windows) -- the 2026-08-23 "CAUSE FOUND" | **dead** -- interpreter now configured, and the fix did not change the behaviour |
+
+**The interpreter refutation is direct, not inferred.** The Python SDK is demonstrably live:
+`get_symbol_info` on a `Path` annotation resolves into **typeshed stubs**, into a
+`sys.version_info >= (3, 14)` branch matching the configured 3.14.5 interpreter; `get_symbol_info`
+on a project call site resolves across files and picks correctly between two same-named twins; and
+`lint_files` emits **type-inference** diagnostics. A full semantic model exists.
+
+So what survives is the original hypothesis: **the Python call-hierarchy provider is simply not
+wired to `analyze_calls`.** A JVM project in the same IDE remains the only clean proof, and is not
+worth building.
+
+**Method note worth keeping.** Each of the three rounds found a plausible cause, fixed it, and
+wrote "CAUSE FOUND" *without re-measuring*. A cause is established only when removing it changes
+the behaviour.
+
+**Stop re-testing this on the drift cadence.** Two re-tests across an RC->GA transition and a
+backend change produced the identical result. Re-test when a JVM project is open anyway, or when
+release notes mention Python call hierarchy -- not otherwise. **And it no longer costs anything:
+pyright covers the capability (see below), so this is a curiosity, not a gap.**
+
+### The original measurement (2026-08-09), retained for the reasoning
+
+This was the single highest-value gap and the checklist item to re-test first. It now exists. **It does not resolve Python symbols.**
+
+Four `symbolFqn` forms tried against a symbol `search_symbol` locates without trouble:
+
+| passed | result |
+|---|---|
+| `toolguard.config.find_project_root` | `No callable symbol found` |
+| `find_project_root` | `No callable symbol found` |
+| `config.find_project_root` | `No callable symbol found` |
+| `toolguard.config.Configuration.governed_tools` (class method, full path) | `No callable symbol found` |
+
+`search_symbol(q="find_project_root", paths=["toolguard/**"])` returns both declarations correctly in the same session, so the symbol index sees the code; only the **call-hierarchy provider** does not. The error text is consistent with that: *"Type roots are supported only when the language call hierarchy provider maps them to a callable target."*
+
+**Cause is NOT established, and my first reading of it was wrong.** I concluded "JVM-only, same as `run_inspection_kts`". Arnon's competing hypothesis is better supported by outside evidence:
+
+> The version we have now in the IDE is an EAP, not a final release. And I think the EAP still has issues with WSL. I suspect that this is the core reason. There are other tools that fail in the IDE as well (like generating diagrams) and there were bugs reported by people about such failures in WSL environments going back at least a year.
+
+So there are two live explanations and **this measurement does not discriminate between them**:
+
+1. The call-hierarchy provider does not map Python (a language-support gap).
+2. **2026.2.1 is an EAP/RC on a WSL + Remote Development backend**, where whole IDE subsystems are known to fail — diagram generation being another local example, with reports going back a year.
+
+Hypothesis 2 explains more: it predicts unrelated failures in unrelated subsystems, which is what is actually observed. Hypothesis 1 predicts only this one.
+
+**A discriminating test needs a JVM project in the same IDE and backend.** If `analyze_calls` fails there too, it is the environment; if it works, it is language support. Not worth building a throwaway Java project for — **Arnon's call: revisit at the final release rather than now.**
+
+**Consequence either way: nothing changes for Python today.** The resolve-verified recipe below remains the IDE route, and pyright/LSP remains the preferred semantic lane. Re-test at GA, not on the normal cadence.
 
 Re-measure with `uv run python ~/.claude/tools/ide_mcp_capabilities.py --verbose`; see
 *Drift* below. Never restate the inventory from memory -- ask the script.
+
+### pyright DOES cover the `analyze_calls` gap (measured 2026-08-25)
+
+The gap that justified two re-tests is closed by the other lane. `LSP incomingCalls` /
+`outgoingCalls` on `toolguard.config.find_project_root`:
+
+* **21 incoming calls** with exact call-site line:column, plus 1 outgoing.
+* **Disambiguates same-named twins.** `config.find_project_root` and `env_config.find_project_root`
+  both exist; each list contains only its own callers. Validated against 41 textual
+  `find_project_root(` occurrences -- every one of the 20 exclusions was checked by hand and every
+  one was correct (the twin's own callers, the twin's internal calls, and `patch("...")` **strings**,
+  which are not calls at all).
+* **Resolves class-based `unittest` methods individually**, which is the thing the graph's
+  `tests_for` cannot do.
+
+**Measured blind spot: aliased imports.** `test_config.py:13` does
+`from toolguard.env_config import find_project_root as env_find_project_root`, and the two calls
+through that alias (`523`, `526`) are **absent** from `env_config.find_project_root`'s incoming
+list. Two false negatives, silent. This is the *same* blind spot the IDE recipe below documents, so
+neither lane covers it -- when a symbol is aliased anywhere, add a text pass.
+
+### `lint_files` / `get_file_problems`: a real correctness lane (measured 2026-08-25)
+
+Previously listed as an untested open question. **Tested, and it earns its place.**
+
+`lint_files` over 7 files returned ~70 problems and one **ERROR** that no other lane here caught:
+`toolguard/env_config.py:134`, `-> Dict[str, any]` -- the builtin `any`, not `typing.Any`.
+`uv run ruff check` reports "All checks passed" on that file.
+
+* `get_file_problems` **defaults to errors only.** An empty `errors: []` means no ERRORs, *not* a
+  clean file -- `config.py` returned `[]` and `lint_files` found 22 warnings in it. Pass
+  `errorsOnly: false`, or use `lint_files` with `min_severity`.
+* `lint_files` takes a batch and reports per file; it analyses Markdown too (it flagged a malformed
+  table in `README.md`).
+* **Not noise-free**: `Cannot find reference 'SEEK_END' in 'os'` in `log_writer.py` is a false
+  positive. Treat output as triage, not verdict.
+
+### GOTCHA: `read_file`'s `limit` is ignored (measured 2026-08-25)
+
+`offset=199, limit=6` returned three lines, then `...2052 lines truncated...`, then the file's
+**tail**. It reads offset->EOF and elides the middle. **It is not a windowing tool** -- use
+`Read`/`sed` for a slice. Asking for a large limit blows the token budget and spills to a temp file.
 
 ### Capability shape, in one pass
 
 * **Semantic, read-only**: `search_symbol` (declaration index), `get_symbol_info` (resolve at
   a position), `get_file_problems` (inspections).
 * **Semantic, write**: `rename_refactoring` -- reference-aware across the project.
-* **Text/regex** (fast, IDE-indexed, *not* semantic): `search_text`, `search_regex`,
-  `search_in_files_by_text`, `search_in_files_by_regex`.
-* **Files**: `search_file`, `find_files_by_glob`, `find_files_by_name_keyword`,
-  `list_directory_tree`, `read_file`, `get_file_text_by_path`.
+* **Text/regex** (fast, IDE-indexed, *not* semantic): `search_text`, `search_regex`. Both verified
+  working 2026-08-25; they replace the removed `search_in_files_by_*`.
+* **Files**: `search_file` (glob; replaces `find_files_by_glob`), `list_directory_tree`,
+  `read_file` (replaces `get_file_text_by_path`; **see the `limit` gotcha above**). All verified
+  2026-08-25.
+* **Unified search**: `skill_search` with `mode=file|text|regex|symbol` -- one entry point for the
+  four above. Verified identical to `search_symbol` on `mode=symbol`.
+* **Python** (new at GA): `get_python_environment` reports the interpreter for a file -- correct
+  `.venv` path and version here, but `environmentType` and `packageManager` both come back
+  `unknown`, so **it does not detect uv**. `configure_python_interpreter` writes config; untested.
+* **VCS**: `git_status` -- correct branch and counts, verified 2026-08-25.
 * **Project/build/run**: `get_project_modules`, `get_project_dependencies`, `build_project`,
   `execute_run_configuration`, `get_run_configurations`, `get_repositories`.
 * **Debugger** (16 `xdebug_*` tools): live stacks, frame values, breakpoints, expression
@@ -41,14 +207,30 @@ Re-measure with `uv run python ~/.claude/tools/ide_mcp_capabilities.py --verbose
   and it NPE'd on a trivial script against a `.py` file. Not a Python route.
 * **Database** (9 tools) and notebooks (`runNotebookCell`).
 
-### What is missing, and what that costs
+### Fallout from the 2026-08-09 removals — fix before relying on any agent
 
-* **No `analyze_calls`** in this build, despite JetBrains documenting it and despite this
-  server's own `search_symbol` description telling you to use it. Verified at the protocol
-  level, not merely absent from the client registry.
+Seven tools vanished, and several were named in configuration rather than merely used:
+
+* `~/.claude/agents/*.md` allowlists enumerate `mcp__jetbrains__*` **by name**. Entries for
+  `replace_text_in_file`, `get_file_text_by_path`, `find_files_by_glob`,
+  `find_files_by_name_keyword`, `search_in_files_by_text` and `search_in_files_by_regex` now
+  point at nothing. A dangling allowlist entry fails silently — the agent simply never gets
+  the tool — which is the same class of failure the naming memory already warns about.
+* Auto-memory `feedback_edit_via_ide_mcp` instructs using `mcp__jetbrains__replace_text_in_file`
+  for files Arnon is watching. **That tool no longer exists.** The surviving write path is
+  `apply_patch` (verify its shape before recommending it).
+* `reformat_file` changed its required parameter from `path` to `files`. Any caller passing
+  `path` now fails.
+
+### What is still missing, and what that costs
+
 * **No Find Usages / references tool** under any name (`find_usages`, `get_usages`,
-  `search_usages`, `find_references` all absent).
+  `search_usages`, `find_references` all absent). `analyze_calls` was supposed to be this and
+  is JVM-only in practice — see above.
 * **No type hierarchy**, no file-outline tool.
+* **`analyze_calls` for Python.** Present, advertised, unusable here across two builds and a
+  backend change. **No longer a cost** -- pyright supplies the capability; see above. Stop
+  re-testing it every review.
 
 `rename_refactoring` proves the reference engine *is* in the build -- it's simply not exposed
 read-only. So this is a plugin-surface omission, plausibly fixed by an update, and worth
@@ -175,7 +357,10 @@ existing tools, newly *documented* capabilities, and recipes that quietly stoppe
 Review checklist, when triggered:
 
 - [ ] Run the capability script; if it reports drift, follow its instruction.
-- [ ] Re-test `analyze_calls` presence specifically -- it is the single highest-value gap.
+- [ ] **Confirm `projectPath` still resolves** -- one cheap `search_file` call. A backend or distro
+      change breaks *every* tool at once, and the error is easy to misread as a broken tool.
+- [ ] ~~Re-test `analyze_calls`~~ -- retired as a cadence item 2026-08-25. Two re-tests, same
+      result, and pyright covers the capability.
 - [ ] Re-verify the `search_symbol` span gotcha and the resolve-verified recipe still behave
       as documented above; correct this file if not, and date the correction.
 - [ ] Re-read https://www.jetbrains.com/help/idea/mcp-server.html and diff it against the
@@ -188,8 +373,9 @@ Review checklist, when triggered:
 
 Recorded so they are not rediscovered from scratch:
 
-* **`get_file_problems` as a correctness lane.** It runs real IntelliJ inspections. Could it
-  substitute for, or strengthen, part of a code review? Untested.
+* ~~**`get_file_problems` as a correctness lane.**~~ **ANSWERED 2026-08-25: yes** -- see the
+  `lint_files` section above. Remaining sub-question: is it worth wiring into `/code-review` as a
+  standing step, given the false-positive rate?
 * **The 16 `xdebug_*` tools.** A live debugger is a *dynamic* analysis lane none of the other
   tools offer -- it could resolve exactly the dynamic dispatch that defeats every static
   approach. Entirely unexplored.

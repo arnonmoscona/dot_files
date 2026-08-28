@@ -1,0 +1,9 @@
+{
+  "id": "24",
+  "subject": "At end of ticket set: consolidated surprise-factor report",
+  "description": "Arnon 2026-08-19: no intermediate reporting. Accumulate per-ticket detail in toolguard-memories/TOO-45/reports/surprise/RESULTS-LOG.md and analyse the aggregate once the ticket set is done. Must answer: does recall track anything (abandon gate = all surprises classify as E), do C/D surprises cluster in particular modules, does prose coupling survive the item-07 sweep (was 31% of item 05's touch set), and pick the two items for blind adjudication BEFORE seeing which look good.",
+  "activeForm": "Writing the surprise-factor aggregate",
+  "status": "completed",
+  "blocks": [],
+  "blockedBy": []
+}

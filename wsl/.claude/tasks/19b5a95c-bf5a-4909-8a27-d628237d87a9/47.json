@@ -1,0 +1,9 @@
+{
+  "id": "47",
+  "subject": "Ticket 98: heredoc pre-pass rebuild, 4 chunks",
+  "description": "DONE, all 4 chunks: f8c373a (blind lift), b8947a4 (AST attribution), 4509665 (module boundary), 726fd09 (docs). multiline.py 683->794->522 lines; 4 quote models -> 3; both hand-rolled scanners deleted; unattributable heredoc answers ask even under blanket allow.",
+  "activeForm": "Rebuilding the heredoc pre-pass",
+  "status": "completed",
+  "blocks": [],
+  "blockedBy": []
+}
