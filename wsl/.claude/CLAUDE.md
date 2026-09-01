@@ -90,6 +90,11 @@ Each project's CLAUDE.md names its basic-memory project. Every task has a task m
 * Non-trivial implementation goes to the `feature-coder` subagent -- suggest it rather than
   burning my main-agent context on the details. Verify it wrote its memory report before
   you accept its work; remind it if it didn't. Don't read the report unless I ask.
+* **A delegation needs a filled brief.** The `agent-process` plugin's `brief` skill covers 
+  the whole loop -- writing one, spawning against it, and validating the report that comes 
+  back. A `PreToolUse` gate now refuses to spawn `feature-coder` without a valid brief, so 
+  this is enforced rather than remembered; `NO BRIEF: <reason>` in the prompt waives it 
+  deliberately and visibly.
 * Check a feature-coder task spec against CLAUDE.md conventions before sending it.
 * Code review goes through the `/code-review` skill (below).
 * Search: read `~/.claude/reference/search.md` before a non-trivial code search. Do **not**

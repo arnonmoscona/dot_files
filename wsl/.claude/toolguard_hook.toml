@@ -53,7 +53,37 @@ allow = [
     'Bash([regex]^(head|tail|wc|cut|sort|uniq|nl|column|tr|cat)\b(?!.*[>|].*\b(tee|dd)\b))',
     # </disclosure-and-attestation>
     "Bash([regex]^export PATH=.?\\$HOME/\\.local/bin:\\$PATH.?$)",
-    'Bash([regex]^find\b(?!.*\s-(exec|execdir|ok|okdir|delete|fls|fprint|fprintf)\b))',
+    # find, read-only: every action predicate excluded.
+    # replaces: 'Bash([regex]^find\b(?!.*\s-(exec|execdir|ok|okdir|delete|fls|fprint|fprintf)\b))',
+    'Bash([regex]^find\s+(?![^\n]*-(?:exec|execdir|delete|ok|okdir|fprint|fls|fprintf)\b)(?![^\n]*(?:>|\$\(|`))[^\n]*$)',
+    # Separator and progress output. The single biggest source of prompts.
+    'Bash([regex]^echo\b(?![^\n]*(?:>|\$\(|`))[^\n]*$)',
+
+    # `date` and `date +FORMAT` only -- never `date -s`, which sets the clock.
+    'Bash([regex]^date(\s+\+[^>`$|]*)?$)',
+
+    # PATH lookups.
+    'Bash([regex]^(which|type|command -v)\s+[A-Za-z0-9._/-]+$)',
+
+    # Changing the shell's own directory. Every later leaf still answers to its own rule.
+    'Bash([regex]^cd\s+[^>`$|;&]+$)',
+
+    # cat with display flags, no redirect. Plain `cat FILE` is covered by existing rules;
+    # this adds the numbered/annotated forms that kept prompting.
+    'Bash([regex]^cat\s+-[AbenstTv]+\s+(?![^\n]*(?:>|\$\(|`))\S+$)',
+
+    # Reading a file in the working project. Read is non-destructive by construction --
+    # this is the tool, not `cat`, so there is no redirect to worry about. Scoped to
+    # source and text files rather than everything, so a stray .env or key still asks.
+    'Read(*.py)',
+    'Read(*.md)',
+    'Read(*.toml)',
+    'Read(*.json)',
+    'Read(**/*.py)',
+    'Read(**/*.md)',
+
+    'Bash(ls *)',
+
     "Bash([regex]^rm (/home/arnon/\\.claude/toolguard_hook\\.local\\.toml|/home/arnon/\\.claude/toolguard_hook\\.toml))",
     "Bash([regex]^rm \\-rf (/home/arnon/\\.claude/skills/toolguard\\-maintenance|/home/arnon/\\.claude/skills/toolguard\\-security\\-audit))",
     "Bash(cd:*)",

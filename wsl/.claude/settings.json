@@ -1,5 +1,5 @@
 {
-  "model": "opus",
+  "model": "opus[1m]",
   "hooks": {
     "SessionEnd": [
       {
@@ -75,7 +75,16 @@
   },
   "enabledPlugins": {
     "telegram@claude-plugins-official": true,
-    "pyright-lsp@claude-plugins-official": true
+    "pyright-lsp@claude-plugins-official": true,
+    "agent-process@claude-tooling": true
+  },
+  "extraKnownMarketplaces": {
+    "claude-tooling": {
+      "source": {
+        "source": "github",
+        "repo": "arnonmoscona/claude_tooling"
+      }
+    }
   },
   "effortLevel": "high",
   "theme": "auto",

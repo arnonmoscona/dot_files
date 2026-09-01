@@ -6,6 +6,10 @@
         "hooks": [
           {
             "type": "command",
+            "command": "/home/arnon/projects/claude_tooling/agent_process/hooks/subagent-audit.sh"
+          },
+          {
+            "type": "command",
             "command": "~/.claude/hooks/log-conversation.sh"
           }
         ]
