@@ -13,6 +13,10 @@ governed_tools = [
     "mcp__jetbrains__execute_terminal_command",
 ]
 
+# Auto mode fallbacks - we trust the auto-mode classifier
+no_match_fallback_in_auto_mode = "allow_with_warning"
+undecidable_fallback_in_auto_mode = "allow_with_warning"
+
 [permissions]
 allow = [
     # <disclosure-and-attestation>
@@ -72,6 +76,23 @@ allow = [
     # this adds the numbered/annotated forms that kept prompting.
     'Bash([regex]^cat\s+-[AbenstTv]+\s+(?![^\n]*(?:>|\$\(|`))\S+$)',
 
+    # Access to youtrack
+    "Bash(~/projects/youtrack_api/get-issue.sh *)",
+    "Bash(~/projects/youtrack_api/list-unresolved-issues.sh *)",
+    "Bash(~/projects/youtrack_api/add-comment.sh *)",
+
+    # Memory management
+    "Bash(uvx basic-memory *)",
+    "Bash(basic-memory *)",
+    "Bash(obsidian *)",
+
+    "Bash(pbcopy)",  # clipboard
+
+    # Code quality & search
+    "Bash(pyright *)",
+    "Bash(pyscn analyze *)",
+    
+
     # Reading a file in the working project. Read is non-destructive by construction --
     # this is the tool, not `cat`, so there is no redirect to worry about. Scoped to
     # source and text files rather than everything, so a stray .env or key still asks.
@@ -81,9 +102,9 @@ allow = [
     'Read(*.json)',
     'Read(**/*.py)',
     'Read(**/*.md)',
+    'Read(~/dev-process/**)',
 
     'Bash(ls *)',
-
     "Bash([regex]^rm (/home/arnon/\\.claude/toolguard_hook\\.local\\.toml|/home/arnon/\\.claude/toolguard_hook\\.toml))",
     "Bash([regex]^rm \\-rf (/home/arnon/\\.claude/skills/toolguard\\-maintenance|/home/arnon/\\.claude/skills/toolguard\\-security\\-audit))",
     "Bash(cd:*)",
@@ -93,12 +114,22 @@ allow = [
     "Read(~/.toolguard/**)",
     "Write(/home/arnon/.claude/settings.json)",
     "Write(~/.toolguard/**)",
+    'Write(~/dev-process/**)',
     "Edit(/home/arnon/.claude/settings.json)",
     "Edit(~/.toolguard/**)",
+    'Edit(~/dev-process/**)',
 ]
 
 ask = [
     "Bash(toolguard-maintain:*)",
+]
+
+deny = [
+    # TOO-80 mitigation: toolguard does not strip a wrapper flag whose value is a
+    # separate token (`nice -n 5`, `timeout -k 5`, `stdbuf -o L`, `--signal TERM`),
+    # so `nice -n 5 python x.py` slips past `Bash(python *)`. Matches the wrapped
+    # forms directly. Remove when the stripper is fixed.
+    { match='Bash([regex]^(?:(?:timeout|time|nice|nohup|stdbuf|command|builtin|noglob)(?:\s+-{1,2}[A-Za-z][\w-]*(?:=\S+)?(?:\s+[^\s-]\S*)?|\s+\d+\S*)*\s+)+python3?(?:\s|$))', additionalContext="python must be executed using uv" },
 ]
 
 [hard_deny]

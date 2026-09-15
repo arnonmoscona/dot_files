@@ -52,6 +52,38 @@ comments.
 cat <file.md> | ~/projects/youtrack_api/add-comment.sh <TICKET-ID>
 ```
 
+**list unresolved**
+
+You can list unresolved tickets for a given project given its ticket prefix. For instance, if the ticket 
+prefix for a project is "FLO", then you can list the unresolved tickets for it using:
+```bash
+~/projects/youtrack_api/list-unresolved-issues.sh FLO
+```
+This will produce a JSON list with the unresolved tickets. For example:
+```json
+[
+  {
+    "resolved": null,
+    "idReadable": "FLO-145",
+    "$type": "Issue"
+  },
+  {
+    "resolved": null,
+    "idReadable": "FLO-126",
+    "$type": "Issue"
+  },
+  {
+    "resolved": null,
+    "idReadable": "FLO-100",
+    "$type": "Issue"
+  }
+]
+```
+or, if you just want the IDs:
+```bash
+~/projects/youtrack_api/list-unresolved-issues.sh FLO | jq '.[] | .idReadable' | sed -e 's/"//g'
+```
+
 The body is markdown. The script handles all quoting and escaping, so don't sanitize the text; it
 prints the created comment as JSON and exits non-zero on failure. Anything longer than a line or
 two goes in a file (your scratchpad) passed with `-f`, not crammed into `-m`.
@@ -104,53 +136,143 @@ Each project's CLAUDE.md names its basic-memory project. Every task has a task m
 
 ## Disclose code you wrote before you run it
 
-**Applies to me and to every subagent and skill with a Bash tool.** Some projects add mechanics
-on top (toolguard has an env-var marker scheme); this is the part that holds everywhere.
+**Applies to me and to every subagent and skill with a Bash tool, in every project.** The
+permission hook sees a command line; it cannot see the program the command line carries. This
+section is how that program gets in front of Arnon before it runs.
 
-Every Bash command is one of two kinds. **A tool invocation**: running a program that already
-existed -- `grep`, `ls`, `git diff`, a linter, a test runner, a committed project script. You
-chose flags and paths; you did not write the logic. **No disclosure.** **Program delivery**: the
-command *carries logic you just authored*. **Disclose.**
+**The test is authorship, not length.** Every Bash command you issue is one of two kinds:
 
-The question is always **"did I write the logic that is about to execute?"** -- not whether the
-command is short, read-only, or already visible in the transcript. It comes out "yes" for:
+- **A tool invocation**: you are running a program that already existed -- `grep`, `ls`,
+  `git diff`, a linter, a test runner, a committed project script. You chose flags and paths;
+  you did not write the logic. **No disclosure.**
+- **Program delivery**: the command *carries a program you just authored*, or points at one. A
+  heredoc into an interpreter, a `-c`/`-e` argument, or the path to a script you wrote for this
+  task. The flags are not the point -- the code is. **Disclose.**
 
-1. A heredoc into an interpreter (`<<'PY'` into `python`/`node`/`sh`).
-2. Inline code in an argument -- `python -c`, `node -e`, `perl -e`, `bash -c`, `jq -f`.
-3. A path to a script you or a subagent wrote for this task -- `python scratchpad/probe.py`.
-4. **Shell you composed rather than invoked** -- `sed -e`/`-i` programs, `awk`, `for`/`while`
-   loops, `xargs` with an authored command. **This is the one that gets missed**, because shell
-   does not look like a program. The interpreter is `sh`; the program is the command line.
+The word "one-liner" is banned from this decision. `python -c` followed by forty lines of code is
+a single shell command and is not a one-liner in any sense that matters here; the shell syntax is
+a delivery mechanism for a program you wrote. Likewise `uv run python fix.py` is short, but its
+shortness is the problem -- the program is in the file, and only the filename reaches the reviewer.
 
-Writing a script and then running it is a trigger by itself. The `Write` sitting in the
-transcript makes the run feel already explained -- it isn't, because the log and the permission
-prompt both get only a filename.
+Ask: **did I write the logic that is about to execute?** If yes, disclose it, however short the
+command looks.
 
-Format: Bash comments immediately before the command, so they travel with it into the prompt,
-the transcript and the logs.
+Concretely, that question comes out "yes" for any of these, **anywhere in the command text**,
+including after a `cd`, a `&&`, a pipe, or inside a subshell:
+
+1. A heredoc into an interpreter -- `<<'PY'`, `<<EOF`, `<<-` into `python`/`node`/`sh`/`bash`.
+2. Inline code in an argument -- `python -c`, `uv run python -c`, `node -e`, `perl -e`,
+   `ruby -e`, `bash -c`, `sh -c`, `jq -f`.
+3. **A path to a script you or a subagent wrote for this task** -- `uv run python tmp/x.py`,
+   `python scratchpad/probe.py`, `bash /tmp/fix.sh`, `node scratch.js`.
+4. **Shell you composed rather than invoked** -- `sed -e`/`-i` substitution programs, `awk`
+   programs, `for`/`while` loops, `xargs` with an authored command, multi-stage `$(...)`
+   pipelines whose logic is the point. The interpreter is `sh` and the program is the command
+   line. **This is the case that gets missed**, because shell does not *look* like a program.
+
+No exceptions for short, for read-only, for "I just showed the code", or for "a rule will
+reject it anyway". The exemption covers only what is *not* on that list: `grep`, `ls`,
+`git diff`, `uv run ruff check .`, `uv run python -m unittest ...`, and **committed** scripts
+(a project's own `tools/`, `~/bin/...`, `~/projects/youtrack_api/...`) -- files that were
+reviewed once and are not being written right now.
+
+**Measured 2026-08-09**: of 17 qualifying commands in one day, 7 were disclosed and 10 were
+not, and every miss on the main agent's side was case 4 or an undisclosed scratch script. The
+misses were not random -- everything that felt like *a program in a file* got a block, and
+everything that felt like *shell* got nothing. That is the file-versus-shell test, which is not
+the test. The test is authorship.
+
+**Disclosure is not only decision support.** It also feeds after-the-fact analysis of what the
+agent actually did, which is why it is required even when the command will be blocked, even
+when it fails, and even when nobody is at the keyboard. A rejected command with a disclosure is
+a usable record; a rejected command without one is a bare path.
+
+**This applies to subagents exactly as it applies to the main agent** -- `feature-coder`,
+`code-reviewer`, and anything else with a Bash tool. A subagent's commands land in the same
+`logs/toolguard-*.md` and, because subagent identification is currently broken, are attributed
+to `main`. An agent that skips disclosure therefore corrupts the main agent's record too.
+
+This wording is not a guess. The previous version said "don't announce ordinary one-liners whose
+full effect is visible in the command text", which a short `python -c` satisfies as well as `grep`
+does -- so the carve-out ate the rule. Five candidate rewrites were scored against 77 real
+commands drawn from the logs; the authorship framing above was the only one to clear 95% (98.7%
+on Sonnet, vs 85.7% for the "one-liner" text, with its single error a false positive). Notably it
+beat a purely mechanical version of the same trigger list (90.9%) -- naming the underlying
+question generalizes where enumerating syntax does not, which is why the framing leads and the
+list is subordinate to it. Full results: basic-memory note *Intent-disclosure phrasing experiment
+-- winning wording and results* (`TOO-19`).
+
+**Case 3 is the one that actually gets missed, and it is the one that matters most.** Measured over
+`logs/toolguard-2026-07-29.md` and `-07-30.md`: 34 commands qualified, 20 were undisclosed, and
+**every single scratch-script run was undisclosed (5/5)**. One of them, `uv run python
+fix_agents.py --apply`, rewrote 15 files under `~/.claude/` -- outside the project -- and logged as
+`EXECUTED`, not `ASK`, because `uv run python *` matches an allow rule. Nothing prompted, nothing
+was recorded but a filename, and the disclosure that was the only remaining signal was absent.
+
+The mechanism is specific and worth naming so you can catch it: **you had just written the file in
+the same turn.** The `Write` is right there in the transcript, so running it feels already
+explained. It is not -- the log gets a bare path, and the permission prompt gets a bare path.
+So: **`Write`/`Edit` of a script, followed by running it, is a disclosure trigger by itself.**
+If a script is worth writing rather than inlining, its `--apply` run is worth one comment block.
+
+**Judge each command on its own.** The misses cluster in runs -- once one undisclosed heredoc goes
+out, the next four inherit it. A batch of similar commands is a batch of separate decisions.
+
+Announce as a Bash comment on the lines immediately before the invocation, so it travels with
+the command into all three places that matter -- the permission prompt where Arnon decides,
+the transcript, and `logs/toolguard-*.md`:
 
 ```bash
 # INTENT: <what the code does, in plain language -- not a restatement of the code>
 # TOUCHES: reads <paths>; writes <paths>   (say "writes nothing" when it writes nothing)
 # INLINE BECAUSE: <why this isn't a file you could have been asked to run>
+uv run python - <<'PY'
+...
+PY
 ```
 
-Use `NOT INLINE BECAUSE` for case 3, and put writes **outside the project directory in capitals**.
-Judge each command on its own -- misses cluster in runs, because once one undisclosed command
-goes out the next four inherit it.
+For case 3 the third field doesn't apply -- it *is* a file -- so use `NOT INLINE BECAUSE` and say
+why the code deserved a file. Never drop the block just because the third line doesn't fit; that
+friction is part of why this case gets skipped:
 
-**Disclosure is for after-the-fact analysis as much as for my approval**, so it is required even
-when the command will be blocked by a rule, even when it fails, and even when nobody is watching.
-A blocked command with a disclosure is a usable record; without one it is a bare path.
+```bash
+# INTENT: rewrite the model: field in the two code-reviewer variants to match the opus definition
+# TOUCHES: reads ~/.claude/agents/*.md; WRITES ~/.claude/agents/code-reviewer-{fable,sonnet}.md
+# NOT INLINE BECAUSE: multi-file rewrite with a --apply dry-run gate; too long to read inline
+uv run python scratchpad/fix_agents.py --apply
+```
 
-**Also add the machine-readable marker**, because a comment can never be matched by a permission
-rule -- the PEG parser strips comments before matching. Prefix the command with `TG_INTENT=1`, or
-with `TG_ATTEST_READONLY=1` when *every* leaf is read-only. The read-only attestation is one you
-make on your own authority, and a false one is worse than none, because the rules trust it: it
-grants a blanket allow bounded only by deny rules.
+Note what that `TOUCHES` line does that nothing else in the pipeline does: it puts
+"writes 15 files under `~/.claude/`" in front of Arnon *before* the command runs. The rule that
+allows it sees only `uv run python *`. Where a command writes outside the project, put the write
+in capitals as above.
 
-**These markers are read by toolguard rules**. Three consequences follow from how matching works, and they are the
-difference between the marker working and not:
+Prose in the terminal reaches only the transcript, so use the comment form even when you add
+prose as well. A leading comment does not affect rule matching -- the PEG parser discards it and
+matches the real leaf command.
+
+### Always add the machine-checkable marker too
+
+The comment block is what Arnon reads, but **a comment can never be matched by a permission
+rule** -- the PEG parser strips comments before matching (verified via
+`toolguard.testing.sandbox`, 2026-07-29: a comment-only marker behaved identically to no marker
+at all). So whenever the disclosure applies, also add an **env-var prefix**, which is inside the
+leaf command and therefore visible:
+
+| Prefix | Meaning |
+|---|---|
+| `TG_INTENT=1` | a disclosure block precedes this command |
+| `TG_ATTEST_READONLY=1` | same, **plus** every leaf here is read-only (implies `TG_INTENT`) |
+
+```bash
+# INTENT: count call sites of resolve_project_root across the package
+# TOUCHES: reads toolguard/**/*.py; writes nothing
+# INLINE BECAUSE: needs import-alias resolution, not a grep
+TG_ATTEST_READONLY=1 uv run python tmp/count_calls.py
+```
+
+**User-level toolguard rules read these markers.** Three consequences follow from how matching
+works, and they are the difference between the marker working and not:
 
 * **The marker must be the first thing in the leaf it attests.** Matching is per extracted leaf,
   so `cd x && TG_ATTEST_READONLY=1 grep foo` attests nothing -- `cd` is the first leaf. A bare
@@ -165,8 +287,29 @@ difference between the marker working and not:
   lets it through. Either way the shape is authored code, so **disclose it** and do not reach for
   `awk` where `grep`, `sed -n` or `cut` would do.
 
-**An undisclosed command carrying authored logic now gets a nudge injected into the session.**
-It still runs; you get told. If you see it, the disclosure was missing.
+**A rule also nudges when a command carries authored logic and no marker.** It allows the command
+and injects a line saying the disclosure was missing, so an omission is visible rather than
+silent. It catches a scratch-script path, composed `sed`/`awk`/`xargs`, and a loop body -- a loop
+itself is invisible to any rule, since matching happens per extracted leaf, but its body almost
+always references the loop variable.
+
+Detection is partial by design, so **the log is still the audit**. `disclosure_compliance.py` in
+the claude_tooling repo measures the rate over these logs; treat every qualifying command as one
+you will be measured on.
+
+Use `TG_ATTEST_READONLY=1` only when *every* leaf is read-only. Do **not** attest a compound
+containing a write, redirect, delete, or install -- not even an incidental one. If part of the
+work writes, split it: attest the read-only part, let the writing part take a normal decision.
+This is an attestation you make on your own authority, and a false one is worse than none,
+because the rules trust it.
+
+So attestation buys silence for scratch-script runs and ordinary leaf commands, not for foreign
+code (the undecidable floor above). Mark foreign code anyway: it costs nothing and it records
+the claim.
+
+This is not a request for permission and doesn't replace one. Arnon reads these when deciding
+where to keep or remove friction, so specific beats short. If the honest answer to "why
+inline" is "no good reason", write it to a file and run that instead.
 
 ## Tool-capability reviews
 

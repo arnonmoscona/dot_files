@@ -10,14 +10,14 @@ and plugin releases, and **the published docs run ahead of what a given build sh
 capability inventory has to be treated as a measured fact with a date on it, not as
 documentation. Everything below is measured.
 
-## Current state (measured 2026-08-25)
+## Current state (measured 2026-09-09)
 
 | | |
 |---|---|
-| Server | `IntelliJ IDEA MCP Server` **2026.2.1 GA** (was 2026.2.1 RC, was 2026.1.3) |
+| Server | `IntelliJ IDEA MCP Server` **2026.2.2** (was 2026.2.1 GA, 2026.2.1 RC, 2026.1.3) |
 | Registration | user scope, key `jetbrains`, SSE `http://127.0.0.1:64342/sse` |
 | Backend | **Windows-native IDE over `\\wsl.localhost`** — no longer Remote Development |
-| Tools advertised | **60** (was 58) |
+| Tools advertised | **59** (was 60) |
 | MCP protocol | `2024-11-05` |
 
 **The backend changed and it is the single most disruptive fact here.** `pgrep -f remote-dev-serv`
@@ -55,6 +55,44 @@ Do not hardcode the literal. It is derivable in-process, which generalizes to an
 Failure is loud and distinguishable: a bad `projectPath` says *"doesn't correspond to any open
 project"* and lists the open ones. **That error is not a capability result** -- do not record a
 tool as broken on the strength of it.
+
+### Drift 2026-08-25 -> 2026-09-09, measured by the script
+
+Version `2026.2.1` -> `2026.2.2`. **REMOVED (1):** `skill_search`. **CHANGED:**
+`xdebug_get_frame_values` description. No additions.
+
+`skill_search` was the unified `mode=file|text|regex|symbol` entry point. **Nothing depended on
+it**: a grep of `~/.claude/` finds it only in this file and the capability snapshots -- no agent
+allowlist, no memory. Use the four underlying tools directly. This is the first removal here
+with no fallout, which is worth noting only because the 2026-08-09 removals had plenty.
+
+**`projectPath` re-verified 2026-09-09**, per the checklist: the POSIX path is still rejected
+with the "doesn't correspond to any open project" error, the `//wsl.localhost/Ubuntu-26.04/...`
+form still works. No change.
+
+**NOT re-verified this round: the `search_symbol` span gotcha and the resolve-verified caller
+recipe.** Both are documented against `config.py:211`, and TOO-78 was moving that very file
+while the review ran, so any measurement would have recorded the refactor rather than the tool.
+Carried to the next review. Stated rather than silently skipped, because a checklist item that
+disappears without a line is indistinguishable from one that passed.
+
+#### No move / move-file refactoring exists (measured and doc-confirmed 2026-09-09)
+
+`rename_refactoring` is still the **only** refactoring tool advertised, and the JetBrains page
+documents no move, no type hierarchy and no find-usages tool. Worth stating explicitly because
+the IDE's *interactive* Move is reliable and reference-aware, so it is an obvious thing to want
+to drive from here. It is not on the MCP surface: reorganizing packages is a manual UI
+operation, and the agent's role is to prepare and verify around it.
+
+#### Doc-vs-measurement disagreements, this round
+
+* **The page still documents `skill_search`** and still counts 60 tools. For this removal the
+  docs *lag* the build, where previously they *ran ahead* of it. Both directions have now been
+  seen; the measurement wins either way.
+* **`analyze_calls` is documented with no Python caveat** -- *"Builds the IDE Call Hierarchy
+  tree for a method, function, constructor, or supported type target. Use it to see who calls a
+  symbol or what the symbol calls."* It still does not work on Python here. This is exactly the
+  disagreement this file exists to record, and it does **not** reopen the retired re-test item.
 
 ### Drift 2026-08-09 -> 2026-08-25, measured by the script
 
@@ -192,8 +230,8 @@ Previously listed as an untested open question. **Tested, and it earns its place
 * **Files**: `search_file` (glob; replaces `find_files_by_glob`), `list_directory_tree`,
   `read_file` (replaces `get_file_text_by_path`; **see the `limit` gotcha above**). All verified
   2026-08-25.
-* **Unified search**: `skill_search` with `mode=file|text|regex|symbol` -- one entry point for the
-  four above. Verified identical to `search_symbol` on `mode=symbol`.
+* ~~**Unified search**: `skill_search`~~ -- **removed in 2026.2.2**. Call the four tools above
+  directly.
 * **Python** (new at GA): `get_python_environment` reports the interpreter for a file -- correct
   `.venv` path and version here, but `environmentType` and `packageManager` both come back
   `unknown`, so **it does not detect uv**. `configure_python_interpreter` writes config; untested.
@@ -228,6 +266,10 @@ Seven tools vanished, and several were named in configuration rather than merely
   `search_usages`, `find_references` all absent). `analyze_calls` was supposed to be this and
   is JVM-only in practice — see above.
 * **No type hierarchy**, no file-outline tool.
+* **No move / move-file refactoring** (measured 2026-09-09, and the docs agree). The IDE's
+  interactive Move is reference-aware and reliable; it is simply not exposed. A package
+  reorganization is therefore a manual UI operation with the agent preparing and verifying
+  around it.
 * **`analyze_calls` for Python.** Present, advertised, unusable here across two builds and a
   backend change. **No longer a cost** -- pyright supplies the capability; see above. Stop
   re-testing it every review.
@@ -381,9 +423,14 @@ Recorded so they are not rediscovered from scratch:
   approach. Entirely unexplored.
 * **`get_project_modules` / `get_project_dependencies`** for orientation, versus
   `get_architecture_overview` from the graph.
-* **Whether the client registry ever lags the server's `tools/list`.** The script reads the
-  server directly; Claude Code exposes what it negotiated at connect time. If those diverge, a
-  tool can be "present" and still uncallable, so a restart is the fix rather than an update.
+* **Whether the client registry ever lags the server's `tools/list`.** Still open, but narrowed
+  2026-09-09. What was measured: the server's 59-tool `tools/list` and the list `execute_tool`
+  reports it can dispatch are **identical sets** (diffed both directions, both empty) -- and
+  this session's client registry also lacks the removed `skill_search`. **That is weaker
+  evidence than it looks**: both of those lists are server-side, and this session happened to
+  connect after the upgrade. The case that could actually diverge is an IDE upgrade *during* a
+  session, which is untested. If it happens, a tool can be "present" and still uncallable, and
+  a restart is the fix rather than an update.
 
 <!--
 Maintainer notes (stripped before entering context).

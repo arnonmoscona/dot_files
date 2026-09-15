@@ -1,160 +1,124 @@
-# Auto-mode evidence-collection experiment (temporary, 2026-07-23): loosened from the
-# user-level default of "ask" so unmatched commands don't block auto-mode sessions.
-# Revert (remove this line) once evidence collection is done.
-no_match_fallback = "allow_with_no_warnings"      # TEMPORARY until TOO-28 is done
-undecidable_fallback = "allow_with_no_warnings"   # TEMPORARY until TOO-28 is done
+# toolguard's own project config.
+#
+# Fallbacks are set explicitly rather than inherited from ~/.claude, even though
+# the user level already says "ask". This is the repo where config behaviour is
+# tested; its decisions should not shift because the user-level file was edited.
+# The auto-mode handoff IS inherited: no_match_fallback_in_auto_mode and
+# undecidable_fallback_in_auto_mode live at user level and apply here, so an
+# unattended run proceeds while an interactive one prompts.
+#
+# Rules are in toolguard's own canonical order -- Bash, Read, Write, Edit, then
+# lowercased pattern -- so `toolguard-maintain` will not reshuffle them.
+no_match_fallback = "ask"
+undecidable_fallback = "ask"
 
+# A native allow rule cannot cover a command carrying a disclosure marker.
+# `allow` deliberately does not match past an assignment of an unrecognised
+# variable (see docs/auto-mode.md#auto_mode_behavior-and-command-prefixes), so
+# `TG_INTENT=1 pbcopy` matches nothing here and prompts. That is working as
+# intended: TG_ATTEST_READONLY=1 gets a blanket allow from a user-level regex
+# because it attests the command is read-only, while TG_INTENT=1 only attests
+# that a disclosure was written, which is not a safety claim. If a rule ever
+# genuinely needs to pre-approve a disclosed, non-read-only command, it has to
+# be a [regex] -- no native pattern can express it.
 [permissions]
 allow = [
-  "Bash(/home/arnon/.local/bin/basic-memory --help)",
-  "Bash(\\\\obsidian --help)",
-  "Bash(\\\\obsidian append *)",
-  "Bash(\\\\obsidian create *)",
-  "Bash(\\\\obsidian delete *)",
-  "Bash(\\\\obsidian read *)",
-  "Bash(\\\\obsidian search *)",
-  "Bash(\\\\obsidian search:context *)",
-  "Bash(\\\\obsidian vaults *)",
-  "Bash(ag \"_load_governed_tools\\\\b\" toolguard)",
-  "Bash(ag \"_load_permissions\\\\b\" toolguard)",
-  "Bash(ag \"bash_permissions\" toolguard)",
-  "Bash(ag def bash_permissions|def _load_governed_tools|def _load_permissions|_CONFIG_SYNC_DEFAULTS *)",
-  "Bash(awk '{print $2\"\\\\t\"$1\" lines\\\\t\"$3}')",
-  "Bash(basic-memory doctor *)",
-  "Bash(basic-memory status *)",
-  "Bash(git -C /home/arnon/projects/toolguard show 3d4d480:.claude/CLAUDE.md)",
-  "Bash(git check-ignore *)",
-  "Bash(grep *)",
-  "Bash(grep -v \"^--$\")",
-  "Bash(obsidian --version)",
-  "Bash(obsidian version *)",
-  "Bash(pbcopy)",
-  "Bash(pyright *)",
+  # toolguard does not strip `timeout` the way native does, so `pyright *`
+  # cannot match a wrapped call and this second form is load-bearing.
   "Bash([regex]^timeout [0-9]* pyright .*)",
-  "Bash(rtk grep *)",
-  "Bash(rtk ls *)",
-  "Bash(search)",
-  "Bash(sed -n '14,20p' /home/arnon/projects/toolguard/claude.code.review.md)",
-  "Bash(sed -n '60,67p' /home/arnon/projects/toolguard/tmp/drafts/dot-claude/CLAUDE.md)",
-  "Bash(sort -n -k1)",
-  "Bash(sort -t. -k1)",
-
-  "Bash(uvx basic-memory *)",
-  "Bash(~/projects/youtrack_api/get-issue.sh \"TOO-14\")",
-  "Bash(~/projects/youtrack_api/get-issue.sh *)",
-  "Bash(~/projects/youtrack_api/get-issue.sh TOO-8 *)",
-  "Read(//home/arnon/.basic-memory/**)",
-  "Read(//home/arnon/.claude/**)",
-  "Read(//home/arnon/.config/**)",
-  "Read(//home/arnon/.config/basic-memory/**)",
-  "Read(//home/arnon/projects/dot_files/wsl/.claude/**)",
-  "Read(//home/arnon/projects/dot_files/wsl/.claude/skills/**)",
-  "Read(//home/arnon/projects/flowers/featherhill/**)",
-  "Read(//home/arnon/projects/flowers/featherhill/.claude/**)",
-  "Read(./**)",
-  "Write(./**)",
-  "Edit(./**)",
-
-
+  # Both spellings, deliberately. `obsidian` stopped being a shell alias on
+  # 2026-09-08 (the GUI launcher is `ob` now), so the bare form is correct going
+  # forward; the escaped form is kept because the older `\obsidian` convention is
+  # still in circulation and a backslash before a non-alias is harmless. Drop the
+  # escaped line once nothing types it. A doubly-escaped pattern matches neither
+  # -- that spelling was inert in the previous config.
+  "Bash(\\obsidian *)",
+  "Bash(ag *)",
+  "Bash(basic-memory *)",
   "Bash(canopy *)",
+  "Bash(git check-ignore *)",
+  "Bash(git worktree *)",
+  "Bash(grep *)",
   "Bash(npx canopy *)",
   "Bash(npx canopy@latest *)",
-  "Bash(git worktree *)",
+  "Bash(obsidian *)",
+  "Bash(pbcopy)",
+  "Bash(pyright *)",
   "Bash(pyscn analyze *)",
-  # ---------------------------------------------------------------------------
+  "Bash(rtk grep *)",
+  "Bash(rtk ls *)",
+  "Bash(sort *)",
+  "Bash(uvx basic-memory *)",
+  "Bash(~/projects/youtrack_api/get-issue.sh *)",
+  "Bash(~/projects/youtrack_api/list-unresolved-issues.sh *)",
+  "Bash(~/projects/youtrack_api/add-comment.sh *)",
+  # Read is wider than write on purpose: the write scope is this project only,
+  # and the deny list below carves the exceptions out of it.
+  "Read(./**)",
+  "Read(~/.basic-memory/**)",
+  "Read(~/.claude/**)",
+  "Read(~/.config/**)",
+  "Read(~/projects/dot_files/wsl/.claude/**)",
+  "Read(~/projects/flowers/featherhill/**)",
+  "Write(./**)",
+  "Edit(./**)",
 ]
 
+# `uv run` is the sanctioned way to run anything Python here, and it is the
+# single largest source of no-match fallback traffic. Naming it makes that
+# traffic a rule match rather than a fallback: it keeps the interactive prompt,
+# drops the warning noise under auto, and stops the auto-mode trace recording it
+# as "no_match" -- a cause that means "addressable by writing a rule".
+#
+# Foreign inline code (`python -c`, a heredoc into python/node/perl/...) is
+# ASK-floored regardless, and no allow rule lifts it -- verified 2026-09-07 that
+# neither `Bash(*)` nor the `__HEREDOC_TO_python__` sentinel changes the outcome.
+# What governs it is undecidable_fallback, which is why it is set above rather
+# than left to default. Only FOREIGN executors are floored; a heredoc into
+# bash/sh is not. The durable advice is unchanged: write the script to a file
+# and run it rather than inlining Python into bash.
 ask = [
-  # The following were commented out as part of the auto-mode data collection process.
-  # When TOO-28 is implemented (specifically per-rule overrides) then these will be coinfigured for
-  # auto-mode-specific behavior. So we will also need to modify some user level rules (like HEREDOC rules)
-  #"Bash(python3 -m json.tool)",
-  #"Bash(uv run *)",
-
-  # TOO-19 note (2026-07-25), for whoever reads this next -- do NOT try to fix
-  # the heredoc/`python -c` prompting by adding an allow rule here or anywhere
-  # else in the hierarchy. It cannot work, by design:
-  #
-  #   command_extractor.py  flags foreign inline code / foreign heredoc sinks
-  #                         with LeafCommand(ask_floor=True)
-  #   compound.py:65-71     clamps the verdict -- an explicit `deny` is honoured,
-  #                         but `allow` is UNCONDITIONALLY downgraded to `ask`
-  #
-  # There is no config knob gating that clamp (making it configurable is the
-  # deferred ticket). The working alternative is to never inline Python into
-  # bash at all: Write the script to a file, then run `uv run python <file>` --
-  # a plain leaf command, allowed. That also matches the project's own
-  # "no Bash for file operations" rule.
-  #
-  # TESTED 2026-07-25 -- adding an allow that matches the sentinel form
-  # (`__HEREDOC_TO_python__`) does NOT help, and neither does `Bash(*)`.
-  # Measured two ways in a throwaway dir:
-  #   (a) end-to-end with an allow list containing every spelling of the
-  #       sentinel form PLUS `Bash(*)`  -> still `ask`;
-  #   (b) _resolve_leaf() called with a resolve_one stub that allows
-  #       EVERYTHING (stronger than any writable rule) -> still `ask`.
-  # Because compound.py resolves the outer command and then THROWS THE ALLOW
-  # AWAY: only a `deny` returns early, every other verdict falls through to
-  # the unconditional `return "ask", ...`. The rule does match; the match is
-  # discarded. So this is not fixable from config at any pattern.
-  #
-  # Scope note: only FOREIGN executors get the floor (python/node/perl/ruby/
-  # php/Rscript/awk/... -- see FOREIGN_EXECUTORS). A heredoc into bash/sh is
-  # NOT ask-floored -- verified allowed. So there is no __HEREDOC_TO_bash__
-  # problem to solve.
+  { match = "Bash(uv run *)", auto_mode_behavior = "allow" },
 ]
 
+# These denies are the only thing standing between an unattended run and these
+# paths. An unmatched write here does not fail closed: under auto mode the
+# inherited no_match_fallback_in_auto_mode permits it. So each entry has to be
+# an explicit deny, not merely an absent allow.
+#
+# They close the FILE-TOOL half only. Bash-side writes to the same paths (`>`,
+# `tee`, `rm`, `mv`) cannot be enumerated exhaustively, and are caught after the
+# fact by architecture_fitness.py --guard, which inspects what was actually
+# touched rather than predicting every spelling.
+#
+# Self-locking on purpose: with toolguard_hook.toml itself denied, an agent
+# cannot remove these either, and a deny is overridable only at a MORE specific
+# level. Editing them is Arnon's action, via the IDE.
+#
+# Within the file rules: ./logs is evidence, written by toolguard and read by
+# agents; .env and .claude.env are secrets; the rest is permission configuration
+# at both project and user level.
 deny = [
-  "Bash(python3 *)",  # You should always run python through uv in the current venv
-  "Bash(python *)",  # You should always run python through uv in the current venv
-
-  # <TEMPORARY>
-  # TOO-45 refactoring-loop guards -- invariant 6, written as rules rather than as
-  # prose in a prompt, because prose "MUST" language has a demonstrated track record
-  # of being dropped in this setup.
-  #
-  # These are DENIES rather than omissions on purpose: with
-  # no_match_fallback = "allow_with_no_warnings" above, a path that simply is not
-  # allowed falls through to the fallback and is silently permitted. Only an
-  # explicit deny stops anything while that fallback stands.
-  #
-  # Scope note: this closes the FILE-TOOL half only. Bash-side writes to the same
-  # paths (`>`, `tee`, `rm`, `mv`) cannot be enumerated exhaustively by patterns;
-  # those are covered after the fact by architecture_fitness.py --guard, which
-  # inspects what was actually touched rather than predicting every spelling.
-  #
-  # Self-locking by design: once toolguard_hook.toml itself is denied, an agent
-  # cannot remove this fence either, and a deny is only overridable at a MORE
-  # specific level. Removal at ticket close is Arnon's action, via the IDE.
-  #
-  # Revert = delete this whole fence.
-
-  # The decision log is evidence. The loop reads it; it never writes it.
-  "Write(./logs/**)",
-  "Edit(./logs/**)",
-
-  # Secrets. Standing rule, independent of this ticket.
-  "Write(./.env)",
-  "Edit(./.env)",
+  { match="Bash(python *)", additionalContext="python must be executed using uv" },   # Always run python through uv, in the current venv
+  { match="Bash(python3 *)", additionalContext="python must be executed using uv" },
   "Write(./.claude.env)",
-  "Edit(./.claude.env)",
-
-  # Permission configuration -- project level. Self-locking, see above.
-  "Write(./.claude/toolguard_hook.toml)",
-  "Edit(./.claude/toolguard_hook.toml)",
   "Write(./.claude/settings.json)",
-  "Edit(./.claude/settings.json)",
   "Write(./.claude/settings.local.json)",
+  "Write(./.claude/toolguard_hook.toml)",
+  "Write(./.env)",
+  "Write(./logs/**)",
+  "Write(~/.claude/settings.json)",
+  "Write(~/.claude/settings.local.json)",
+  "Write(~/.claude/toolguard_hook.toml)",
+  "Write(~/.toolguard/rules/**)",
+  "Edit(./.claude.env)",
+  "Edit(./.claude/settings.json)",
   "Edit(./.claude/settings.local.json)",
-
-  # Permission configuration -- user level and the rules directory.
-  "Write(//home/arnon/.toolguard/rules/**)",
-  "Edit(//home/arnon/.toolguard/rules/**)",
-  "Write(//home/arnon/.claude/toolguard_hook.toml)",
-  "Edit(//home/arnon/.claude/toolguard_hook.toml)",
-  "Write(//home/arnon/.claude/settings.json)",
-  "Edit(//home/arnon/.claude/settings.json)",
-  "Write(//home/arnon/.claude/settings.local.json)",
-  "Edit(//home/arnon/.claude/settings.local.json)",
-  # </TEMPORARY>
+  "Edit(./.claude/toolguard_hook.toml)",
+  "Edit(./.env)",
+  "Edit(./logs/**)",
+  "Edit(~/.claude/settings.json)",
+  "Edit(~/.claude/settings.local.json)",
+  "Edit(~/.claude/toolguard_hook.toml)",
+  "Edit(~/.toolguard/rules/**)",
 ]
