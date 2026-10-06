@@ -1,9 +1,0 @@
-{
-  "id": "55",
-  "subject": "Ticket 105: comments belong in the PEG",
-  "description": "DONE. Phase 1 63644a7 (grammar recognises comments, labelled hash/body). Phase 2 2ca11b2 (NodeKind.COMMENT by label, IRComment, include_comments client choice, _strip_comments deleted). 17 shapes byte-identical end-to-end incl the # INTENT: disclosure case. multiline.py down to 4 lexical steps; 3 of 4 disagreeing quote scanners now gone across the ticket family.",
-  "activeForm": "Fixing comment handling at the source",
-  "status": "completed",
-  "blocks": [],
-  "blockedBy": []
-}

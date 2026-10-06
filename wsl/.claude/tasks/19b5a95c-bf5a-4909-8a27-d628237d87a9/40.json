@@ -1,9 +1,0 @@
-{
-  "id": "40",
-  "subject": "Ticket 32: the two items marked \"fix before push\" - OVERDUE since 2026-08-10",
-  "description": "32.1 committed (permanent silent disable of auto-migration on platforms without advisory locks). Item 2 demoted by Arnon.",
-  "activeForm": "Fixing ticket 32's overdue fix-before-push items",
-  "status": "completed",
-  "blocks": [],
-  "blockedBy": []
-}

@@ -1,9 +1,0 @@
-{
-  "id": "52",
-  "subject": "Ticket 101: grammar rejects a bare {} word",
-  "description": "DONE 03d922c. unquoted_word admits \"{}\" as a 2-char unit; braces STAY in delimiter. First attempt (removing braces from delimiter) opened a deny bypass on brace groups - caught pre-commit by direct measurement, not by the corpus, which has no brace groups. Added test_deny_penetrates_constructs.py (17 constructs + benign control). One golden tightened allow->deny correctly; bash/allow floor 5351->5350 as a reviewed decision.",
-  "activeForm": "Handling the bare-brace grammar gap",
-  "status": "completed",
-  "blocks": [],
-  "blockedBy": []
-}

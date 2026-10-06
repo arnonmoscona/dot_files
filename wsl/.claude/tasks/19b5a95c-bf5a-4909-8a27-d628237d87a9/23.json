@@ -1,9 +1,0 @@
-{
-  "id": "23",
-  "subject": "After bug fixes: doc review + architecture doc re-read",
-  "description": "PRE-PUSH, owed: coverage_stdlib.py (89/98/99 unmeasured), pyscn analyze, and /documentation-review which is USER-INVOKED - docs/ changed heavily today (new heredoc-parsing-design.md plus agent-guides, configuration, security, permission-patterns, agent-map, technical-notes, install).",
-  "activeForm": "Reviewing docs",
-  "status": "pending",
-  "blocks": [],
-  "blockedBy": []
-}

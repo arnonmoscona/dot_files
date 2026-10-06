@@ -48,7 +48,7 @@ allow = [
     # list is a hardcoded enumeration that decays silently, which is the failure
     # mode this whole scheme exists to avoid. Coverage: 1-2 char names appear in
     # ~539 of the 596 variable-referencing commands, about 90%.
-    { match = 'Bash([regex]^(?!TG_(?:INTENT|ATTEST_READONLY)=1\s).*(\bsed\s+-[ei]\b|\bawk\s+.|\bfor\s+\w+\s+in\b|\bxargs\b|\$\{?[A-Za-z][A-Za-z0-9]?(?![A-Za-z0-9_])|(python|bash|sh|node)\s+\S*(tmp|scratchpad)/))', additionalContext = "This command carries logic you authored. CLAUDE.md requires an INTENT/TOUCHES block and a TG_INTENT=1 marker. It ran anyway -- disclose on the next one." },
+    #{ match = 'Bash([regex]^(?!TG_(?:INTENT|ATTEST_READONLY)=1\s).*(\bsed\s+-[ei]\b|\bawk\s+.|\bfor\s+\w+\s+in\b|\bxargs\b|\$\{?[A-Za-z][A-Za-z0-9]?(?![A-Za-z0-9_])|(python|bash|sh|node)\s+\S*(tmp|scratchpad)/))', additionalContext = "This command carries logic you authored. CLAUDE.md requires an INTENT/TOUCHES block and a TG_INTENT=1 marker. It ran anyway -- disclose on the next one." },
     # Read-only filters, so an attested pipeline is not blocked by its trailing
     # leaf. 60% of attested commands are pipelines, and the marker can only lead
     # one leaf. Temporary shape -- `cat` and `tr` want permit-testing before this
@@ -122,6 +122,7 @@ allow = [
 
 ask = [
     "Bash(toolguard-maintain:*)",
+    { match = 'Bash([regex]^(?!TG_(?:INTENT|ATTEST_READONLY)=1\s).*(\bsed\s+-[ei]\b|\bawk\s+.|\bfor\s+\w+\s+in\b|\bxargs\b|\$\{?[A-Za-z][A-Za-z0-9]?(?![A-Za-z0-9_])|(python|bash|sh|node)\s+\S*(tmp|scratchpad)/))', additionalContext = "This command carries logic you authored. CLAUDE.md requires an INTENT/TOUCHES block and a TG_INTENT=1 marker. It ran anyway -- disclose on the next one.", auto_mode_behavior = "allow" },
 ]
 
 deny = [
@@ -130,13 +131,13 @@ deny = [
     # so `nice -n 5 python x.py` slips past `Bash(python *)`. Matches the wrapped
     # forms directly. Remove when the stripper is fixed.
     { match='Bash([regex]^(?:(?:timeout|time|nice|nohup|stdbuf|command|builtin|noglob)(?:\s+-{1,2}[A-Za-z][\w-]*(?:=\S+)?(?:\s+[^\s-]\S*)?|\s+\d+\S*)*\s+)+python3?(?:\s|$))', additionalContext="python must be executed using uv" },
+    { match = 'Bash([regex]^(?:[A-Za-z_][A-Za-z0-9_]*=\S*\s+)*(\S*/)?python(3(\.\d+)?)?(?![\w.-]))', additionalContext = "python must be executed using uv -- use `uv run python` (CLAUDE.md). This is not about this one command: the project venv is the only interpreter carrying the project's dependencies, so a bare python runs against the wrong environment and its results do not mean what they appear to mean. Re-issue the command through `uv run python`; do not reach for a wrapper, an absolute interpreter path, or a shell script to run it instead." },
 ]
 
 [hard_deny]
 deny = [
     "Bash([regex]rm\\b.*\\.toolguard)",
-    # REMOVED "Bash([regex]find\\b.*\\.toolguard.*-delete)",
-    'Bash([regex]^find\b.*\s-(delete|(exec|execdir)\s+(rm|shred|mv|dd|chmod|chown))\b)',
+    "Bash([regex]^find\\b.*\\s-(delete|(exec|execdir)\\s+(rm|shred|mv|dd|chmod|chown))\\b)",
     "Read(**/.env)",
     "Read(**/.env.*)",
     "Read(**/.aws/**)",
@@ -153,8 +154,150 @@ deny = [
     "Write(~/.aws/**)",
     "Write(~/.ssh/**)",
     "Edit(~/.env)",
+    "Write(**/.env.*)",
+    "Edit(**/.env.*)",
+    "Edit(**/.aws/**)",
+    "Edit(**/.ssh/**)",
+    "Write(~/.env.*)",
+    "Edit(~/.env.*)",
+    "Edit(~/.aws/**)",
+    "Edit(~/.ssh/**)",
+
+    # The following was added after a security review in the featherhill project in Oct 2026.
+    # It is Claude authored and covers measure gaps, catastrophic cases and other rules not covered by
+    # the builtin toolguard installer defaults.
+    # These rules are supplamented by soft-deny rules for the auto mode classifier so that especially
+    # software installation is covered - a case that is hard to express in toolguard and better expressed
+    # as auto-mode classifier guidance.
+
+    # =====================================================================
+    # A. CLOSE THE MEASURED GAPS  (recommended -- all three were verified open)
+    # =====================================================================
+
+    # ---- A1. Bash coverage ------------------------------------------------
+    # The canonical set is Read/Write/Edit only; it has no Bash entry at all, so every
+    # shell route to a secret stays open. Measured on the live config AFTER seeding:
+    # `cat ~/.ssh/id_rsa` -> allow via the user-level read-command allow.
+    #
+    # Bash rules match per extracted LEAF, where the file appears bare and
+    # space-separated (`grep SECRET_KEY .env`), so these must NOT require a leading `/`
+    # or `^`. A bare `\.env\b` is deliberate: `\b` already excludes `.envrc` and
+    # `.environment`, the next character being a word character. Bash rules are also
+    # matched with a leading `~` expanded, for every pattern type, so one spelling
+    # covers `~/.ssh/x` and `/home/arnon/.ssh/x` alike.
+    { match = 'Bash([regex]\.env\b)', additionalContext = "Denied by a user-level hard_deny: .env files hold live credentials, and a shell command is not a reviewable way to touch them. This cannot be overridden at any level. Do not reach for another route -- a different reader, an interpreter, a copy, or a rename is the same access by another name. If the task genuinely needs a value from .env, say which key you need and why, and let Arnon decide." },
+    { match = 'Bash([regex]\.(ssh|aws|gnupg)/)', additionalContext = "Denied by a user-level hard_deny: this touches SSH, AWS or GnuPG credential material. This cannot be overridden at any level. Do not reach for another route or spelling. Arnon manages key material by hand; report what you needed and stop." },
+
+    # ---- A2. Cross-project file access ------------------------------------
+    # The canonical patterns are project-relative (`**/...`, anchored to the ACTIVE
+    # project root) plus home-anchored (`~/...`, which covers $HOME itself). Neither
+    # covers another project's secrets while you work here. Measured: Read of
+    # /home/arnon/projects/toolguard/.env with cwd in featherhill -> allow, via the
+    # project's broad `~/projects/**`.
+    #
+    # Regex, not glob, on purpose: a regex pattern is never path-joined to the project
+    # root (toolguard/engine/file_matching.py: "A regex pattern is not a filesystem
+    # path; never path-join it"), so it is machine-wide by construction and immune to
+    # the relative/absolute anchoring rules that make globs project-scoped.
+    #
+    # `/\.env\b` requires the slash immediately before `.env`, so it matches only a
+    # dotfile: `/path/.env` and `/path/.env.production` match, `/path/foo.env` does not.
+    { match = 'Read([regex]/\.env\b)', additionalContext = "Denied by a user-level hard_deny: .env files hold live credentials, anywhere on this machine, not just in the current project. This cannot be overridden at any level. Do not try a shell reader, an interpreter, or a copy instead. Name the key you needed and let Arnon decide." },
+    { match = 'Write([regex]/\.env\b)', additionalContext = "Denied by a user-level hard_deny: writing a .env can plant or clobber live credentials. This cannot be overridden at any level. Do not route around it. Propose the change in plain text and let Arnon make it." },
+    { match = 'Edit([regex]/\.env\b)', additionalContext = "Denied by a user-level hard_deny: editing a .env in place can plant or clobber live credentials. This cannot be overridden at any level. Do not route around it. Propose the change in plain text and let Arnon make it." },
+    # Credential directories, wholesale, `.pub` included -- the simpler and stricter
+    # option, chosen deliberately. One pattern with no exception has no bypass to get
+    # wrong, and handing a public key to GitHub is a thing done by hand anyway.
+    # `(/|$)` covers both a file inside the directory and the directory itself.
+    { match = 'Read([regex]/\.(ssh|aws|gnupg)(/|$))', additionalContext = "Denied by a user-level hard_deny: SSH, AWS and GnuPG directories are off limits in full, public keys included, by deliberate choice. This cannot be overridden at any level. Do not try a shell reader or an interpreter instead. If Arnon needs a public key somewhere, he will paste it himself." },
+    { match = 'Write([regex]/\.(ssh|aws|gnupg)(/|$))', additionalContext = "Denied by a user-level hard_deny: writing into an SSH, AWS or GnuPG directory can plant a key or a credential. This cannot be overridden at any level. Do not route around it -- report what you intended and let Arnon do it." },
+    { match = 'Edit([regex]/\.(ssh|aws|gnupg)(/|$))', additionalContext = "Denied by a user-level hard_deny: editing SSH, AWS or GnuPG material in place can plant a key -- authorized_keys above all. This cannot be overridden at any level. Do not route around it; report what you intended." },
+
+    # ---- A3. Catastrophic operations --------------------------------------
+    # These belong in hard_deny rather than being left to a fallback because hard_deny
+    # is mode-independent: it holds in auto mode, where the fallback is deliberately
+    # `allow`. They also pass the documented test for the mechanism -- none of them has
+    # a legitimate exception (docs/agent-guides.md: "[hard_deny] means no exceptions").
+    #
+    # They are also the specific gap in the other layer. The auto-mode classifier
+    # defaults cover file-level destruction thoroughly ("Irreversible Local Destruction"
+    # names rm -rf, git reset --hard, git clean -fdx, rsync --delete, truncation), but
+    # across all 82KB of defaults there is no mention of mkfs, chmod, chown, dd, block
+    # devices or fork bombs, and the classifier's own hard_deny tier has exactly one
+    # entry (Data Exfiltration). Cheap, deterministic, mode-independent floor.
+    #
+    # ALL ANCHORED TO `^`, which is not cosmetic. Bash rules match leaf TEXT, so an
+    # unanchored rule also fires on a command that merely MENTIONS the dangerous string
+    # inside a quoted payload. Measured over 39,797 historical commands: the unanchored
+    # forms denied 2 real commands, and both were `toolguard --eval` probes carrying
+    # `dd if=/dev/zero of=/dev/sda` inside a JSON argument -- i.e. the rules would have
+    # blocked the very audit probes used to verify this floor. Anchored: 0 false
+    # positives over the same corpus, with no attack shape lost.
+    { match = 'Bash([regex]^(sudo\s+)?(dd|shred)\b[^\n]*\bof=/dev/)', additionalContext = "Denied by a user-level hard_deny: this writes straight to a block device, destroying every filesystem on it with no recovery path. hard_deny cannot be overridden by any rule, level or mode, and that is deliberate. Do not retry, do not reword it, and do not reach for a different tool, a script, or an interpreter to do the same thing -- circumventing a deny is itself the thing the rule exists to stop. If you believe this is genuinely required, say so in plain text and let Arnon run it." },
+    { match = 'Bash([regex]^(sudo\s+)?mkfs(\.\w+)?\s+/dev/)', additionalContext = "Denied by a user-level hard_deny: this creates a filesystem on a block device, discarding everything currently on it. hard_deny cannot be overridden by any rule, level or mode. Do not retry or reword, and do not reach for another tool or a script to do the same thing. Report it and let Arnon run it if he intends it." },
+    { match = 'Bash([regex]^(sudo\s+)?(chmod|chown)\s+(-\w+\s+)*\S+\s+/\s*$)', additionalContext = "Denied by a user-level hard_deny: a recursive permission or ownership change rooted at / breaks the system's permission model and is not practically reversible. hard_deny cannot be overridden by any rule, level or mode. Almost always this is a mistyped path -- check whether you meant a path under the project. Do not retry against / by another route." },
+    { match = 'Bash([regex]^:\s*\(\s*\)\s*\{)', additionalContext = "Denied by a user-level hard_deny: this is the fork-bomb shape, which exhausts process slots and usually needs a hard reboot to clear. hard_deny cannot be overridden by any rule, level or mode. Do not retry or obfuscate it. If you are testing parser behaviour, evaluate the string with `toolguard --eval` instead of running it." },
+
+    # =====================================================================
+    # B. OTHER CREDENTIAL FAMILIES  (optional -- drop any you disagree with)
+    # =====================================================================
+    # Not part of the canonical set and not something I measured as exploited here.
+    # Offered because they are the same class of material as .ssh/.aws and carry
+    # plaintext credentials or long-lived tokens. Each is a dotfile-anchored path, so
+    # the false-positive surface is small. One shared guidance text, kept brief.
+    { match = 'Read([regex]/\.netrc$)', additionalContext = "Denied by a user-level hard_deny: this file holds plaintext credentials. Cannot be overridden at any level. Do not reach for another route; report what you needed." },
+    { match = 'Write([regex]/\.netrc$)', additionalContext = "Denied by a user-level hard_deny: this file holds plaintext credentials. Cannot be overridden at any level. Do not reach for another route; report what you intended." },
+    { match = 'Edit([regex]/\.netrc$)', additionalContext = "Denied by a user-level hard_deny: this file holds plaintext credentials. Cannot be overridden at any level. Do not reach for another route; report what you intended." },
+    { match = 'Bash([regex]\.netrc\b)', additionalContext = "Denied by a user-level hard_deny: this file holds plaintext credentials. Cannot be overridden at any level. Do not reach for another reader or interpreter." },
+    { match = 'Read([regex]/\.pgpass$)', additionalContext = "Denied by a user-level hard_deny: this file holds plaintext database passwords. Cannot be overridden at any level. Do not reach for another route; report what you needed." },
+    { match = 'Write([regex]/\.pgpass$)', additionalContext = "Denied by a user-level hard_deny: this file holds plaintext database passwords. Cannot be overridden at any level. Do not reach for another route." },
+    { match = 'Edit([regex]/\.pgpass$)', additionalContext = "Denied by a user-level hard_deny: this file holds plaintext database passwords. Cannot be overridden at any level. Do not reach for another route." },
+    { match = 'Bash([regex]\.pgpass\b)', additionalContext = "Denied by a user-level hard_deny: this file holds plaintext database passwords. Cannot be overridden at any level. Do not reach for another reader or interpreter." },
+    { match = 'Read([regex]/\.kube/)', additionalContext = "Denied by a user-level hard_deny: kubeconfig carries cluster credentials. Cannot be overridden at any level. Do not reach for another route; report what you needed." },
+    { match = 'Write([regex]/\.kube/)', additionalContext = "Denied by a user-level hard_deny: kubeconfig carries cluster credentials. Cannot be overridden at any level. Do not reach for another route." },
+    { match = 'Edit([regex]/\.kube/)', additionalContext = "Denied by a user-level hard_deny: kubeconfig carries cluster credentials. Cannot be overridden at any level. Do not reach for another route." },
+    { match = 'Bash([regex]\.kube/)', additionalContext = "Denied by a user-level hard_deny: kubeconfig carries cluster credentials. Cannot be overridden at any level. Do not reach for another reader or interpreter." },
+    { match = 'Read([regex]/\.docker/config\.json$)', additionalContext = "Denied by a user-level hard_deny: this holds registry auth tokens. Cannot be overridden at any level. Do not reach for another route; report what you needed." },
+    { match = 'Write([regex]/\.docker/config\.json$)', additionalContext = "Denied by a user-level hard_deny: this holds registry auth tokens. Cannot be overridden at any level. Do not reach for another route." },
+    { match = 'Edit([regex]/\.docker/config\.json$)', additionalContext = "Denied by a user-level hard_deny: this holds registry auth tokens. Cannot be overridden at any level. Do not reach for another route." },
+    { match = 'Bash([regex]\.docker/config\.json)', additionalContext = "Denied by a user-level hard_deny: this holds registry auth tokens. Cannot be overridden at any level. Do not reach for another reader or interpreter." },
+    { match = 'Read([regex]/\.config/gcloud/)', additionalContext = "Denied by a user-level hard_deny: this holds Google Cloud credentials. Cannot be overridden at any level. Do not reach for another route; report what you needed." },
+    { match = 'Write([regex]/\.config/gcloud/)', additionalContext = "Denied by a user-level hard_deny: this holds Google Cloud credentials. Cannot be overridden at any level. Do not reach for another route." },
+    { match = 'Edit([regex]/\.config/gcloud/)', additionalContext = "Denied by a user-level hard_deny: this holds Google Cloud credentials. Cannot be overridden at any level. Do not reach for another route." },
+    { match = 'Bash([regex]\.config/gcloud/)', additionalContext = "Denied by a user-level hard_deny: this holds Google Cloud credentials. Cannot be overridden at any level. Do not reach for another reader or interpreter." },
+    # SSH private keys by filename, for keys kept OUTSIDE ~/.ssh -- a deploy key in a
+    # project directory is the usual case, and A2 would miss it.
+    { match = 'Read([regex]/id_(rsa|dsa|ecdsa|ed25519)(\.pub)?$)', additionalContext = "Denied by a user-level hard_deny: this is an SSH key file, wherever it is kept. Cannot be overridden at any level. Do not reach for another route; Arnon handles key material himself." },
+    { match = 'Write([regex]/id_(rsa|dsa|ecdsa|ed25519)(\.pub)?$)', additionalContext = "Denied by a user-level hard_deny: this would write an SSH key file. Cannot be overridden at any level. Do not reach for another route; Arnon handles key material himself." },
+    { match = 'Edit([regex]/id_(rsa|dsa|ecdsa|ed25519)(\.pub)?$)', additionalContext = "Denied by a user-level hard_deny: this would edit an SSH key file. Cannot be overridden at any level. Do not reach for another route; Arnon handles key material himself." },
+    { match = 'Bash([regex]\bid_(rsa|dsa|ecdsa|ed25519)\b)', additionalContext = "Denied by a user-level hard_deny: this command names an SSH key file. Cannot be overridden at any level. Do not reach for another reader, a copy, or ssh-keygen; Arnon handles key material himself." },
+
+    # NOT proposed, deliberately: `*.pem` and `*.key`. Both are common as ordinary
+    # repo fixtures and build artifacts, and an unoverridable deny on them would
+    # misfire often enough to get the whole block deleted. `.npmrc`/`.pypirc` were
+    # also left out -- project-local copies are usually registry config rather than
+    # tokens, so they belong in an ordinary `deny` where a carve-out is possible.
+
 ]
 
+# =====================================================================
+# C. CARVE-OUT for the non-secret .env templates
+# =====================================================================
+# hard_deny.allow is a carve-out from hard_deny.deny, not a forced allow. docs/security.md
+# prescribes exactly this rather than trimming the deny list: "Covering both verbs across
+# all four families does mean .env.example and its siblings are write-denied as well as
+# read-denied; if you need one, add it to the narrow hard_deny.allow carve-out rather than
+# trimming the deny list."
+#
+# This is a fix for friction you already have, not a new exposure: the canonical
+# Read(**/.env.*) already denied in-project .env.example before this ticket, and seeding
+# added the Write/Edit halves on 2026-10-04.
+allow = [
+    'Read([regex]/\.env\.(example|sample|template)$)',
+    'Write([regex]/\.env\.(example|sample|template)$)',
+    'Edit([regex]/\.env\.(example|sample|template)$)',
+    'Bash([regex]\.env\.(example|sample|template)\b)',
+]
 
 [takeover_mode]
 enabled = true

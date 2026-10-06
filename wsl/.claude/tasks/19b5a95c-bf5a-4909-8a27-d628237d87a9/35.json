@@ -1,9 +1,0 @@
-{
-  "id": "35",
-  "subject": "Ticket 79: command substitution runs foreign code with no ASK floor",
-  "description": "TIER 1, promoted 2026-08-20 on evidence. Command substitution $(...) appears 1,121 times across the corpora - 1,115 in toolguard (2.1% of commands), 5 in featherhill (0.1%). Command-shape ticket, so both corpora carry information about agent behaviour; the 20x gap estimates how much is task-specific. Severity: foreign inline code executes without hitting the ASK floor that inline/heredoc foreign code is supposed to trigger. Sibling of ticket 67 (if/while wrapper defeats the ASK floor), which is FIXED - check whether that fix's mechanism generalises here before designing a new one.",
-  "activeForm": "Closing the command-substitution ASK-floor gap",
-  "status": "completed",
-  "blocks": [],
-  "blockedBy": []
-}

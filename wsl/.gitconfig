@@ -8,7 +8,7 @@
     cm = commit -m
 	lg = log --graph --oneline --decorate --all
 	amend = commit --amend --no-edit
-	unstage = reset HEAD
+	unstage = reset HEAD --
 
 [push]
 	autoSetupRemote = true

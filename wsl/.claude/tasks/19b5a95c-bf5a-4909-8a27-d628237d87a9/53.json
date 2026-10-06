@@ -1,9 +1,0 @@
-{
-  "id": "53",
-  "subject": "Ticket 102: here-strings misparsed as heredocs",
-  "description": "Pre-existing. _HEREDOC_RE matches the first two < of <<<. Three damages: stray < left in the leaf, sink attributed to the keyword 'do', here-string content swallowed. Under undecidable_fallback=allow, bash <<< \"rm -rf x\" evades deny Bash(rm:*) while the heredoc spelling is caught. Exposure ZERO in all three corpora (featherhill 0, toolguard 2 both false/harmless, instagram 0). Fix earns its place on the silent leaf corruption (accidentally reachable by any here-string), NOT on the bypass (deliberate evasion, out of threat model). Regex fix is pre-pass; adding a here_string grammar production is a separate two-phase .peg change.",
-  "activeForm": "Handling the here-string misparse",
-  "status": "pending",
-  "blocks": [],
-  "blockedBy": []
-}

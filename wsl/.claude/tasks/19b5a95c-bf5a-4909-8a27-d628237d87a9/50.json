@@ -1,9 +1,0 @@
-{
-  "id": "50",
-  "subject": "Ticket 88: replace the curl deny-with-exception example with find",
-  "description": "DONE 2648423 (toolguard side). find replaces curl in agent-guides.md + configuration.md; enumerability rule published; curl's verdict is ask. Audit SKILL.md also updated but lives in dot_files - NEEDS ARNON TO COMMIT there.",
-  "activeForm": "Replacing the curl example with find",
-  "status": "completed",
-  "blocks": [],
-  "blockedBy": []
-}

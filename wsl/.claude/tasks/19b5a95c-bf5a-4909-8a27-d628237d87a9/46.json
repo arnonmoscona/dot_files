@@ -1,8 +1,0 @@
-{
-  "id": "46",
-  "subject": "Ticket 20c (RA1): dry-run diff shows unrequested re-sort + deletes empty deny/ask lines - FLAG for Arnon, candidate defer",
-  "description": "DROPPED by Arnon: \"A resort is harmless as long as it follows the rules about comments correctly. We can drop this one.\"",
-  "status": "completed",
-  "blocks": [],
-  "blockedBy": []
-}

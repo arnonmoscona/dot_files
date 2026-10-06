@@ -1,9 +1,0 @@
-{
-  "id": "37",
-  "subject": "Config-write / self-protection cluster: tickets 40, 39, 64, 70",
-  "description": "TIER 1 on severity. Four tickets I had been treating as scattered singles; they are one subsystem and one class - the write path that protects toolguard's own config. Do together.\n\n40: verify_config_text accepts ANY JSON document, so a \"verified\" write can overwrite settings.json.\n39: the write guard's content-loss check is placement-blind - a hard deny moved into an allow section passes.\n64: a project ledger whose body claims level=user redirects the next write into the user's HOME; record_decision is unlocked.\n70: applying an edit drops the parse-failure safety floor, and the as-if-enacted audit reads cleaner than reality.\n\nNo log signature - none of these are command or rule shapes, so severity judgement is the only axis. All four are in the direction that matters: a protection that does not protect, silently. Ticket 20 and 22 are NOT part of this cluster (they are advisory-tier, downstream of 18).",
-  "activeForm": "Fixing the config-write protection cluster",
-  "status": "completed",
-  "blocks": [],
-  "blockedBy": []
-}
