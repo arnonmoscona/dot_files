@@ -91,6 +91,64 @@ allow = [
     # Code quality & search
     "Bash(pyright *)",
     "Bash(pyscn analyze *)",
+    # --- generic utilities ---
+    "Bash(du -sh:*)",
+    "Bash(sleep:*)",
+    "Bash(grep:*)",
+    "Bash(ack:*)",
+    "Bash(ag:*)",
+    "Bash(ps aux:*)",
+    "Bash(claude mcp list:*)",
+    "Bash(test -f /tmp/:*)",
+    "Bash(html-validate:*)",
+
+    # --- scripts in ~/bin, used from every project ---
+    "Bash(~/bin/pbcopy)",
+    "Bash(~/bin/alert:*)",
+    "Bash(open_note_by_title.sh :*)",
+    "Bash(~/bin/open_note_by_title.sh:*)",
+    "Bash(~/bin/open_note_by_title.sh :*)",
+
+    # `git flake8` and `git isort` are not git subcommands -- they are scripts in
+    # ~/bin, so git.rules.toml does not cover them. Verified: without a rule they
+    # resolve to ask. The read-only git commands the project also re-allowed
+    # (diff, log, status, ls-files) ARE already covered by git.rules.toml, so they
+    # were dropped rather than promoted.
+    "Bash(git flake8:*)",
+    "Bash(git isort:*)",
+
+    # The absolute spellings. The existing `~/`-prefixed rules match command TEXT,
+    # so they do not cover a command written with the expanded path.
+    "Bash(/home/arnon/projects/youtrack_api/get-issue.sh:*)",
+    "Bash(/home/arnon/projects/youtrack_api/add-comment.sh:*)",
+    "Bash(/home/arnon/projects/youtrack_api/list-unresolved-issues.sh:*)",
+
+    # The machine-generic half of the mkdir family the analyzer wanted to weld to
+    # this project's `flowers/` paths. Covers `mkdir /tmp/...` and `mkdir -p /tmp/...`.
+    'Bash([regex]^mkdir( -p)? /tmp/\S*$)',
+
+    # --- scratch space, generic ---
+    "Read(/tmp/**)",
+    "Write(/tmp/**)",
+    "Edit(/tmp/**)",
+
+    # --- reading Claude's own layout and the projects tree ---
+    "Read(~/.claude/agents/**)",
+    "Read(~/.claude/projects/**)",
+    "Read(~/projects/**)",
+    "Read(~/mac-recovery/dot_files/.claude.json)",
+
+    # Claude Code auto-memory: ~/.claude/projects/<project-slug>/memory/, a flat
+    # directory of one-fact .md files plus MEMORY.md. Machine-wide, which is why
+    # this lives here and not in any one project. Nothing to do with basic-memory,
+    # whose notes sit in the project tree.
+    # Anchored at BOTH ends with [^/]+ segments so no separator can follow memory/
+    # and `..` cannot climb out. The unanchored predecessor allowed Write to
+    # ~/.claude/settings.json and rm of /etc/passwd by traversal (FLO-147).
+    # Note: there is not Read rule in the following three because the read is covered by "Read(~/.claude/projects/**)" above
+    'Write([regex]^/home/arnon/\.claude/projects/[^/]+/memory/[^/]+\.md$)',
+    'Edit([regex]^/home/arnon/\.claude/projects/[^/]+/memory/[^/]+\.md$)',
+    'Bash([regex]^rm /home/arnon/\.claude/projects/[^/]+/memory/[^/]+\.md$)',
     
 
     # Reading a file in the working project. Read is non-destructive by construction --
@@ -118,6 +176,8 @@ allow = [
     "Edit(/home/arnon/.claude/settings.json)",
     "Edit(~/.toolguard/**)",
     'Edit(~/dev-process/**)',
+
+
 ]
 
 ask = [
@@ -132,6 +192,12 @@ deny = [
     # forms directly. Remove when the stripper is fixed.
     { match='Bash([regex]^(?:(?:timeout|time|nice|nohup|stdbuf|command|builtin|noglob)(?:\s+-{1,2}[A-Za-z][\w-]*(?:=\S+)?(?:\s+[^\s-]\S*)?|\s+\d+\S*)*\s+)+python3?(?:\s|$))', additionalContext="python must be executed using uv" },
     { match = 'Bash([regex]^(?:[A-Za-z_][A-Za-z0-9_]*=\S*\s+)*(\S*/)?python(3(\.\d+)?)?(?![\w.-]))', additionalContext = "python must be executed using uv -- use `uv run python` (CLAUDE.md). This is not about this one command: the project venv is the only interpreter carrying the project's dependencies, so a bare python runs against the wrong environment and its results do not mean what they appear to mean. Re-issue the command through `uv run python`; do not reach for a wrapper, an absolute interpreter path, or a shell script to run it instead." },
+
+    # ~/bin/send_text is defunct: the SMS provider was too unreliable. The script is
+    # still on disk, so an allow would keep it reachable. Covers the bare name (it
+    # is on PATH via ~/bin) and both path spellings.
+    { match = 'Bash([regex](^|/)send_text\b)', additionalContext = "~/bin/send_text is defunct -- its SMS provider proved too unreliable, and the script is kept on disk for reference only. Do not use it to notify Arnon, and do not look for another SMS route. If the Telegram plugin is enabled in this session, send the message through Telegram instead. Telegram is not enabled in every session: if it is unavailable, say so plainly and put the message in your reply, which Arnon will see." },
+
 ]
 
 [hard_deny]
@@ -277,6 +343,13 @@ deny = [
     # misfire often enough to get the whole block deleted. `.npmrc`/`.pypirc` were
     # also left out -- project-local copies are usually registry config rather than
     # tokens, so they belong in an ordinary `deny` where a carve-out is possible.
+
+
+    # .claude/channels protections
+    { match = 'Read([regex]/\.claude/channels/)', additionalContext = "Denied by a user-level hard_deny: ~/.claude/channels/ holds live credentials for Claude Code's messaging connectors. Reading one would expose a token that can post as Arnon. hard_deny cannot be overridden by any rule, level or permission mode. Do not retry, do not reword it, and do not reach for a different tool, a script, or an interpreter to do the same thing -- circumventing a deny is itself the thing the rule exists to stop. If you need to know whether a connector is configured, say so and let Arnon check." },
+    { match = 'Write([regex]/\.claude/channels/)', additionalContext = "Denied by a user-level hard_deny: ~/.claude/channels/ holds live credentials for Claude Code's messaging connectors. Writing here could redirect Arnon's notifications or plant a token. hard_deny cannot be overridden by any rule, level or permission mode. Do not retry, do not reword it, and do not reach for a different tool, a script, or an interpreter to do the same thing. Connector setup is something Arnon does himself." },
+    { match = 'Edit([regex]/\.claude/channels/)', additionalContext = "Denied by a user-level hard_deny: ~/.claude/channels/ holds live credentials for Claude Code's messaging connectors. hard_deny cannot be overridden by any rule, level or permission mode. Do not retry and do not reach for another tool or an interpreter to do the same thing. Connector setup is something Arnon does himself." },
+    { match = 'Bash([regex]\.claude/channels/)', additionalContext = "Denied by a user-level hard_deny: ~/.claude/channels/ holds live credentials for Claude Code's messaging connectors. This rule matches the command text, so it applies to ANY command-line tool naming that path -- not just cat. hard_deny cannot be overridden by any rule, level or permission mode. Do not retry, do not reword it, and do not reach for a different tool, a script, or an interpreter to do the same thing. If you need to know whether a connector is configured, ask Arnon." },
 
 ]
 
